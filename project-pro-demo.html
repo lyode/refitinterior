@@ -1,0 +1,3657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Builder Pro">
+    <meta name="apple-mobile-web-app-title" content="Builder Pro">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#E0E5EC">
+    
+    <title>Builder Pro - Neumorphism Edition</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Prevent horizontal overflow on mobile */
+        html {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        * {
+            max-width: 100%;
+        }
+
+        :root {
+            --bg: #E0E5EC;
+            --shadow-light: #FFFFFF;
+            --shadow-dark: #A3B1C6;
+            --text-primary: #4A5568;
+            --text-secondary: #718096;
+            --text-tertiary: #A0AEC0;
+            --accent: #667eea;
+            --accent-light: #9F7AEA;
+            --success: #48BB78;
+            --warning: #ED8936;
+            --danger: #F56565;
+            --income-color: #48BB78;
+            --expense-color: #F56565;
+            
+            --font-scale: 1;
+        }
+
+        body.font-s { --font-scale: 0.85; }
+        body.font-m { --font-scale: 1; }
+        body.font-l { --font-scale: 1.15; }
+        body.font-xl { --font-scale: 1.3; }
+        body.font-xxl { --font-scale: 1.5; }
+
+        .night-mode {
+            --bg: #2D3748 !important;
+            --shadow-light: #3F4A5F !important;
+            --shadow-dark: #1A202C !important;
+            --text-primary: #E2E8F0 !important;
+            --text-secondary: #CBD5E0 !important;
+            --text-tertiary: #A0AEC0 !important;
+        }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            font-size: calc(14px * var(--font-scale));
+        }
+
+        /* Floating text effect - 25px elevation */
+        body, button, input, select, textarea, .logo, .header-subtitle,
+        .nav-item, .stat-card, .project-card, .task-item, .transaction-item,
+        .modal-content, h1, h2, h3, h4, h5, h6, p, span, div, label {
+            text-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 15px 30px rgba(0, 0, 0, 0.25),
+                0 8px 15px rgba(0, 0, 0, 0.2),
+                0 3px 8px rgba(0, 0, 0, 0.15);
+            transform: translateZ(25px);
+        }
+
+        .night-mode body, 
+        .night-mode button, 
+        .night-mode input, 
+        .night-mode select, 
+        .night-mode textarea,
+        .night-mode .logo,
+        .night-mode .header-subtitle,
+        .night-mode .nav-item,
+        .night-mode .stat-card,
+        .night-mode .project-card,
+        .night-mode .task-item,
+        .night-mode .transaction-item,
+        .night-mode .modal-content,
+        .night-mode h1, .night-mode h2, .night-mode h3, 
+        .night-mode h4, .night-mode h5, .night-mode h6, 
+        .night-mode p, .night-mode span, .night-mode div, .night-mode label {
+            text-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.6),
+                0 15px 30px rgba(0, 0, 0, 0.5),
+                0 8px 15px rgba(0, 0, 0, 0.4),
+                0 3px 8px rgba(0, 0, 0, 0.3);
+            transform: translateZ(25px);
+        }
+
+        /* 75% Glass-morphism transparency effect */
+        .header,
+        .nav,
+        .stats-container,
+        .projects-container,
+        .project-card,
+        .task-item,
+        .transaction-item,
+        .modal-content {
+            background: rgba(224, 229, 236, 0.25) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .night-mode .header,
+        .night-mode .nav,
+        .night-mode .stats-container,
+        .night-mode .projects-container,
+        .night-mode .project-card,
+        .night-mode .task-item,
+        .night-mode .transaction-item,
+        .night-mode .modal-content {
+            background: rgba(45, 55, 72, 0.25) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Neumorphic Header */
+        .header {
+            padding: 20px 32px;
+            background: var(--bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 
+                6px 6px 12px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .logo {
+            font-size: calc(24px * var(--font-scale));
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 
+                2px 2px 4px var(--shadow-dark),
+                -2px -2px 4px var(--shadow-light);
+            letter-spacing: -1px;
+        }
+
+        .header-subtitle {
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        .neuro-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: none;
+            color: var(--text-primary);
+            font-size: calc(18px * var(--font-scale));
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 
+                5px 5px 10px var(--shadow-dark),
+                -5px -5px 10px var(--shadow-light);
+            position: relative;
+        }
+
+        .neuro-btn:hover {
+            color: var(--accent);
+        }
+
+        .neuro-btn:active {
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+        }
+
+        .sync-indicator {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .sync-indicator.syncing {
+            background: var(--warning);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.9); }
+        }
+
+        /* Sync Status Bar */
+        .sync-status-bar {
+            padding: 8px 32px;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-secondary);
+            font-weight: 600;
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        /* Soft Navigation */
+        .nav {
+            padding: 20px 32px;
+            background: var(--bg);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+            padding: 8px;
+            background: var(--bg);
+            border-radius: 50px;
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+            overflow-x: auto;
+        }
+
+        .nav-item {
+            padding: 12px 24px;
+            background: var(--bg);
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: calc(13px * var(--font-scale));
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: none;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            box-shadow: 
+                5px 5px 10px var(--shadow-dark),
+                -5px -5px 10px var(--shadow-light);
+        }
+
+        /* Embossed Stats */
+        .stats-container {
+            padding: 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .stat-card {
+            padding: 28px;
+            background: var(--bg);
+            border-radius: 28px;
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+            transition: all 0.4s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                rgba(255, 255, 255, 0) 50%,
+                rgba(163, 177, 198, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 
+                12px 12px 24px var(--shadow-dark),
+                -12px -12px 24px var(--shadow-light);
+        }
+
+        .stat-icon-wrapper {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+        }
+
+        .stat-icon {
+            font-size: calc(32px * var(--font-scale));
+        }
+
+        .stat-value {
+            font-size: calc(40px * var(--font-scale));
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .stat-card.income .stat-value { color: var(--income-color); }
+        .stat-card.expense .stat-value { color: var(--expense-color); }
+
+        .stat-label {
+            font-size: calc(12px * var(--font-scale));
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+            padding-bottom: 100px;
+        }
+
+        /* Soft Project Card */
+        .project-card {
+            background: var(--bg);
+            border-radius: 32px;
+            overflow: visible;
+            margin-bottom: 32px;
+            box-shadow: 
+                10px 10px 20px var(--shadow-dark),
+                -10px -10px 20px var(--shadow-light);
+            transition: all 0.4s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                14px 14px 28px var(--shadow-dark),
+                -14px -14px 28px var(--shadow-light);
+        }
+
+        .project-header {
+            padding: 32px;
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.08) 0%, 
+                rgba(159, 122, 234, 0.08) 100%);
+            border-radius: 32px 32px 0 0;
+            position: relative;
+        }
+
+        .project-title {
+            font-size: calc(24px * var(--font-scale));
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-subtitle {
+            font-size: calc(13px * var(--font-scale));
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .project-stat {
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .project-stat-value {
+            font-size: calc(16px * var(--font-scale));
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .project-stat-label {
+            font-size: calc(10px * var(--font-scale));
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background: var(--bg);
+            border: none;
+            color: var(--text-secondary);
+            font-size: calc(11px * var(--font-scale));
+            font-weight: 700;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+        }
+
+        .action-btn:hover {
+            color: var(--accent);
+        }
+
+        .action-btn:active {
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .project-body {
+            padding: 32px;
+        }
+
+        .section-title {
+            font-size: calc(14px * var(--font-scale));
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Task Items */
+        .task-item {
+            padding: 16px;
+            margin-bottom: 12px;
+            background: var(--bg);
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 12px;
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            font-size: calc(13px * var(--font-scale));
+        }
+
+        .task-meta {
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        /* Tactile Buttons */
+        .btn {
+            padding: 14px 28px;
+            background: var(--bg);
+            border: none;
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: calc(14px * var(--font-scale));
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 
+                6px 6px 12px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            box-shadow: 
+                6px 6px 12px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light);
+        }
+
+        .btn-success {
+            color: white;
+            background: var(--success);
+        }
+
+        .btn-danger {
+            color: white;
+            background: var(--danger);
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: none;
+            color: var(--text-secondary);
+            font-size: calc(14px * var(--font-scale));
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+            flex-shrink: 0;
+        }
+
+        .icon-btn:hover {
+            color: var(--accent);
+        }
+
+        .icon-btn:active {
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .icon-btn.danger {
+            color: var(--danger);
+        }
+
+        .icon-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Gantt Chart */
+        .gantt-container {
+            background: var(--bg);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        .gantt-timeline-header {
+            display: flex;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 0 var(--shadow-dark);
+        }
+
+        .gantt-timeline-months {
+            margin-left: 150px;
+            display: flex;
+            flex: 1;
+            gap: 2px;
+        }
+
+        .gantt-month {
+            flex: 1;
+            text-align: center;
+            font-size: calc(10px * var(--font-scale));
+            color: var(--text-secondary);
+            font-weight: 700;
+            padding: 8px 4px;
+            background: var(--bg);
+            border-radius: 8px;
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .gantt-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            min-height: 48px;
+        }
+
+        .gantt-label {
+            width: 150px;
+            font-size: calc(12px * var(--font-scale));
+            font-weight: 700;
+            color: var(--text-primary);
+            padding-right: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .gantt-timeline {
+            flex: 1;
+            position: relative;
+            height: 40px;
+            background: var(--bg);
+            border-radius: 8px;
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .gantt-bar {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            font-size: calc(10px * var(--font-scale));
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+            transition: all 0.3s;
+        }
+
+        .gantt-bar:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                4px 4px 8px var(--shadow-dark),
+                -4px -4px 8px var(--shadow-light);
+        }
+
+        .today-line {
+            position: absolute;
+            top: -12px;
+            bottom: -12px;
+            width: 4px;
+            background: var(--danger);
+            z-index: 10;
+            border-radius: 2px;
+            box-shadow: 0 0 12px var(--danger);
+        }
+
+        .today-line::before {
+            content: 'TODAY';
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--danger);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 900;
+            white-space: nowrap;
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+        }
+
+        /* Calendar */
+        .calendar-container {
+            background: var(--bg);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+            margin-bottom: 24px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--bg);
+            box-shadow: 0 2px 0 var(--shadow-dark);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-top: 12px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            padding: 8px;
+            background: var(--bg);
+            border-radius: 12px;
+            font-size: calc(11px * var(--font-scale));
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                5px 5px 10px var(--shadow-dark),
+                -5px -5px 10px var(--shadow-light);
+            z-index: 10;
+        }
+
+        .calendar-day:active {
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            color: white;
+            font-weight: 900;
+            box-shadow: 
+                5px 5px 10px var(--shadow-dark),
+                -5px -5px 10px var(--shadow-light),
+                0 0 20px var(--danger);
+            animation: todayPulse 2s infinite;
+            transform: scale(1.08);
+        }
+
+        @keyframes todayPulse {
+            0%, 100% { box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light), 0 0 20px var(--danger); }
+            50% { box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light), 0 0 30px var(--danger); }
+        }
+
+        .calendar-event {
+            font-size: calc(8px * var(--font-scale));
+            padding: 2px 4px;
+            background: var(--accent);
+            color: white;
+            border-radius: 4px;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal.show { display: flex; }
+
+        .modal-content {
+            background: var(--bg);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 
+                20px 20px 40px var(--shadow-dark),
+                -20px -20px 40px var(--shadow-light);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 2px solid var(--bg);
+            box-shadow: 0 2px 0 var(--shadow-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: calc(20px * var(--font-scale));
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: none;
+            color: var(--text-secondary);
+            font-size: calc(20px * var(--font-scale));
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-close:active {
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 2px solid var(--bg);
+            box-shadow: 0 -2px 0 var(--shadow-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: calc(12px * var(--font-scale));
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: none;
+            border-radius: 16px;
+            font-size: calc(14px * var(--font-scale));
+            color: var(--text-primary);
+            font-family: inherit;
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            box-shadow: 
+                inset 4px 4px 8px var(--shadow-dark),
+                inset -4px -4px 8px var(--shadow-light);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Settings Panel */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 90%;
+            max-width: 450px;
+            height: 100vh;
+            background: var(--bg);
+            box-shadow: -8px 0 16px var(--shadow-dark);
+            transition: right 0.3s;
+            z-index: 1001;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .settings-panel.show { right: 0; }
+
+        .settings-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .settings-backdrop.show { display: block; }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--bg);
+            box-shadow: 0 2px 0 var(--shadow-dark);
+        }
+
+        .settings-section {
+            margin-bottom: 28px;
+            padding-bottom: 28px;
+            border-bottom: 2px solid var(--bg);
+            box-shadow: 0 2px 0 var(--shadow-light);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+            box-shadow: none;
+        }
+
+        .settings-label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-size: calc(14px * var(--font-scale));
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 16px;
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+        }
+
+        .theme-option {
+            padding: 12px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg);
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+        }
+
+        .theme-option:active {
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .theme-option.active {
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+        }
+
+        .theme-preview {
+            height: 50px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: calc(14px * var(--font-scale));
+            font-weight: 700;
+        }
+
+        .theme-name {
+            font-size: calc(11px * var(--font-scale));
+            text-align: center;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .contrast-controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .contrast-btn {
+            padding: 12px 8px;
+            background: var(--bg);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: calc(11px * var(--font-scale));
+            font-weight: 700;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+        }
+
+        .contrast-btn.active {
+            color: white;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+        }
+
+        .contrast-btn:active {
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        /* Floating FAB */
+        .fab-container {
+            position: fixed;
+            bottom: calc(32px + env(safe-area-inset-bottom));
+            right: 32px;
+            z-index: 99;
+        }
+
+        .fab {
+            width: 68px;
+            height: 68px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border: none;
+            color: white;
+            font-size: calc(32px * var(--font-scale));
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 
+                10px 10px 20px var(--shadow-dark),
+                -10px -10px 20px var(--shadow-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab:hover {
+            transform: scale(1.08) rotate(90deg);
+            box-shadow: 
+                14px 14px 28px var(--shadow-dark),
+                -14px -14px 28px var(--shadow-light);
+        }
+
+        .fab:active {
+            transform: scale(1.02) rotate(90deg);
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+        }
+
+        .fab-menu {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .fab-menu.show { display: flex; }
+
+        .fab-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            background: var(--bg);
+            color: var(--text-primary);
+            border-radius: 50px;
+            box-shadow: 
+                6px 6px 12px var(--shadow-dark),
+                -6px -6px 12px var(--shadow-light);
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: calc(13px * var(--font-scale));
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .fab-option:hover {
+            transform: translateX(-4px);
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+        }
+
+        .fab-option:active {
+            box-shadow: 
+                inset 3px 3px 6px var(--shadow-dark),
+                inset -3px -3px 6px var(--shadow-light);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg);
+            color: var(--text-primary);
+            padding: 16px 24px;
+            border-radius: 50px;
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: 700;
+            font-size: calc(14px * var(--font-scale));
+        }
+
+        .toast.show { opacity: 1; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 32px;
+            background: var(--bg);
+            border-radius: 28px;
+            box-shadow: 
+                inset 6px 6px 12px var(--shadow-dark),
+                inset -6px -6px 12px var(--shadow-light);
+        }
+
+        .empty-icon {
+            font-size: calc(80px * var(--font-scale));
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-16px); }
+        }
+
+        .empty-title {
+            font-size: calc(24px * var(--font-scale));
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .empty-text {
+            font-size: calc(14px * var(--font-scale));
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Analytics Components */
+        .insight-card {
+            background: var(--bg);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 
+                8px 8px 16px var(--shadow-dark),
+                -8px -8px 16px var(--shadow-light);
+            transition: all 0.3s;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                10px 10px 20px var(--shadow-dark),
+                -10px -10px 20px var(--shadow-light);
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .insight-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(24px * var(--font-scale));
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .insight-title {
+            font-size: calc(18px * var(--font-scale));
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .insight-body {
+            font-size: calc(14px * var(--font-scale));
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .insight-list {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0 0 0;
+        }
+
+        .insight-list li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            font-size: calc(13px * var(--font-scale));
+            color: var(--text-secondary);
+        }
+
+        .insight-list li:before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .warning-card {
+            background: linear-gradient(135deg, rgba(245, 101, 101, 0.1), rgba(237, 137, 54, 0.1));
+            border-left: 4px solid var(--danger);
+        }
+
+        .success-card {
+            background: linear-gradient(135deg, rgba(72, 187, 120, 0.1), rgba(56, 178, 172, 0.1));
+            border-left: 4px solid var(--success);
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(159, 122, 234, 0.1));
+            border-left: 4px solid var(--accent);
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .metric-box {
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .metric-value {
+            font-size: calc(28px * var(--font-scale));
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--bg);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 8px 0;
+            box-shadow: 
+                inset 2px 2px 4px var(--shadow-dark),
+                inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 12px;
+            transition: width 0.3s;
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, var(--warning), #f59e0b);
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, var(--danger), #dc2626);
+        }
+
+        .progress-fill.success {
+            background: linear-gradient(90deg, var(--success), #10b981);
+        }
+
+        .workload-chart {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .workload-day {
+            text-align: center;
+        }
+
+        .workload-day-name {
+            font-size: calc(10px * var(--font-scale));
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .workload-bar-container {
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .workload-bar {
+            width: 100%;
+            background: linear-gradient(180deg, var(--accent), var(--accent-light));
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 
+                3px 3px 6px var(--shadow-dark),
+                -3px -3px 6px var(--shadow-light);
+        }
+
+        .workload-bar:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                4px 4px 8px var(--shadow-dark),
+                -4px -4px 8px var(--shadow-light);
+        }
+
+        .workload-bar.light { opacity: 0.3; }
+        .workload-bar.medium { opacity: 0.6; }
+        .workload-bar.heavy { opacity: 1; background: linear-gradient(180deg, var(--warning), #f59e0b); }
+        .workload-bar.overloaded { opacity: 1; background: linear-gradient(180deg, var(--danger), #dc2626); }
+
+        .workload-count {
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-primary);
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .suggestion-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--bg);
+            border-radius: 12px;
+            font-size: calc(11px * var(--font-scale));
+            font-weight: 700;
+            margin: 4px;
+            box-shadow: 
+                2px 2px 4px var(--shadow-dark),
+                -2px -2px 4px var(--shadow-light);
+        }
+
+        .suggestion-badge.priority { color: var(--danger); }
+        .suggestion-badge.warning { color: var(--warning); }
+        .suggestion-badge.success { color: var(--success); }
+        .suggestion-badge.info { color: var(--accent); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                margin-top: 7vh;
+            }
+
+            .header, .nav, .stats-container, .container {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            /* Fit mobile interface to screen */
+            body {
+                overflow-x: hidden;
+                width: 100vw;
+                max-width: 100%;
+            }
+
+            .header {
+                width: 100vw;
+                padding: 15px 16px;
+                box-sizing: border-box;
+            }
+
+            .nav-container {
+                width: 100%;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .nav-container::-webkit-scrollbar {
+                display: none;
+            }
+
+            .stats-container,
+            .projects-container,
+            .container {
+                width: 100%;
+                max-width: 100vw;
+                padding: 16px;
+                box-sizing: border-box;
+            }
+
+            .project-card,
+            .task-item,
+            .transaction-item {
+                width: 100%;
+                max-width: calc(100vw - 32px);
+                box-sizing: border-box;
+            }
+
+            .modal-content {
+                width: calc(100vw - 32px);
+                max-width: 500px;
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 16px;
+            }
+
+            .gantt-container {
+                overflow-x: auto;
+                width: 100%;
+            }
+
+            .logo {
+                font-size: calc(20px * var(--font-scale));
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+
+            .stat-card {
+                padding: 20px;
+            }
+
+            .gantt-label {
+                width: 100px;
+                font-size: calc(11px * var(--font-scale));
+            }
+
+            .fab {
+                width: 60px;
+                height: 60px;
+                font-size: calc(28px * var(--font-scale));
+            }
+        }
+    </style>
+</head>
+<body><script>localStorage.setItem('builderProData',"{\"currentUser\": \"REFIT Project Pro\", \"userPosition\": \"Project Control Dashboard\", \"currentView\": \"home\", \"projects\": [{\"id\": 101, \"name\": \"Mont Kiara Residence\", \"client\": \"Aster Living\", \"startDate\": \"2026-06-10\", \"endDate\": \"2026-08-25\", \"description\": \"Full interior fit-out\", \"locked\": false, \"completed\": false, \"created_at\": \"2026-06-01T00:00:00Z\", \"updated_at\": \"2026-06-20T00:00:00Z\"}, {\"id\": 102, \"name\": \"Bangsar Retail Studio\", \"client\": \"North & Co.\", \"startDate\": \"2026-06-18\", \"endDate\": \"2026-07-30\", \"description\": \"Retail renovation\", \"locked\": false, \"completed\": false, \"created_at\": \"2026-06-01T00:00:00Z\", \"updated_at\": \"2026-06-20T00:00:00Z\"}, {\"id\": 103, \"name\": \"KL Office Refresh\", \"client\": \"Vertex Asia\", \"startDate\": \"2026-05-01\", \"endDate\": \"2026-06-15\", \"description\": \"Office refurbishment\", \"locked\": true, \"completed\": true, \"created_at\": \"2026-05-01T00:00:00Z\", \"updated_at\": \"2026-06-16T00:00:00Z\"}], \"tasks\": [{\"id\": 201, \"projectId\": 101, \"name\": \"Confirm carpentry shop drawings\", \"priority\": \"High\", \"status\": \"In Progress\", \"startDate\": \"2026-06-18\", \"dueDate\": \"2026-06-24\", \"assignee\": \"Project Team\", \"description\": \"\", \"created_at\": \"2026-06-10T00:00:00Z\", \"updated_at\": \"2026-06-20T00:00:00Z\"}, {\"id\": 202, \"projectId\": 101, \"name\": \"Electrical first-fix inspection\", \"priority\": \"Critical\", \"status\": \"Get Ready\", \"startDate\": \"2026-06-22\", \"dueDate\": \"2026-06-27\", \"assignee\": \"Site Supervisor\", \"description\": \"\", \"created_at\": \"2026-06-10T00:00:00Z\", \"updated_at\": \"2026-06-20T00:00:00Z\"}, {\"id\": 203, \"projectId\": 102, \"name\": \"Approve signage sample\", \"priority\": \"Medium\", \"status\": \"In Progress\", \"startDate\": \"2026-06-20\", \"dueDate\": \"2026-06-25\", \"assignee\": \"Designer\", \"description\": \"\", \"created_at\": \"2026-06-10T00:00:00Z\", \"updated_at\": \"2026-06-20T00:00:00Z\"}, {\"id\": 204, \"projectId\": 103, \"name\": \"Final handover\", \"priority\": \"High\", \"status\": \"Completed\", \"startDate\": \"2026-06-12\", \"dueDate\": \"2026-06-15\", \"assignee\": \"Project Manager\", \"description\": \"\", \"created_at\": \"2026-06-10T00:00:00Z\", \"updated_at\": \"2026-06-16T00:00:00Z\"}], \"transactions\": [{\"id\": 301, \"projectId\": 101, \"type\": \"income\", \"category\": \"Deposit\", \"amount\": 42000, \"date\": \"2026-06-12\", \"description\": \"30% deposit\", \"created_at\": \"2026-06-12T00:00:00Z\", \"updated_at\": \"2026-06-12T00:00:00Z\"}, {\"id\": 302, \"projectId\": 101, \"type\": \"expense\", \"category\": \"Materials\", \"amount\": 12800, \"date\": \"2026-06-18\", \"description\": \"Carpentry deposit\", \"created_at\": \"2026-06-18T00:00:00Z\", \"updated_at\": \"2026-06-18T00:00:00Z\"}, {\"id\": 303, \"projectId\": 102, \"type\": \"income\", \"category\": \"Deposit\", \"amount\": 18000, \"date\": \"2026-06-19\", \"description\": \"Project deposit\", \"created_at\": \"2026-06-19T00:00:00Z\", \"updated_at\": \"2026-06-19T00:00:00Z\"}, {\"id\": 304, \"projectId\": 102, \"type\": \"expense\", \"category\": \"Labor\", \"amount\": 6200, \"date\": \"2026-06-20\", \"description\": \"Site mobilisation\", \"created_at\": \"2026-06-20T00:00:00Z\", \"updated_at\": \"2026-06-20T00:00:00Z\"}], \"permanentlyDeleted\": [], \"nightMode\": false, \"fontSize\": \"m\", \"lastUpdated\": \"2026-06-20T00:00:00Z\"}");</script>
+    <div class="settings-backdrop" id="settingsBackdrop" onclick="toggleSettings()"></div>
+
+    <header class="header">
+        <div class="header-left" onclick="showProfileModal()">
+            <div>
+                <div class="logo" id="headerName">Builder Pro</div>
+                <div class="header-subtitle" id="headerPosition">by REFIT Interior</div>
+            </div>
+        </div>
+        <div class="header-btns">
+            <button class="neuro-btn" onclick="smartSync()" title="Smart Sync">
+                🔄
+                <span class="sync-indicator" id="syncIndicator"></span>
+            </button>
+            <button class="neuro-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
+        </div>
+    </header>
+
+    <div class="sync-status-bar" id="syncStatusBar">
+        <span id="deviceType"></span> • 
+        <span id="lastSyncTime" style="cursor: pointer;" onclick="showToast('Click 🔄 to sync now')">Never synced</span> • 
+        <span id="syncMode">Offline</span>
+    </div>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <button class="nav-item active" onclick="switchView('home')">Home</button>
+            <button class="nav-item" onclick="switchView('analytics')">Analytics</button>
+            <button class="nav-item" onclick="switchView('kanban')">Kanban</button>
+            <button class="nav-item" onclick="switchView('projects')">Projects</button>
+            <button class="nav-item" onclick="switchView('schedule')">Schedule</button>
+            <button class="nav-item" onclick="switchView('calendar')">Calendar</button>
+        </div>
+    </nav>
+
+    <div class="stats-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">
+                    <div class="stat-icon">📁</div>
+                </div>
+                <div class="stat-value" id="totalProjects">0</div>
+                <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper">
+                    <div class="stat-icon">✅</div>
+                </div>
+                <div class="stat-value" id="totalTasks">0</div>
+                <div class="stat-label">Tasks</div>
+            </div>
+            <div class="stat-card income">
+                <div class="stat-icon-wrapper">
+                    <div class="stat-icon">💰</div>
+                </div>
+                <div class="stat-value" id="totalIncome">$0</div>
+                <div class="stat-label">Income</div>
+            </div>
+            <div class="stat-card expense">
+                <div class="stat-icon-wrapper">
+                    <div class="stat-icon">💸</div>
+                </div>
+                <div class="stat-value" id="totalExpenses">$0</div>
+                <div class="stat-label">Expenses</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent"></div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <span style="font-size: calc(20px * var(--font-scale)); font-weight: 800;">⚙️ Settings</span>
+            <button class="modal-close" onclick="toggleSettings()">✕</button>
+        </div>
+
+        <div class="settings-section">
+            <label class="settings-label">🔑 Smart Sync API</label>
+            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                <input type="password" id="apiKeyInput" placeholder="JSONBin API Key" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: var(--bg); box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);">
+                <button class="btn btn-primary" onclick="saveApiKey()">Save</button>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span style="font-weight: 600; color: var(--text-secondary); font-size: calc(13px * var(--font-scale));">⚡ Auto-Sync (every 5min)</span>
+                <input type="checkbox" id="autoSyncToggle" onchange="toggleAutoSync()" style="width: 48px; height: 28px;">
+            </div>
+            <button class="btn btn-primary" onclick="smartSync()" style="width: 100%; margin-bottom: 8px;">🔄 Manual Sync Now</button>
+            <button class="btn" onclick="testSync()" style="width: 100%;">🔍 Test Connection</button>
+        </div>
+
+        <div class="settings-section">
+            <label class="settings-label">🔤 Font Size</label>
+            <div class="contrast-controls" style="grid-template-columns: repeat(5, 1fr);">
+                <button class="contrast-btn" onclick="setFontSize('s')">S</button>
+                <button class="contrast-btn active" onclick="setFontSize('m')">M</button>
+                <button class="contrast-btn" onclick="setFontSize('l')">L</button>
+                <button class="contrast-btn" onclick="setFontSize('xl')">XL</button>
+                <button class="contrast-btn" onclick="setFontSize('xxl')">XXL</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span class="settings-label" style="margin: 0;">🌙 Night Mode</span>
+                <input type="checkbox" id="nightToggle" onchange="toggleNightMode()" style="width: 48px; height: 28px;">
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <button class="btn btn-primary" onclick="exportData()" style="width: 100%; margin-bottom: 12px;">📤 Export Data</button>
+            <label class="btn btn-success" style="display: block; text-align: center; width: 100%; margin: 0;">
+                📥 Import Data
+                <input type="file" accept=".json" onchange="importData(event)" style="display: none;">
+            </label>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <div class="fab-container">
+        <div class="fab-menu" id="fabMenu">
+            <div class="fab-option" onclick="showProjectModal()">📁 New Project</div>
+            <div class="fab-option" onclick="showTaskModal()">📋 New Task</div>
+            <div class="fab-option" onclick="showTransactionModal('income')">💰 Add Income</div>
+            <div class="fab-option" onclick="showTransactionModal('expense')">💸 Add Expense</div>
+        </div>
+        <button class="fab" onclick="toggleFabMenu()">+</button>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Profile Settings</div>
+                <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="profileName" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Position</label>
+                    <input type="text" id="profilePosition" placeholder="Project Manager">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('profileModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProfile()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="projectModalTitle">New Project</div>
+                <button class="modal-close" onclick="closeModal('projectModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Project Name *</label>
+                    <input type="text" id="projectName" placeholder="Kitchen Renovation">
+                </div>
+                <div class="form-group">
+                    <label>Client Name *</label>
+                    <input type="text" id="projectClient" placeholder="John Doe">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="projectStart">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="projectEnd">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="projectDescription" rows="3"></textarea>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                    <input type="checkbox" id="projectLocked" style="width: 24px; height: 24px;">
+                    <label for="projectLocked" style="font-size: calc(13px * var(--font-scale)); color: var(--text-secondary); margin: 0;">🔒 Lock project (prevents editing)</label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <input type="checkbox" id="projectCompleted" style="width: 24px; height: 24px;">
+                    <label for="projectCompleted" style="font-size: calc(13px * var(--font-scale)); color: var(--text-secondary); margin: 0;">✅ Mark as completed</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('projectModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProject()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="taskModalTitle">New Task</div>
+                <button class="modal-close" onclick="closeModal('taskModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Task Name *</label>
+                    <input type="text" id="taskName" placeholder="Install cabinets">
+                </div>
+                <div class="form-group">
+                    <label>Project *</label>
+                    <select id="taskProject"></select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="taskStart">
+                    </div>
+                    <div class="form-group">
+                        <label>Due Date *</label>
+                        <input type="date" id="taskDue">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select id="taskPriority">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="taskStatus">
+                            <option value="Get Ready">Get Ready</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Assignee</label>
+                    <input type="text" id="taskAssignee" placeholder="Worker name">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="taskDescription" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('taskModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTask()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div class="modal" id="transactionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="transactionModalTitle">Add Transaction</div>
+                <button class="modal-close" onclick="closeModal('transactionModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="transType" onchange="updateCategories()">
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Project *</label>
+                    <select id="transProject"></select>
+                </div>
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="transCategory"></select>
+                </div>
+                <div class="form-group">
+                    <label>Amount ($) *</label>
+                    <input type="number" step="0.01" id="transAmount" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" id="transDate">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="transDescription" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('transactionModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTransaction()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Detail Modal -->
+    <div class="modal" id="projectDetailModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <div class="modal-title" id="projectDetailTitle">Project Details</div>
+                <button class="modal-close" onclick="closeModal('projectDetailModal')">✕</button>
+            </div>
+            <div id="projectDetailBody" class="modal-body" style="max-height: 60vh; overflow-y: auto;"></div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('projectDetailModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day Detail Modal -->
+    <div class="modal" id="dayDetailModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <div class="modal-title" id="dayDetailTitle">📅 Day Details</div>
+                <button class="modal-close" onclick="closeModal('dayDetailModal')">✕</button>
+            </div>
+            <div id="dayDetailBody" class="modal-body" style="max-height: 60vh; overflow-y: auto;"></div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('dayDetailModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const APP_CONFIG = {
+            binId: '690becec43b1c97be99b9837',
+            baseUrl: 'https://api.jsonbin.io/v3',
+            deviceType: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 'Mobile' : 'Laptop'
+        };
+
+        let data = {
+            currentUser: 'Builder Pro',
+            userPosition: 'by REFIT Interior',
+            currentView: 'home',
+            projects: [],
+            tasks: [],
+            transactions: [],
+            permanentlyDeleted: [],
+            nightMode: false,
+            fontSize: 'm',
+            lastUpdated: null
+        };
+
+        let editingId = null;
+        let editingType = null;
+        let syncApiKey = '';
+        let autoSyncInterval = null;
+        let autoSyncEnabled = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            aggressiveCleanup();
+            initUI();
+            updateStats();
+            renderView();
+            initAutoSync();
+            initializeLastSync();
+            
+            document.getElementById('deviceType').textContent = APP_CONFIG.deviceType;
+            
+            if (data.projects.length === 0 && data.tasks.length === 0) {
+                setTimeout(() => {
+                    showToast('👋 Welcome to Builder Pro! Press + to get started');
+                }, 1000);
+            }
+        });
+        function aggressiveCleanup() {
+    const unwantedNames = [
+        'william. mock up 1', 'fnn ice cream booth', 'fnn meeting room 1-refreshment',
+        'fnn add on ac diffuser', 'ms ng- tmn midah. kl', 'fnn ceo blind',
+        'fnn. relocate ac thermostat', 'ss3 winsum', 'usj 11. nicky',
+        'dsara damai. james house', 'william mockup 2', 'liam. production 50 crackle set',
+        'william. production 50 crackle set', 'elaine bu11/14', "adrian home. - d'clover residences",
+        'wong n carol no 37, ss3',
+        'keong to update when installation',
+        'keong to update when instalation',
+        'Budget wuolei',
+        'Budget wuolet',
+        'Keong confirm timing of installation'
+    ];
+    
+    const beforeCount = data.projects.length;
+    data.projects = data.projects.filter(project => {
+        const projectNameLower = project.name.toLowerCase().trim();
+        return !unwantedNames.some(unwanted => 
+            projectNameLower === unwanted.toLowerCase().trim() ||
+            projectNameLower.includes(unwanted.toLowerCase().trim())
+        );
+    });
+    
+    const beforeTaskCount = data.tasks.length;
+    data.tasks = data.tasks.filter(task => {
+        const taskNameLower = task.name.toLowerCase().trim();
+        return !unwantedNames.some(unwanted => 
+            taskNameLower === unwanted.toLowerCase().trim() ||
+            taskNameLower.includes(unwanted.toLowerCase().trim())
+        );
+    });
+    
+    if (beforeCount !== data.projects.length || beforeTaskCount !== data.tasks.length) {
+        const validProjectIds = data.projects.map(p => p.id);
+        data.tasks = data.tasks.filter(task => validProjectIds.includes(task.projectId));
+        data.transactions = data.transactions.filter(trans => validProjectIds.includes(trans.projectId));
+        saveData();
+    }
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('builderProData');
+            if (saved) {
+                data = { ...data, ...JSON.parse(saved) };
+            }
+            syncApiKey = localStorage.getItem('builderProSyncApiKey') || '';
+            applySettings();
+        }
+
+        function saveData() {
+            data.lastUpdated = new Date().toISOString();
+            localStorage.setItem('builderProData', JSON.stringify(data));
+        }
+
+        function addTimestamps(item, isNew = false) {
+            const now = new Date().toISOString();
+            if (isNew) item.created_at = now;
+            item.updated_at = now;
+            return item;
+        }
+
+        function mergeByTimestamp(localItems, cloudItems) {
+            const merged = new Map();
+            localItems.forEach(item => merged.set(item.id, { ...item, _source: 'local' }));
+            cloudItems.forEach(cloudItem => {
+                const localItem = merged.get(cloudItem.id);
+                if (!localItem) {
+                    merged.set(cloudItem.id, { ...cloudItem, _source: 'cloud' });
+                } else {
+                    const localTime = new Date(localItem.updated_at || localItem.created_at || 0);
+                    const cloudTime = new Date(cloudItem.updated_at || cloudItem.created_at || 0);
+                    if (cloudTime > localTime) {
+                        merged.set(cloudItem.id, { ...cloudItem, _source: 'cloud' });
+                    }
+                }
+            });
+            const result = Array.from(merged.values()).filter(item => !item.deleted_at);
+            result.forEach(item => delete item._source);
+            return result;
+        }
+
+        function applySettings() {
+            if (data.nightMode) {
+                document.body.classList.add('night-mode');
+                document.getElementById('nightToggle').checked = true;
+            }
+            setFontSize(data.fontSize || 'm');
+            updateHeader();
+        }
+
+        function initUI() {
+            document.getElementById('deviceType').textContent = APP_CONFIG.deviceType;
+        }
+
+        function setFontSize(size) {
+            document.body.classList.remove('font-s', 'font-m', 'font-l', 'font-xl', 'font-xxl');
+            document.body.classList.add('font-' + size);
+            data.fontSize = size;
+            saveData();
+            
+            document.querySelectorAll('.contrast-btn').forEach(btn => btn.classList.remove('active'));
+            const sizeMap = { s: 0, m: 1, l: 2, xl: 3, xxl: 4 };
+            const fontControls = document.querySelectorAll('.contrast-controls')[0];
+            if (fontControls) {
+                fontControls.querySelectorAll('.contrast-btn')[sizeMap[size]]?.classList.add('active');
+            }
+        }
+
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode');
+            data.nightMode = document.body.classList.contains('night-mode');
+            saveData();
+        }
+
+        function updateHeader() {
+            if (data.currentUser !== 'Builder Pro') {
+                document.getElementById('headerName').textContent = data.currentUser;
+            }
+            if (data.userPosition !== 'by REFIT Interior') {
+                document.getElementById('headerPosition').textContent = data.userPosition;
+            }
+        }
+
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            const backdrop = document.getElementById('settingsBackdrop');
+            
+            if (panel.classList.contains('show')) {
+                panel.classList.remove('show');
+                backdrop.classList.remove('show');
+                document.body.style.overflow = '';
+            } else {
+                panel.classList.add('show');
+                backdrop.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function toggleFabMenu() {
+            document.getElementById('fabMenu').classList.toggle('show');
+        }
+
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), duration);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function switchView(view) {
+            data.currentView = view;
+            document.querySelectorAll('.nav-item').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            renderView();
+        }
+
+        function renderView() {
+            const content = document.getElementById('mainContent');
+            switch(data.currentView) {
+                case 'home': renderHome(content); break;
+                case 'analytics': renderAnalytics(content); break;
+                case 'kanban': renderKanban(content); break;
+                case 'projects': renderProjects(content); break;
+                case 'schedule': renderSchedule(content); break;
+                case 'calendar': renderCalendar(content); break;
+            }
+        }
+
+        function renderHome(container) {
+            const income = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = data.transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            
+            let html = `
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">💰 Finance Summary</div>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <div class="project-stat-value" style="color: var(--income-color);">$${income.toFixed(2)}</div>
+                                <div class="project-stat-label">Income</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="project-stat-value" style="color: var(--expense-color);">$${expenses.toFixed(2)}</div>
+                                <div class="project-stat-label">Expenses</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="project-stat-value" style="color: ${income - expenses >= 0 ? 'var(--income-color)' : 'var(--expense-color)'};">
+                                    $${(income - expenses).toFixed(2)}
+                                </div>
+                                <div class="project-stat-label">Profit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            if (data.projects.length > 0) {
+                html += renderProjectTimeline();
+            } else {
+                html += `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎯</div>
+                        <div class="empty-title">Ready to Start</div>
+                        <div class="empty-text">Click the + button to create your first project</div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function renderAnalytics(container) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Analyze tasks
+            const allTasks = data.tasks;
+            const completedTasks = allTasks.filter(t => t.status === 'Completed');
+            const activeTasks = allTasks.filter(t => t.status !== 'Completed');
+            const overdueTasks = activeTasks.filter(t => new Date(t.dueDate) < today);
+            const upcomingTasks = activeTasks.filter(t => {
+                const dueDate = new Date(t.dueDate);
+                const daysUntil = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+                return daysUntil >= 0 && daysUntil <= 7;
+            });
+            
+            // Analyze projects
+            const activeProjects = data.projects.filter(p => !p.completed);
+            const completedProjects = data.projects.filter(p => p.completed);
+            const projectsWithOverdue = activeProjects.filter(p => {
+                const projectTasks = allTasks.filter(t => t.projectId === p.id);
+                return projectTasks.some(t => t.status !== 'Completed' && new Date(t.dueDate) < today);
+            });
+            
+            // Calculate workload by day (next 7 days)
+            const workloadByDay = [];
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                const dayTasks = activeTasks.filter(t => t.dueDate === dateStr || t.startDate === dateStr);
+                workloadByDay.push({
+                    day: date.toLocaleDateString('en', { weekday: 'short' }),
+                    date: dateStr,
+                    count: dayTasks.length,
+                    tasks: dayTasks
+                });
+            }
+            
+            // Find busiest day
+            const busiestDay = workloadByDay.reduce((max, day) => day.count > max.count ? day : max, workloadByDay[0]);
+            
+            // Calculate completion rate
+            const completionRate = allTasks.length > 0 ? (completedTasks.length / allTasks.length * 100) : 0;
+            
+            // Priority analysis
+            const highPriorityTasks = activeTasks.filter(t => t.priority === 'High' || t.priority === 'Critical');
+            
+            // Generate smart suggestions
+            const suggestions = [];
+            const warnings = [];
+            const insights = [];
+            
+            // Overdue analysis
+            if (overdueTasks.length > 0) {
+                warnings.push({
+                    icon: '⚠️',
+                    title: `${overdueTasks.length} Overdue Task${overdueTasks.length > 1 ? 's' : ''}`,
+                    message: `You have ${overdueTasks.length} task${overdueTasks.length > 1 ? 's' : ''} past their deadline. Consider rescheduling or completing them ASAP.`,
+                    items: overdueTasks.slice(0, 5).map(t => {
+                        const project = data.projects.find(p => p.id === t.projectId);
+                        return `${t.name} (${project ? project.name : 'No Project'}) - Due: ${t.dueDate}`;
+                    }),
+                    action: 'Review overdue tasks in Kanban view'
+                });
+            }
+            
+            // Workload analysis
+            if (busiestDay.count >= 5) {
+                warnings.push({
+                    icon: '📊',
+                    title: 'Heavy Workload Detected',
+                    message: `${busiestDay.day} has ${busiestDay.count} tasks scheduled. Consider redistributing workload to avoid burnout.`,
+                    items: [`Busiest day: ${busiestDay.day} with ${busiestDay.count} tasks`],
+                    action: 'Spread tasks across the week more evenly'
+                });
+            }
+            
+            // Upcoming deadlines
+            if (upcomingTasks.length > 0) {
+                insights.push({
+                    icon: '📅',
+                    title: `${upcomingTasks.length} Task${upcomingTasks.length > 1 ? 's' : ''} Due This Week`,
+                    message: `You have ${upcomingTasks.length} task${upcomingTasks.length > 1 ? 's' : ''} coming up in the next 7 days. Plan accordingly.`,
+                    items: upcomingTasks.slice(0, 5).map(t => {
+                        const project = data.projects.find(p => p.id === t.projectId);
+                        const daysUntil = Math.ceil((new Date(t.dueDate) - today) / (1000 * 60 * 60 * 24));
+                        return `${t.name} - Due in ${daysUntil} day${daysUntil !== 1 ? 's' : ''} (${project ? project.name : 'No Project'})`;
+                    })
+                });
+            }
+            
+            // High priority tasks
+            if (highPriorityTasks.length > 0) {
+                warnings.push({
+                    icon: '🔥',
+                    title: `${highPriorityTasks.length} High Priority Task${highPriorityTasks.length > 1 ? 's' : ''}`,
+                    message: `Focus on these critical tasks first to maintain project momentum.`,
+                    items: highPriorityTasks.slice(0, 5).map(t => {
+                        const project = data.projects.find(p => p.id === t.projectId);
+                        return `${t.name} [${t.priority}] - ${project ? project.name : 'No Project'}`;
+                    })
+                });
+            }
+            
+            // Project health
+            if (projectsWithOverdue.length > 0) {
+                warnings.push({
+                    icon: '📁',
+                    title: 'Projects At Risk',
+                    message: `${projectsWithOverdue.length} project${projectsWithOverdue.length > 1 ? 's have' : ' has'} overdue tasks. Review and update project timelines.`,
+                    items: projectsWithOverdue.map(p => p.name)
+                });
+            }
+            
+            // Productivity insights
+            if (completionRate >= 70) {
+                insights.push({
+                    icon: '✨',
+                    title: 'Great Progress!',
+                    message: `You've completed ${completionRate.toFixed(0)}% of your tasks. Keep up the excellent work!`,
+                    items: [`${completedTasks.length} completed out of ${allTasks.length} total tasks`]
+                });
+            } else if (completionRate < 30 && allTasks.length > 5) {
+                suggestions.push({
+                    icon: '💡',
+                    title: 'Low Completion Rate',
+                    message: `Only ${completionRate.toFixed(0)}% of tasks completed. Consider breaking large tasks into smaller, manageable chunks.`,
+                    items: [
+                        'Break complex tasks into subtasks',
+                        'Focus on completing 2-3 tasks daily',
+                        'Remove or delegate low-priority tasks'
+                    ]
+                });
+            }
+            
+            // Workload balance suggestion
+            const maxWorkload = Math.max(...workloadByDay.map(d => d.count));
+            const minWorkload = Math.min(...workloadByDay.map(d => d.count));
+            if (maxWorkload - minWorkload > 5) {
+                suggestions.push({
+                    icon: '⚖️',
+                    title: 'Unbalanced Workload',
+                    message: 'Your task distribution varies significantly throughout the week.',
+                    items: [
+                        'Move tasks from busy days to lighter days',
+                        'Aim for 2-4 tasks per day',
+                        'Keep weekends lighter when possible'
+                    ]
+                });
+            }
+            
+            // Empty workdays
+            const emptyDays = workloadByDay.filter(d => d.count === 0);
+            if (emptyDays.length > 0 && activeTasks.length > 0) {
+                insights.push({
+                    icon: '📆',
+                    title: 'Schedule Optimization',
+                    message: `You have ${emptyDays.length} day${emptyDays.length > 1 ? 's' : ''} with no scheduled tasks. Consider distributing work evenly.`,
+                    items: emptyDays.map(d => `${d.day} is free - good for buffer time or planning`)
+                });
+            }
+            
+            // No active tasks
+            if (activeTasks.length === 0 && data.projects.length > 0) {
+                suggestions.push({
+                    icon: '🎯',
+                    title: 'No Active Tasks',
+                    message: 'You have projects but no active tasks. Break down your projects into actionable tasks.',
+                    items: [
+                        'Review each active project',
+                        'Create specific, measurable tasks',
+                        'Set realistic deadlines'
+                    ]
+                });
+            }
+            
+            // Render HTML
+            let html = `
+                <div class="insight-card info-card">
+                    <div class="insight-header">
+                        <div class="insight-icon">🧠</div>
+                        <div class="insight-title">Smart Schedule Analytics</div>
+                    </div>
+                    <div class="insight-body">
+                        AI-powered analysis of your workload, deadlines, and productivity patterns with actionable recommendations.
+                    </div>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <div class="insight-icon">📊</div>
+                        <div class="insight-title">Workload Overview</div>
+                    </div>
+                    <div class="metric-row">
+                        <div class="metric-box">
+                            <div class="metric-value">${activeTasks.length}</div>
+                            <div class="metric-label">Active Tasks</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" style="color: var(--danger);">${overdueTasks.length}</div>
+                            <div class="metric-label">Overdue</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" style="color: var(--warning);">${upcomingTasks.length}</div>
+                            <div class="metric-label">This Week</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" style="color: var(--success);">${completionRate.toFixed(0)}%</div>
+                            <div class="metric-label">Completion</div>
+                        </div>
+                    </div>
+                    <div class="insight-body" style="margin-top: 16px;">
+                        <strong>Progress:</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${completionRate >= 70 ? 'success' : completionRate >= 40 ? 'warning' : 'danger'}" 
+                                 style="width: ${completionRate}%;"></div>
+                        </div>
+                        ${completedTasks.length} of ${allTasks.length} tasks completed
+                    </div>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <div class="insight-icon">📅</div>
+                        <div class="insight-title">7-Day Workload Distribution</div>
+                    </div>
+                    <div class="workload-chart">
+                        ${workloadByDay.map(day => {
+                            let barClass = 'light';
+                            let barHeight = day.count * 20;
+                            if (day.count >= 7) { barClass = 'overloaded'; barHeight = 100; }
+                            else if (day.count >= 5) { barClass = 'heavy'; barHeight = 85; }
+                            else if (day.count >= 3) { barClass = 'medium'; barHeight = 60; }
+                            else if (day.count > 0) { barHeight = 35; }
+                            
+                            return `
+                                <div class="workload-day">
+                                    <div class="workload-day-name">${day.day}</div>
+                                    <div class="workload-bar-container">
+                                        ${day.count > 0 ? `<div class="workload-bar ${barClass}" style="height: ${barHeight}px;" title="${day.count} tasks"></div>` : '<div style="height: 5px; width: 100%; background: var(--bg); border-radius: 4px;"></div>'}
+                                    </div>
+                                    <div class="workload-count">${day.count}</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="insight-body" style="margin-top: 16px;">
+                        <span class="suggestion-badge info">Light: 1-2 tasks</span>
+                        <span class="suggestion-badge warning">Medium: 3-4 tasks</span>
+                        <span class="suggestion-badge priority">Heavy: 5+ tasks</span>
+                    </div>
+                </div>
+            `;
+            
+            // Render warnings
+            warnings.forEach(warning => {
+                html += `
+                    <div class="insight-card warning-card">
+                        <div class="insight-header">
+                            <div class="insight-icon">${warning.icon}</div>
+                            <div class="insight-title">${warning.title}</div>
+                        </div>
+                        <div class="insight-body">
+                            <strong>${warning.message}</strong>
+                            ${warning.items ? `
+                                <ul class="insight-list">
+                                    ${warning.items.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                            ${warning.action ? `<div style="margin-top: 12px; font-weight: 700; color: var(--accent);">💡 ${warning.action}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Render insights
+            insights.forEach(insight => {
+                html += `
+                    <div class="insight-card info-card">
+                        <div class="insight-header">
+                            <div class="insight-icon">${insight.icon}</div>
+                            <div class="insight-title">${insight.title}</div>
+                        </div>
+                        <div class="insight-body">
+                            <strong>${insight.message}</strong>
+                            ${insight.items ? `
+                                <ul class="insight-list">
+                                    ${insight.items.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Render suggestions
+            suggestions.forEach(suggestion => {
+                html += `
+                    <div class="insight-card success-card">
+                        <div class="insight-header">
+                            <div class="insight-icon">${suggestion.icon}</div>
+                            <div class="insight-title">${suggestion.title}</div>
+                        </div>
+                        <div class="insight-body">
+                            <strong>${suggestion.message}</strong>
+                            ${suggestion.items ? `
+                                <ul class="insight-list">
+                                    ${suggestion.items.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Project status
+            if (data.projects.length > 0) {
+                html += `
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <div class="insight-icon">📁</div>
+                            <div class="insight-title">Project Status</div>
+                        </div>
+                        <div class="metric-row">
+                            <div class="metric-box">
+                                <div class="metric-value">${activeProjects.length}</div>
+                                <div class="metric-label">Active Projects</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-value" style="color: var(--success);">${completedProjects.length}</div>
+                                <div class="metric-label">Completed</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-value" style="color: var(--danger);">${projectsWithOverdue.length}</div>
+                                <div class="metric-label">At Risk</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // If no data
+            if (data.tasks.length === 0 && data.projects.length === 0) {
+                html = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <div class="empty-title">No Data Yet</div>
+                        <div class="empty-text">Create projects and tasks to see smart analytics and insights</div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function renderProjectTimeline() {
+            const projectsWithDates = data.projects.filter(p => p.startDate && p.endDate);
+            const projectsWithoutDates = data.projects.filter(p => !p.startDate || !p.endDate);
+            
+            if (projectsWithDates.length === 0) {
+                let html = '<div class="gantt-container"><div class="section-title">📅 Project Timeline</div>';
+                html += '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">';
+                html += '<p style="margin-bottom: 16px;">No project dates set. Projects list:</p>';
+                data.projects.forEach(project => {
+                    html += `
+                        <div class="task-item" style="margin-bottom: 12px; ${project.completed ? 'opacity: 0.6;' : ''}">
+                            <div class="task-content">
+                                <div class="task-name">${project.completed ? '✅ ' : ''}${project.name} ${project.locked ? '🔒' : ''}</div>
+                                <div class="task-meta">${project.client}</div>
+                            </div>
+                            <button class="icon-btn" onclick="editProject(${project.id})" ${project.locked ? 'disabled' : ''}>✏️</button>
+                        </div>
+                    `;
+                });
+                html += '</div></div>';
+                return html;
+            }
+            
+            let minDate = null, maxDate = null;
+            projectsWithDates.forEach(p => {
+                const start = new Date(p.startDate);
+                const end = new Date(p.endDate);
+                if (!minDate || start < minDate) minDate = start;
+                if (!maxDate || end > maxDate) maxDate = end;
+            });
+            
+            minDate.setDate(minDate.getDate() - 3);
+            maxDate.setDate(maxDate.getDate() + 3);
+            
+            const totalDays = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24)) + 1;
+            const months = [];
+            let current = new Date(minDate);
+            while (current <= maxDate) {
+                months.push({
+                    label: current.toLocaleDateString('en', { month: 'short', year: 'numeric' }),
+                    start: new Date(current),
+                    end: new Date(current.getFullYear(), current.getMonth() + 1, 0)
+                });
+                current.setMonth(current.getMonth() + 1);
+            }
+            
+            let html = '<div class="gantt-container"><div class="section-title">📅 Project Timeline</div>';
+            html += '<div class="gantt-timeline-header"><div class="gantt-timeline-months">';
+            months.forEach(month => {
+                const monthStart = Math.max(0, Math.ceil((month.start - minDate) / (1000 * 60 * 60 * 24)));
+                const monthEnd = Math.min(totalDays, Math.ceil((month.end - minDate) / (1000 * 60 * 60 * 24)) + 1);
+                const width = ((monthEnd - monthStart) / totalDays) * 100;
+                html += `<div class="gantt-month" style="width: ${width}%;">${month.label}</div>`;
+            });
+            html += '</div></div>';
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (today >= minDate && today <= maxDate) {
+                const todayOffset = Math.ceil((today - minDate) / (1000 * 60 * 60 * 24));
+                const todayPosition = (todayOffset / totalDays) * 100;
+                html += `<div class="today-line" style="left: calc(150px + ${todayPosition}%);"></div>`;
+            }
+            
+            projectsWithDates.forEach(project => {
+                const start = new Date(project.startDate);
+                const end = new Date(project.endDate);
+                const startOffset = Math.ceil((start - minDate) / (1000 * 60 * 60 * 24));
+                const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+                const width = (duration / totalDays) * 100;
+                const left = (startOffset / totalDays) * 100;
+                
+                const isOverdue = end < today && !project.locked;
+                const barStyle = isOverdue ? 
+                    'background: linear-gradient(135deg, var(--danger), #dc2626);' : 
+                    'background: linear-gradient(135deg, var(--accent), var(--accent-light));';
+                
+                html += `
+                    <div class="gantt-row">
+                        <div class="gantt-label">
+                            <span title="${project.name}">${project.completed ? '✅ ' : ''}${project.name} ${project.locked ? '🔒' : ''}</span>
+                            <button class="icon-btn" onclick="editProject(${project.id})" 
+                                    ${project.locked ? 'disabled' : ''} 
+                                    style="width: 28px; height: 28px;">✏️</button>
+                        </div>
+                        <div class="gantt-timeline">
+                            <div class="gantt-bar" style="left: ${left}%; width: ${width}%; ${barStyle} ${project.completed ? 'opacity: 0.6;' : ''}" 
+                                 onclick="showProjectDetail(${project.id})" title="Click for details">
+                                <div style="font-weight: 700;">${duration} days</div>
+                                <div style="font-size: 9px; opacity: 0.9;">
+                                    ${start.toLocaleDateString('en', { month: 'short', day: 'numeric' })} - 
+                                    ${end.toLocaleDateString('en', { month: 'short', day: 'numeric' })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (projectsWithoutDates.length > 0) {
+                html += '<div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--bg); box-shadow: 0 -2px 0 var(--shadow-light);">';
+                html += '<div style="font-size: 12px; margin-bottom: 12px; color: var(--text-secondary); font-weight: 700;">⚠️ Projects without dates:</div>';
+                projectsWithoutDates.forEach(project => {
+                    html += `
+                        <div class="gantt-row" style="${project.completed ? 'opacity: 0.6;' : ''}">
+                            <div class="gantt-label">
+                                <span>${project.completed ? '✅ ' : ''}${project.name} ${project.locked ? '🔒' : ''}</span>
+                                <button class="icon-btn" onclick="editProject(${project.id})" 
+                                        ${project.locked ? 'disabled' : ''} 
+                                        style="width: 28px; height: 28px;">✏️</button>
+                            </div>
+                            <div class="gantt-timeline" style="display: flex; align-items: center; padding-left: 12px;">
+                                <span style="font-size: 11px; color: var(--text-secondary);">No dates - ${project.client}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        function renderProjects(container) {
+            if (data.projects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📁</div>
+                        <div class="empty-title">No Projects Yet</div>
+                        <div class="empty-text">Click + to create your first project</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            data.projects.forEach(project => {
+                const tasks = data.tasks.filter(t => t.projectId === project.id);
+                const transactions = data.transactions.filter(t => t.projectId === project.id);
+                const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+                const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+                
+                html += `
+                    <div class="project-card" style="${project.completed ? 'opacity: 0.7; filter: grayscale(0.3);' : ''}">
+                        <div class="project-header">
+                            <div class="project-title">
+                                ${project.completed ? '✅ ' : ''}${project.name} ${project.locked ? '🔒' : ''}
+                                ${project.completed ? '<span style="color: var(--success); font-size: 14px; font-weight: 600; margin-left: 8px;">(COMPLETED)</span>' : ''}
+                            </div>
+                            <div class="project-subtitle">Client: ${project.client}</div>
+                            <div class="project-stats">
+                                <div class="project-stat">
+                                    <div class="project-stat-value">${tasks.length}</div>
+                                    <div class="project-stat-label">Tasks</div>
+                                </div>
+                                <div class="project-stat">
+                                    <div class="project-stat-value" style="color: var(--income-color);">${income.toFixed(0)}</div>
+                                    <div class="project-stat-label">Income</div>
+                                </div>
+                                <div class="project-stat">
+                                    <div class="project-stat-value" style="color: ${income - expenses >= 0 ? 'var(--income-color)' : 'var(--expense-color)'};">
+                                        ${(income - expenses).toFixed(0)}
+                                    </div>
+                                    <div class="project-stat-label">Profit</div>
+                                </div>
+                            </div>
+                            <div class="project-actions">
+                                <button class="action-btn" onclick="editProject(${project.id})" ${project.locked ? 'disabled' : ''}>
+                                    ${project.locked ? 'Locked' : 'Edit'}
+                                </button>
+                                <button class="action-btn" onclick="toggleProjectLock(${project.id})">
+                                    ${project.locked ? 'Unlock' : 'Lock'}
+                                </button>
+                                <button class="action-btn" onclick="toggleProjectComplete(${project.id})" style="color: ${project.completed ? 'var(--success)' : 'var(--text-secondary)'};">
+                                    ${project.completed ? '✅ Completed' : '📋 Close Case'}
+                                </button>
+                                <button class="action-btn" onclick="permanentDeleteProject(${project.id})">Delete</button>
+                            </div>
+                        </div>
+                        <div class="project-body">
+                            <div class="section-title">
+                                📋 Tasks (${tasks.length})
+                                <button class="btn btn-primary" onclick="showTaskModal(); document.getElementById('taskProject').value = ${project.id};" style="padding: 8px 16px; font-size: 12px;">+ Add</button>
+                            </div>
+                            ${tasks.length === 0 ? '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">No tasks yet</div>' : ''}
+                            ${tasks.map(task => `
+                                <div class="task-item">
+                                    <div class="task-content">
+                                        <div class="task-name">${task.name}</div>
+                                        <div class="task-meta">
+                                            <span>📅 ${task.dueDate}</span>
+                                            <span>${task.priority}</span>
+                                            <span>${task.status}</span>
+                                            ${task.assignee ? `<span>👤 ${task.assignee}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="task-actions">
+                                        ${task.status !== 'Completed' ? `<button class="icon-btn" onclick="completeTask(${task.id})" style="color: var(--success);" title="Mark as Done">✅</button>` : ''}
+                                        <button class="icon-btn" onclick="editTask(${task.id})" title="Edit">✏️</button>
+                                        <button class="icon-btn danger" onclick="deleteTask(${task.id})" title="Delete">🗑️</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function renderKanban(container) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const dueTasks = data.tasks.filter(t => {
+                const dueDate = new Date(t.dueDate);
+                dueDate.setHours(0, 0, 0, 0);
+                return dueDate <= today && t.status !== 'Completed';
+            });
+            
+            const inProgressTasks = data.tasks.filter(t => t.status === 'In Progress');
+            const getReadyTasks = data.tasks.filter(t => 
+                (t.status === 'Get Ready' || !t.status) && !dueTasks.includes(t)
+            );
+            
+            const columns = [
+                { title: 'Due', tasks: dueTasks, color: 'var(--danger)' },
+                { title: 'In Progress', tasks: inProgressTasks, color: 'var(--warning)' },
+                { title: 'Get Ready', tasks: getReadyTasks, color: 'var(--accent)' }
+            ];
+            
+            let html = '<div style="display: flex; gap: 16px; overflow-x: auto; padding-bottom: 20px;">';
+            columns.forEach(column => {
+                html += `
+                    <div style="min-width: 300px; background: var(--bg); border-radius: 24px; padding: 20px; box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);">
+                        <h3 style="font-size: 16px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--bg); box-shadow: 0 2px 0 var(--shadow-dark); color: ${column.color}; font-weight: 800;">
+                            ${column.title} (${column.tasks.length})
+                        </h3>
+                        <div style="min-height: 100px;">
+                `;
+                
+                column.tasks.forEach(task => {
+                    const project = data.projects.find(p => p.id === task.projectId);
+                    html += `
+                        <div class="task-item" style="margin-bottom: 12px;">
+                            <div class="task-content">
+                                <div class="task-name">${task.name}</div>
+                                <div class="task-meta">
+                                    <span>${project ? project.name : 'No Project'}</span>
+                                    <span>📅 ${task.dueDate}</span>
+                                    <span>${task.priority}</span>
+                                    ${task.assignee ? `<span>👤 ${task.assignee}</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                ${task.status !== 'Completed' ? `<button class="icon-btn" onclick="completeTask(${task.id})" style="color: var(--success);" title="Mark as Done">✅</button>` : ''}
+                                <button class="icon-btn" onclick="editTask(${task.id})" title="Edit">✏️</button>
+                                <button class="icon-btn danger" onclick="deleteTask(${task.id})" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        function renderSchedule(container) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const minDate = new Date(today);
+            minDate.setDate(1);
+            const maxDate = new Date(today);
+            maxDate.setMonth(maxDate.getMonth() + 18);
+            maxDate.setDate(0);
+            
+            const projectsWithDates = data.projects.filter(p => p.startDate && p.endDate);
+            
+            if (projectsWithDates.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <div class="empty-title">No Schedule Data</div>
+                        <div class="empty-text">Add dates to your projects to see the schedule</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            projectsWithDates.forEach(p => {
+                const start = new Date(p.startDate);
+                const end = new Date(p.endDate);
+                if (start < minDate) minDate.setTime(start.getTime());
+                if (end > maxDate) maxDate.setTime(end.getTime());
+            });
+            
+            const totalDays = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24)) + 1;
+            const months = [];
+            let current = new Date(minDate);
+            while (current <= maxDate) {
+                const monthStart = new Date(current.getFullYear(), current.getMonth(), 1);
+                const monthEnd = new Date(current.getFullYear(), current.getMonth() + 1, 0);
+                months.push({
+                    label: current.toLocaleDateString('en', { month: 'short', year: 'numeric' }),
+                    start: monthStart,
+                    end: monthEnd
+                });
+                current.setMonth(current.getMonth() + 1);
+            }
+            
+            let html = '<div class="gantt-container"><div class="section-title">📊 18-Month Project Timeline</div>';
+            html += '<div class="gantt-timeline-header"><div class="gantt-timeline-months">';
+            months.forEach(month => {
+                const monthStart = Math.max(0, Math.ceil((month.start - minDate) / (1000 * 60 * 60 * 24)));
+                const monthEnd = Math.min(totalDays, Math.ceil((month.end - minDate) / (1000 * 60 * 60 * 24)) + 1);
+                const width = ((monthEnd - monthStart) / totalDays) * 100;
+                html += `<div class="gantt-month" style="width: ${width}%;">${month.label}</div>`;
+            });
+            html += '</div></div>';
+            
+            if (today >= minDate && today <= maxDate) {
+                const todayOffset = Math.ceil((today - minDate) / (1000 * 60 * 60 * 24));
+                const todayPosition = (todayOffset / totalDays) * 100;
+                html += `<div class="today-line" style="left: calc(150px + ${todayPosition}%);"></div>`;
+            }
+            
+            projectsWithDates.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).forEach(project => {
+                const start = new Date(project.startDate);
+                const end = new Date(project.endDate);
+                const tasks = data.tasks.filter(t => t.projectId === project.id);
+                
+                const startOffset = Math.ceil((start - minDate) / (1000 * 60 * 60 * 24));
+                const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+                const width = (duration / totalDays) * 100;
+                const left = (startOffset / totalDays) * 100;
+                
+                const isOverdue = end < today && !project.locked;
+                const barStyle = isOverdue ? 
+                    'background: linear-gradient(135deg, var(--danger), #dc2626);' : 
+                    'background: linear-gradient(135deg, var(--accent), var(--accent-light));';
+                
+                html += `
+                    <div class="gantt-row" style="${project.completed ? 'opacity: 0.6;' : ''}">
+                        <div class="gantt-label">
+                            <span title="${project.name}">${project.completed ? '✅ ' : ''}${project.name} ${project.locked ? '🔒' : ''}</span>
+                            <button class="icon-btn" onclick="editProject(${project.id})" 
+                                    ${project.locked ? 'disabled' : ''} 
+                                    style="width: 26px; height: 26px; font-size: 11px;">✏️</button>
+                        </div>
+                        <div class="gantt-timeline">
+                            <div class="gantt-bar" style="left: ${left}%; width: ${width}%; ${barStyle} ${project.completed ? 'opacity: 0.7;' : ''}" 
+                                 onclick="showProjectDetail(${project.id})">
+                                <div style="font-weight: 700; font-size: 10px;">${duration}d • ${tasks.length} tasks</div>
+                                <div style="font-size: 9px; opacity: 0.9;">
+                                    ${start.toLocaleDateString('en', { month: 'short', day: 'numeric' })} - 
+                                    ${end.toLocaleDateString('en', { month: 'short', day: 'numeric' })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function renderCalendar(container) {
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            let html = `
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="section-title" style="margin: 0;">
+                            ${today.toLocaleDateString('en', { month: 'long', year: 'numeric' })}
+                        </div>
+                        <button class="btn btn-primary" onclick="syncToiPhoneCalendar()" style="padding: 10px 20px; font-size: 13px;">
+                            📱 Sync to iPhone
+                        </button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div style="font-weight: 800; text-align: center; color: var(--text-secondary); font-size: 11px;">Sun</div>
+                        <div style="font-weight: 800; text-align: center; color: var(--text-secondary); font-size: 11px;">Mon</div>
+                        <div style="font-weight: 800; text-align: center; color: var(--text-secondary); font-size: 11px;">Tue</div>
+                        <div style="font-weight: 800; text-align: center; color: var(--text-secondary); font-size: 11px;">Wed</div>
+                        <div style="font-weight: 800; text-align: center; color: var(--text-secondary); font-size: 11px;">Thu</div>
+                        <div style="font-weight: 800; text-align: center; color: var(--text-secondary); font-size: 11px;">Fri</div>
+                        <div style="font-weight: 800; text-align: center; color: var(--text-secondary); font-size: 11px;">Sat</div>
+            `;
+            
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div class="calendar-day other-month"></div>';
+            }
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const dateStr = date.toISOString().split('T')[0];
+                const isToday = date.toDateString() === today.toDateString();
+                
+                const dayTasks = data.tasks.filter(t => t.dueDate === dateStr || t.startDate === dateStr);
+                
+                html += `<div class="calendar-day ${isToday ? 'today' : ''}" onclick="showDayDetail('${dateStr}')" title="Click to view">
+                    <div style="font-weight: 800;">${day}</div>`;
+                
+                if (dayTasks.length > 0) {
+                    dayTasks.slice(0, 2).forEach(task => {
+                        html += `<div class="calendar-event" title="${task.name}">${task.name.substring(0, 10)}</div>`;
+                    });
+                    if (dayTasks.length > 2) {
+                        html += `<div style="font-size: 9px; color: ${isToday ? 'rgba(255,255,255,0.9)' : 'var(--text-secondary)'};">+${dayTasks.length - 2} more</div>`;
+                    }
+                }
+                
+                html += '</div>';
+            }
+            
+            html += '</div></div>';
+            container.innerHTML = html;
+        }
+
+        function syncToiPhoneCalendar() {
+            let icsContent = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Builder Pro//REFIT Interior//EN\n';
+            icsContent += 'CALSCALE:GREGORIAN\nMETHOD:PUBLISH\n';
+            
+            data.tasks.forEach(task => {
+                if (task.dueDate) {
+                    const project = data.projects.find(p => p.id === task.projectId);
+                    const startDate = task.startDate || task.dueDate;
+                    const formatDate = (dateStr) => dateStr.replace(/-/g, '');
+                    
+                    icsContent += 'BEGIN:VEVENT\n';
+                    icsContent += `UID:${task.id}@builderproapp.com\n`;
+                    icsContent += `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z\n`;
+                    icsContent += `DTSTART:${formatDate(startDate)}\n`;
+                    icsContent += `DTEND:${formatDate(task.dueDate)}\n`;
+                    icsContent += `SUMMARY:${task.name}\n`;
+                    icsContent += `DESCRIPTION:Project: ${project ? project.name : 'None'}\\nPriority: ${task.priority}\\nStatus: ${task.status}\n`;
+                    icsContent += 'END:VEVENT\n';
+                }
+            });
+            
+            icsContent += 'END:VCALENDAR';
+            
+            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'builder-pro-calendar.ics';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('📱 Calendar file created! Open on iPhone to sync.');
+        }
+
+        function showDayDetail(dateStr) {
+            const date = new Date(dateStr);
+            const formattedDate = date.toLocaleDateString('en', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('dayDetailTitle').textContent = formattedDate;
+            
+            const dayTasks = data.tasks.filter(t => t.dueDate === dateStr || t.startDate === dateStr);
+            
+            let html = '';
+            if (dayTasks.length === 0) {
+                html = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📅</div>
+                        <div class="empty-title">No Tasks</div>
+                        <div class="empty-text">No tasks scheduled for this day</div>
+                    </div>
+                `;
+            } else {
+                html += `<div class="section-title">📋 Tasks (${dayTasks.length})</div>`;
+                dayTasks.forEach(task => {
+                    const project = data.projects.find(p => p.id === task.projectId);
+                    html += `
+                        <div class="task-item">
+                            <div class="task-content">
+                                <div class="task-name">${task.name}</div>
+                                <div class="task-meta">
+                                    <span>${project ? project.name : 'No Project'}</span>
+                                    <span>${task.priority}</span>
+                                    <span>${task.status}</span>
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                ${task.status !== 'Completed' ? `<button class="icon-btn" onclick="closeModal('dayDetailModal'); completeTask(${task.id});" style="color: var(--success);" title="Mark as Done">✅</button>` : ''}
+                                <button class="icon-btn" onclick="closeModal('dayDetailModal'); editTask(${task.id});" title="Edit">✏️</button>
+                                <button class="icon-btn danger" onclick="closeModal('dayDetailModal'); deleteTask(${task.id});" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('dayDetailBody').innerHTML = html;
+            document.getElementById('dayDetailModal').classList.add('show');
+        }
+
+        function showProjectDetail(projectId) {
+            const project = data.projects.find(p => p.id === projectId);
+            if (!project) return;
+            
+            const tasks = data.tasks.filter(t => t.projectId === projectId);
+            const transactions = data.transactions.filter(t => t.projectId === projectId);
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            
+            document.getElementById('projectDetailTitle').textContent = (project.completed ? '✅ ' : '') + project.name + (project.completed ? ' (COMPLETED)' : '');
+            
+            let html = `
+                <div style="background: var(--bg); padding: 16px; border-radius: 16px; margin-bottom: 20px; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);">
+                    <div style="font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Project Info</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">
+                        <div><strong>Client:</strong> ${project.client}</div>
+                        ${project.description ? `<div style="margin-top: 8px;"><strong>Description:</strong><br>${project.description}</div>` : ''}
+                    </div>
+                </div>
+                
+                <div style="background: var(--bg); padding: 16px; border-radius: 16px; margin-bottom: 20px; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);">
+                    <div style="font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">💰 Finance</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 11px; color: var(--text-secondary);">Income</div>
+                            <div style="font-size: 18px; font-weight: 800; color: var(--income-color);">$${income.toFixed(2)}</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 11px; color: var(--text-secondary);">Expenses</div>
+                            <div style="font-size: 18px; font-weight: 800; color: var(--expense-color);">$${expenses.toFixed(2)}</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 11px; color: var(--text-secondary);">Profit</div>
+                            <div style="font-size: 18px; font-weight: 800; color: ${income - expenses >= 0 ? 'var(--income-color)' : 'var(--expense-color)'};">
+                                $${(income - expenses).toFixed(2)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">📋 Tasks (${tasks.length})</div>
+            `;
+            
+            if (tasks.length === 0) {
+                html += '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">No tasks yet</div>';
+            } else {
+                tasks.forEach(task => {
+                    html += `
+                        <div class="task-item">
+                            <div class="task-content">
+                                <div class="task-name">${task.name}</div>
+                                <div class="task-meta">
+                                    <span>${task.dueDate}</span>
+                                    <span>${task.priority}</span>
+                                    <span>${task.status}</span>
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                ${task.status !== 'Completed' ? `<button class="icon-btn" onclick="closeModal('projectDetailModal'); completeTask(${task.id});" style="color: var(--success);" title="Mark as Done">✅</button>` : ''}
+                                <button class="icon-btn" onclick="closeModal('projectDetailModal'); editTask(${task.id});" title="Edit">✏️</button>
+                                <button class="icon-btn danger" onclick="closeModal('projectDetailModal'); deleteTask(${task.id});" title="Delete">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('projectDetailBody').innerHTML = html;
+            document.getElementById('projectDetailModal').classList.add('show');
+        }
+
+        function updateStats() {
+            document.getElementById('totalProjects').textContent = data.projects.length;
+            document.getElementById('totalTasks').textContent = data.tasks.length;
+            
+            const income = data.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = data.transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            
+            document.getElementById('totalIncome').textContent = '$' + income.toFixed(0);
+            document.getElementById('totalExpenses').textContent = '$' + expenses.toFixed(0);
+        }
+
+        function showProfileModal() {
+            document.getElementById('profileName').value = data.currentUser;
+            document.getElementById('profilePosition').value = data.userPosition;
+            document.getElementById('profileModal').classList.add('show');
+        }
+
+        function saveProfile() {
+            data.currentUser = document.getElementById('profileName').value || 'Builder Pro';
+            data.userPosition = document.getElementById('profilePosition').value || 'by REFIT Interior';
+            updateHeader();
+            saveData();
+            closeModal('profileModal');
+            showToast('Profile updated');
+        }
+
+        function showProjectModal() {
+            editingId = null;
+            editingType = 'project';
+            document.getElementById('projectModalTitle').textContent = 'New Project';
+            document.getElementById('projectName').value = '';
+            document.getElementById('projectClient').value = '';
+            document.getElementById('projectStart').value = '';
+            document.getElementById('projectEnd').value = '';
+            document.getElementById('projectDescription').value = '';
+            document.getElementById('projectLocked').checked = false;
+            document.getElementById('projectCompleted').checked = false;
+            document.getElementById('projectModal').classList.add('show');
+            toggleFabMenu();
+        }
+
+        function editProject(id) {
+            const project = data.projects.find(p => p.id === id);
+            if (!project || project.locked) return;
+            
+            editingId = id;
+            editingType = 'project';
+            document.getElementById('projectModalTitle').textContent = 'Edit Project';
+            document.getElementById('projectName').value = project.name;
+            document.getElementById('projectClient').value = project.client;
+            document.getElementById('projectStart').value = project.startDate || '';
+            document.getElementById('projectEnd').value = project.endDate || '';
+            document.getElementById('projectDescription').value = project.description || '';
+            document.getElementById('projectLocked').checked = project.locked || false;
+            document.getElementById('projectCompleted').checked = project.completed || false;
+            document.getElementById('projectModal').classList.add('show');
+        }
+
+        function saveProject() {
+            const projectData = {
+                name: document.getElementById('projectName').value.trim(),
+                client: document.getElementById('projectClient').value.trim(),
+                startDate: document.getElementById('projectStart').value,
+                endDate: document.getElementById('projectEnd').value,
+                description: document.getElementById('projectDescription').value.trim(),
+                locked: document.getElementById('projectLocked').checked,
+                completed: document.getElementById('projectCompleted').checked
+            };
+            
+            if (!projectData.name || !projectData.client) {
+                showToast('Please fill required fields');
+                return;
+            }
+            
+            if (editingId) {
+                const index = data.projects.findIndex(p => p.id === editingId);
+                const wasCompleted = data.projects[index].completed;
+                data.projects[index] = addTimestamps({ ...data.projects[index], ...projectData }, false);
+                
+                // Update completedAt timestamp
+                if (projectData.completed && !wasCompleted) {
+                    data.projects[index].completedAt = new Date().toISOString();
+                } else if (!projectData.completed && wasCompleted) {
+                    data.projects[index].completedAt = null;
+                }
+                
+                showToast('Project updated');
+            } else {
+                projectData.id = Date.now();
+                if (projectData.completed) {
+                    projectData.completedAt = new Date().toISOString();
+                }
+                data.projects.push(addTimestamps(projectData, true));
+                showToast('Project created');
+            }
+            
+            saveData();
+            renderView();
+            updateStats();
+            closeModal('projectModal');
+        }
+
+        function permanentDeleteProject(id) {
+            const project = data.projects.find(p => p.id === id);
+            if (!project) return;
+            
+            if (confirm(`⚠️ Permanently delete "${project.name}"?\n\nThis will delete all tasks and transactions.\n\nThis CANNOT be undone.`)) {
+                const now = new Date().toISOString();
+                
+                if (!data.permanentlyDeleted) data.permanentlyDeleted = [];
+                data.permanentlyDeleted.push({ id, type: 'project', deletedAt: now, name: project.name });
+                
+                data.projects = data.projects.filter(p => p.id !== id);
+                data.tasks = data.tasks.filter(t => t.projectId !== id);
+                data.transactions = data.transactions.filter(t => t.projectId !== id);
+                
+                saveData();
+                renderView();
+                updateStats();
+                showToast(`Project "${project.name}" permanently deleted`);
+            }
+        }
+
+        function toggleProjectLock(id) {
+            const project = data.projects.find(p => p.id === id);
+            if (project) {
+                project.locked = !project.locked;
+                addTimestamps(project, false);
+                saveData();
+                renderView();
+                showToast(project.locked ? 'Project locked' : 'Project unlocked');
+            }
+        }
+
+        function toggleProjectComplete(id) {
+            const project = data.projects.find(p => p.id === id);
+            if (project) {
+                project.completed = !project.completed;
+                if (project.completed) {
+                    project.completedAt = new Date().toISOString();
+                } else {
+                    project.completedAt = null;
+                }
+                addTimestamps(project, false);
+                saveData();
+                renderView();
+                updateStats();
+                showToast(project.completed ? '✅ Project completed!' : '📋 Project reopened');
+            }
+        }
+
+        function showTaskModal() {
+            editingId = null;
+            editingType = 'task';
+            document.getElementById('taskModalTitle').textContent = 'New Task';
+            document.getElementById('taskName').value = '';
+            document.getElementById('taskPriority').value = 'Medium';
+            document.getElementById('taskStatus').value = 'Get Ready';
+            document.getElementById('taskStart').value = '';
+            document.getElementById('taskDue').value = '';
+            document.getElementById('taskAssignee').value = '';
+            document.getElementById('taskDescription').value = '';
+            
+            const select = document.getElementById('taskProject');
+            select.innerHTML = '<option value="">Select Project</option>';
+            data.projects.forEach(p => {
+                select.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+            });
+            
+            document.getElementById('taskModal').classList.add('show');
+            
+            if (data.currentView !== 'projects' && data.currentView !== 'schedule') {
+                toggleFabMenu();
+            }
+        }
+
+        function editTask(id) {
+            const task = data.tasks.find(t => t.id === id);
+            if (!task) return;
+            
+            editingId = id;
+            editingType = 'task';
+            document.getElementById('taskModalTitle').textContent = 'Edit Task';
+            document.getElementById('taskName').value = task.name;
+            document.getElementById('taskPriority').value = task.priority;
+            document.getElementById('taskStatus').value = task.status;
+            document.getElementById('taskStart').value = task.startDate || '';
+            document.getElementById('taskDue').value = task.dueDate;
+            document.getElementById('taskAssignee').value = task.assignee || '';
+            document.getElementById('taskDescription').value = task.description || '';
+            
+            const select = document.getElementById('taskProject');
+            select.innerHTML = '<option value="">Select Project</option>';
+            data.projects.forEach(p => {
+                select.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+            });
+            select.value = task.projectId;
+            
+            document.getElementById('taskModal').classList.add('show');
+        }
+
+        function saveTask() {
+            const taskData = {
+                name: document.getElementById('taskName').value.trim(),
+                projectId: parseInt(document.getElementById('taskProject').value),
+                priority: document.getElementById('taskPriority').value,
+                status: document.getElementById('taskStatus').value,
+                startDate: document.getElementById('taskStart').value,
+                dueDate: document.getElementById('taskDue').value,
+                assignee: document.getElementById('taskAssignee').value.trim(),
+                description: document.getElementById('taskDescription').value.trim()
+            };
+            
+            if (!taskData.name || !taskData.projectId || !taskData.dueDate) {
+                showToast('Please fill required fields');
+                return;
+            }
+            
+            if (editingId) {
+                const index = data.tasks.findIndex(t => t.id === editingId);
+                data.tasks[index] = addTimestamps({ ...data.tasks[index], ...taskData }, false);
+                showToast('Task updated');
+            } else {
+                taskData.id = Date.now();
+                data.tasks.push(addTimestamps(taskData, true));
+                showToast('Task created');
+            }
+            
+            saveData();
+            renderView();
+            updateStats();
+            closeModal('taskModal');
+        }
+
+        function deleteTask(id) {
+            if (confirm('Delete this task?')) {
+                data.tasks = data.tasks.filter(t => t.id !== id);
+                saveData();
+                renderView();
+                updateStats();
+                showToast('Task deleted');
+            }
+        }
+
+        function completeTask(id) {
+            const task = data.tasks.find(t => t.id === id);
+            if (task) {
+                task.status = 'Completed';
+                task.completedAt = new Date().toISOString();
+                addTimestamps(task, false);
+                saveData();
+                renderView();
+                showToast('✅ Task completed');
+            }
+        }
+
+        function showTransactionModal(type) {
+            editingId = null;
+            editingType = 'transaction';
+            document.getElementById('transactionModalTitle').textContent = type === 'income' ? 'Add Income' : 'Add Expense';
+            document.getElementById('transType').value = type;
+            document.getElementById('transAmount').value = '';
+            document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('transDescription').value = '';
+            
+            const select = document.getElementById('transProject');
+            select.innerHTML = '<option value="">Select Project</option>';
+            data.projects.forEach(p => {
+                select.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+            });
+            
+            updateCategories();
+            document.getElementById('transactionModal').classList.add('show');
+            
+            if (data.currentView !== 'projects') {
+                toggleFabMenu();
+            }
+        }
+
+        function updateCategories() {
+            const type = document.getElementById('transType').value;
+            const categories = type === 'expense' ? 
+                ['Materials', 'Labor', 'Equipment', 'Transport', 'Other'] : 
+                ['Payment', 'Deposit', 'Final Payment', 'Other'];
+            
+            const select = document.getElementById('transCategory');
+            select.innerHTML = '<option value="">Select Category</option>';
+            categories.forEach(cat => {
+                select.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+        }
+
+        function saveTransaction() {
+            const transData = {
+                type: document.getElementById('transType').value,
+                projectId: parseInt(document.getElementById('transProject').value),
+                category: document.getElementById('transCategory').value,
+                amount: parseFloat(document.getElementById('transAmount').value),
+                date: document.getElementById('transDate').value,
+                description: document.getElementById('transDescription').value.trim()
+            };
+            
+            if (!transData.projectId || !transData.category || !transData.amount || isNaN(transData.amount)) {
+                showToast('Please fill all fields correctly');
+                return;
+            }
+            
+            transData.id = Date.now();
+            data.transactions.push(addTimestamps(transData, true));
+            showToast('Transaction added');
+            
+            saveData();
+            renderView();
+            updateStats();
+            closeModal('transactionModal');
+        }
+
+        function initAutoSync() {
+            const savedAutoSync = localStorage.getItem('autoSyncEnabled');
+            if (savedAutoSync === 'true' && syncApiKey) {
+                autoSyncEnabled = true;
+                document.getElementById('autoSyncToggle').checked = true;
+                startAutoSync();
+            }
+        }
+
+        function toggleAutoSync() {
+            autoSyncEnabled = document.getElementById('autoSyncToggle').checked;
+            localStorage.setItem('autoSyncEnabled', autoSyncEnabled.toString());
+            
+            if (autoSyncEnabled) {
+                startAutoSync();
+                showToast('Auto-sync enabled');
+            } else {
+                stopAutoSync();
+                showToast('Auto-sync disabled');
+            }
+        }
+
+        function startAutoSync() {
+            stopAutoSync();
+            if (syncApiKey && autoSyncEnabled) {
+                autoSyncInterval = setInterval(() => {
+                    smartSync();
+                }, 5 * 60 * 1000);
+            }
+        }
+
+        function stopAutoSync() {
+            if (autoSyncInterval) {
+                clearInterval(autoSyncInterval);
+                autoSyncInterval = null;
+            }
+        }
+
+        function initializeLastSync() {
+            const lastSyncTime = localStorage.getItem('lastSyncTime');
+            if (lastSyncTime) {
+                const date = new Date(parseInt(lastSyncTime));
+                document.getElementById('lastSyncTime').textContent = `Last: ${date.toLocaleTimeString()}`;
+            }
+            
+            document.getElementById('syncMode').textContent = syncApiKey ? 'Ready' : 'No API key';
+        }
+
+        async function smartSync() {
+            if (!syncApiKey) {
+                showToast('⚠️ No API key! Go to Settings → Smart Sync → Save key', 6000);
+                document.getElementById('syncMode').textContent = 'No API key';
+                return;
+            }
+            
+            const indicator = document.getElementById('syncIndicator');
+            const syncMode = document.getElementById('syncMode');
+            
+            indicator.classList.add('syncing');
+            syncMode.textContent = 'Syncing...';
+            
+            try {
+                const getResponse = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}/latest`, {
+                    headers: { 'X-Master-Key': syncApiKey }
+                });
+                
+                if (!getResponse.ok) throw new Error(`Pull failed: ${getResponse.status}`);
+                
+                let cloudData = null;
+                if (getResponse.ok) {
+                    const result = await getResponse.json();
+                    cloudData = result.record || {};
+                }
+                
+                if (cloudData && cloudData.projects) {
+                    data.projects = mergeByTimestamp(data.projects || [], cloudData.projects || []);
+                    data.tasks = mergeByTimestamp(data.tasks || [], cloudData.tasks || []);
+                    data.transactions = mergeByTimestamp(data.transactions || [], cloudData.transactions || []);
+                    
+                    if (cloudData.permanentlyDeleted) {
+                        data.permanentlyDeleted = [
+                            ...(data.permanentlyDeleted || []),
+                            ...cloudData.permanentlyDeleted
+                        ];
+                        data.permanentlyDeleted = Array.from(
+                            new Map(data.permanentlyDeleted.map(item => [item.id, item])).values()
+                        );
+                    }
+                    
+                    saveData();
+                    renderView();
+                    updateStats();
+                }
+                
+                const putResponse = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': syncApiKey
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!putResponse.ok) throw new Error(`Push failed: ${putResponse.status}`);
+                
+                localStorage.setItem('lastSyncTime', Date.now().toString());
+                const nowTime = new Date().toLocaleTimeString();
+                document.getElementById('lastSyncTime').textContent = `Last: ${nowTime}`;
+                showToast(`✅ Synced ${data.projects.length}p ${data.tasks.length}t!`, 3000);
+                indicator.classList.remove('syncing');
+                syncMode.textContent = 'Connected';
+                
+            } catch (error) {
+                let errorMsg = error.message;
+                if (error.message.includes('401')) errorMsg = 'Invalid API key!';
+                else if (error.message.includes('404')) errorMsg = 'Bin not found!';
+                else if (error.message.includes('Failed to fetch')) errorMsg = 'No internet!';
+                
+                showToast(`❌ ${errorMsg}`, 5000);
+                indicator.classList.remove('syncing');
+                syncMode.textContent = 'Error';
+            }
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!key) {
+                showToast('Please enter an API key');
+                return;
+            }
+            
+            syncApiKey = key;
+            localStorage.setItem('builderProSyncApiKey', key);
+            document.getElementById('apiKeyInput').value = '';
+            document.getElementById('syncMode').textContent = 'Ready';
+            showToast('✅ API key saved! Now test connection', 4000);
+        }
+
+        async function testSync() {
+            if (!syncApiKey) {
+                showToast('⚠️ No API key set!');
+                return;
+            }
+            
+            showToast('🔍 Testing connection...');
+            
+            try {
+                const response = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}/latest`, {
+                    headers: { 'X-Master-Key': syncApiKey }
+                });
+                
+                if (response.ok) {
+                    showToast('✅ Connection works! API key is valid.');
+                    document.getElementById('syncMode').textContent = 'Connected';
+                } else if (response.status === 401) {
+                    showToast('❌ Invalid API key!');
+                    document.getElementById('syncMode').textContent = 'Invalid Key';
+                } else if (response.status === 404) {
+                    showToast('❌ Bin not found!');
+                    document.getElementById('syncMode').textContent = 'Invalid Bin';
+                } else {
+                    showToast(`❌ Error ${response.status}`);
+                    document.getElementById('syncMode').textContent = 'Error';
+                }
+            } catch (error) {
+                showToast('❌ Connection failed! Check internet');
+                document.getElementById('syncMode').textContent = 'Offline';
+            }
+        }
+
+        function exportData() {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'builder-pro-backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Data exported');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const imported = JSON.parse(e.target.result);
+                        if (confirm('Replace all current data?')) {
+                            data = imported;
+                            saveData();
+                            applySettings();
+                            renderView();
+                            updateStats();
+                            showToast('Data imported');
+                        }
+                    } catch (error) {
+                        showToast('Import failed');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+    </script>
+</body>
+</html>

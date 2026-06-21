@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1f1b16">
+<title>refit workspace v16.7 thousand separator</title>
+<style>
+:root{--bg:#f5f0df;--card:#fffaf0;--text:#211f1a;--gold:#c7a84b;--black:#1f1b16;--soft:#efe2b9;--danger:#b96b5f;--line:#d8c98f;--white:#fffdf7;--ok:#8ab887}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);padding-bottom:84px}
+.top{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--black),#4b3e20);color:white;padding:14px 16px;border-bottom-left-radius:22px;border-bottom-right-radius:22px}
+.top h1{margin:0;text-transform:lowercase;letter-spacing:2px;font-size:25px}.top p{margin:4px 0 0;color:#f1dc8f;font-size:12px}
+.container{max-width:1240px;margin:auto;padding:12px}.page{min-height:70vh}
+.card{background:var(--card);border-radius:22px;padding:16px;margin:12px 0;box-shadow:0 8px 25px rgba(50,35,0,.08)}
+.hidden{display:none!important}
+button{border:0;border-radius:14px;padding:12px 14px;background:var(--black);color:white;font-size:15px;margin:4px 3px;cursor:pointer;min-height:44px}
+button:active{transform:scale(.97);background:var(--gold);color:#211b11}
+button.gold{background:var(--gold);color:#211b11}button.danger{background:var(--danger)}button.light{background:var(--soft);color:var(--text)}
+input,textarea,select{width:100%;padding:12px;margin:6px 0 10px;border:1px solid var(--line);border-radius:13px;font-size:16px;background:var(--white);color:var(--text)}
+textarea{min-height:76px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.toolbar{position:sticky;top:76px;z-index:15;background:rgba(255,250,240,.96);border:1px solid var(--line);border-radius:18px;padding:8px;margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.toolbar select{width:220px;margin:4px}
+.help{font-size:13px;color:#6f6651;line-height:1.45}.item{background:#fff6da;border-radius:16px;padding:13px;margin:10px 0;line-height:1.55}.badge{display:inline-block;border-radius:20px;background:var(--soft);padding:6px 10px;font-size:12px;margin:3px}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(31,27,22,.96);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+.nav button{background:transparent;color:#fff;margin:0;padding:9px 3px;font-size:12px;border-radius:12px}.nav button.active{background:var(--gold);color:#211b11}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1f1b16;color:white;padding:11px 17px;border-radius:30px;z-index:99999}
+.logoPreview{max-width:160px;max-height:90px;border:1px solid var(--line);background:white;border-radius:12px;padding:6px;margin:8px 0}.printLogo{max-width:120px;max-height:75px;margin-bottom:8px}.liveLogo{max-width:105px;max-height:60px;margin-bottom:8px}
+.quoteWork{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:12px;align-items:start}
+.sidePanel{position:sticky;top:150px}.sidePanel details{background:#fff6da;border-radius:16px;padding:10px;margin-bottom:10px}
+.suggest{background:white;border:1px solid var(--line);border-radius:14px;margin:-6px 0 10px;max-height:180px;overflow:auto}.suggest div{padding:9px;border-bottom:1px solid #eee;cursor:pointer}.suggest div:hover{background:#fff4cf}
+.previewShell{background:white;color:#111;border:1px solid var(--line);border-radius:16px;padding:20px;overflow:auto;min-height:72vh}
+.previewShell h2{text-align:right;letter-spacing:7px;text-transform:lowercase;border-bottom:5px solid #c7a84b;padding-bottom:10px;margin-top:0}
+.previewTable{width:100%;border-collapse:collapse;background:white;font-size:13px}.previewTable th,.previewTable td{border:1px solid #d8c98f;padding:8px;vertical-align:top}.previewTable th{background:#1f1b16;color:white}
+.cellEdit{min-height:28px;outline:0;border-radius:6px;padding:4px}.cellEdit:focus{box-shadow:0 0 0 3px #f1dc8f;background:#fffaf0}
+.previewTotal{text-align:right;font-size:18px;font-weight:bold;margin-top:12px}.smallBtn{padding:5px 8px;font-size:12px;border-radius:10px;min-height:30px}
+.omitted{opacity:.45;text-decoration:line-through}
+.docMinimal .printHeader{border-bottom:1px solid #999}.docMinimal .printTitle{font-size:21px;letter-spacing:5px;font-weight:400}.docLuxury .printHeader{display:block;text-align:center;border-bottom:10px solid #c7a84b}.docLuxury .printTitle{text-align:center;font-size:36px;letter-spacing:10px;color:#c7a84b;margin-top:10px}.docTechnical .printHeader{display:grid;grid-template-columns:120px 1fr 170px;gap:12px;border-bottom:2px dotted #555}.docTechnical .printTitle{text-align:right;font-size:22px;letter-spacing:5px;border:1px dotted #555;padding:10px}.docTechnical th,.docTechnical td{border:1px dotted #555}
+.previewModal{position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:9999;display:flex;flex-direction:column}.previewToolbar{background:#111;color:white;padding:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.previewBody{overflow:auto;padding:20px}
+#printArea{display:none}.docSheet{background:white;color:#111;width:210mm;min-height:297mm;margin:0 auto;padding:18mm;font-size:12px}.printHeader{display:flex;justify-content:space-between;gap:20px;border-bottom:6px solid #c7a84b;padding-bottom:14px;margin-bottom:18px}.printTitle{text-align:right;font-size:25px;letter-spacing:8px;text-transform:lowercase;font-weight:bold}.printCompany{font-size:11px;line-height:1.45}.printInfo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}.printTotal{text-align:right;font-size:18px;font-weight:bold;margin-top:14px}.printTerms{margin-top:22px;line-height:1.5}.signatureRow{display:flex;justify-content:space-between;gap:20px;margin-top:28px}.footerLine{margin-top:22px;border-top:1px solid #aaa;padding-top:8px;font-size:10px;text-align:center}
+@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{display:block;position:absolute;left:0;top:0;width:100%}.docSheet{margin:0;width:100%;min-height:auto}}
+@media(max-width:900px){.grid2,.grid3,.quoteWork{grid-template-columns:1fr}.sidePanel{position:static}.docSheet{width:100%;padding:12mm}.top h1{font-size:23px}.toolbar{top:70px}.previewShell{min-height:60vh}}
+
+.themeGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.themeCard{border:1px solid var(--line);border-radius:14px;padding:10px;background:white;cursor:pointer;min-height:76px}
+.themeCard.active{outline:3px solid var(--gold);background:#fff4cf}
+.themeName{font-weight:bold;font-size:13px}
+.swatches{display:flex;gap:4px;margin:6px 0}
+.swatches span{width:22px;height:12px;border-radius:20px;border:1px solid #ddd}
+.coverPhotoPreview{max-width:100%;max-height:140px;border-radius:14px;border:1px solid var(--line);background:white;margin:6px 0}
+.coverPage{min-height:230mm;display:flex;flex-direction:column;justify-content:center;text-align:center;border:1px solid #ddd;padding:20mm;margin-bottom:12mm}
+.coverPage .coverLogo{max-width:160px;max-height:100px;margin:0 auto 24px}
+.coverPage h1{font-size:34px;letter-spacing:8px;text-transform:lowercase;margin:20px 0;color:#1f1b16}
+.coverPage h2{font-size:24px;margin:12px 0}
+.coverPage img.projectPhoto{max-width:120mm;max-height:80mm;margin:20px auto;border-radius:14px;object-fit:cover}
+.coverMeta{margin-top:20px;line-height:1.8;color:#555}
+.docStartup .printHeader{background:linear-gradient(90deg,#4f46e5,#06b6d4);color:white;border:0;padding:18px;border-radius:16px}.docStartup .printTitle{color:white}.docStartup th{background:#4f46e5!important}
+.docCafe .printHeader{background:#5b3a29;color:#fff7ed;border-bottom:8px solid #d6a85c;padding:18px;border-radius:16px}.docCafe .printTitle{color:#ffd98a}.docCafe th{background:#5b3a29!important;color:#ffd98a}
+.docInterior .printHeader{background:#f8f4ec;border-bottom:8px solid #b79b72;color:#2b2925;padding:18px;border-radius:16px}.docInterior .printTitle{color:#8a6d3b}.docInterior th{background:#6f675d!important;color:white}
+.docPink .printHeader{background:linear-gradient(90deg,#f9a8d4,#c084fc);color:white;border:0;padding:18px;border-radius:16px}.docPink .printTitle{color:white}.docPink th{background:#c084fc!important}
+.liveStartup h2{background:linear-gradient(90deg,#4f46e5,#06b6d4);color:white;border:0;padding:14px;border-radius:14px}
+.liveCafe h2{background:#5b3a29;color:#ffd98a;border-bottom:7px solid #d6a85c;padding:14px;border-radius:14px}
+.liveInterior h2{background:#f8f4ec;color:#8a6d3b;border-bottom:7px solid #b79b72;padding:14px;border-radius:14px}
+.livePink h2{background:linear-gradient(90deg,#f9a8d4,#c084fc);color:white;border:0;padding:14px;border-radius:14px}
+
+</style>
+</head>
+<body><script>localStorage.setItem('rw_company',"{\"name\": \"REFIT STUDIO SDN. BHD.\", \"address\": \"Kuala Lumpur, Malaysia\", \"ssm\": \"202601234567\", \"phone\": \"+60 12-345 6789\", \"email\": \"hello@refitinterior.com\", \"bank\": \"Business account details\", \"sign\": \"Project Director\", \"logo\": \"\"}");localStorage.setItem('rw_draft',"{\"quoteNo\": \"QT-2026-0018\", \"date\": \"21/06/2026\", \"client\": \"Aster Living Sdn. Bhd.\", \"address\": \"Mont Kiara, Kuala Lumpur\", \"project\": \"Show Unit Interior Fit-Out\", \"showCover\": false, \"projectPhoto\": \"\", \"items\": [{\"type\": \"section\", \"title\": \"A. PRELIMINARIES\"}, {\"desc\": \"Site mobilisation, protection and project coordination\", \"unit\": \"lot\", \"qty\": 1, \"rate\": 3800, \"note\": \"Includes supervision and site protection\", \"omitted\": false}, {\"type\": \"section\", \"title\": \"B. CARPENTRY & FEATURE WORKS\"}, {\"desc\": \"Custom TV feature wall with concealed storage\", \"unit\": \"lot\", \"qty\": 1, \"rate\": 12500, \"note\": \"Selected laminate finish\", \"omitted\": false}, {\"desc\": \"Dining built-in display cabinet\", \"unit\": \"ft\", \"qty\": 12, \"rate\": 780, \"note\": \"LED lighting included\", \"omitted\": false}, {\"type\": \"section\", \"title\": \"C. CEILING, LIGHTING & PAINT\"}, {\"desc\": \"Plaster ceiling and lighting points\", \"unit\": \"lot\", \"qty\": 1, \"rate\": 6800, \"note\": \"As per approved drawing\", \"omitted\": false}, {\"desc\": \"Interior painting works\", \"unit\": \"sqft\", \"qty\": 1800, \"rate\": 2.8, \"note\": \"Two finishing coats\", \"omitted\": false}], \"terms\": \"~ 30% upon confirmation. 60% progress claim and 10% upon completion.\\n~ Quotation valid for 30 days.\"}");localStorage.setItem('rw_letterLayout','interior');</script>
+<div class="top"><h1>refit workspace</h1><p>v16.7 theme gallery · thousand separator</p></div>
+
+<div class="container">
+<section id="quote" class="page">
+<div class="toolbar">
+<button class="gold" onclick="newQuote()">+ New</button>
+<select id="quoteSelect"></select>
+<button onclick="editSavedQuote()">Open</button>
+<button class="gold" onclick="saveQuote()">Save</button>
+<button onclick="previewCurrentQuote()">PDF</button>
+<button class="gold" onclick="generateInvoiceFromCurrent()">Invoice</button>
+<select id="letterLayoutSelect" onchange="setLetterLayout(this.value)"><option value="classic">Classic</option><option value="corporate">Corporate</option><option value="modern">Modern Young</option><option value="creative">Creative</option><option value="premium">Luxury Premium</option><option value="technical">Technical</option><option value="minimal">Minimal</option><option value="startup">Startup</option><option value="cafe">Cafe</option><option value="interior">Interior Designer</option><option value="pink">Modern Pink</option></select>
+</div>
+
+<div class="quoteWork">
+<div class="card">
+<h2>editable quote preview</h2>
+<div id="editablePreview" class="previewShell"></div>
+</div>
+
+<div class="sidePanel">
+<details>
+<summary><b>+ Quick Add</b></summary>
+<input id="priceSearch" placeholder="search price master" oninput="showSuggestions()">
+<div id="suggestBox" class="suggest hidden"></div>
+<button onclick="addBlankItem()">direct new item</button>
+<button onclick="addSection()">add section</button>
+<label><input type="checkbox" id="autoLearn" checked style="width:auto"> learn item</label>
+</details>
+
+
+<details>
+<summary><b>Theme Gallery</b></summary>
+<div class="themeGrid" id="themeGallery"></div>
+</details>
+<details>
+<summary><b>Industry Template</b></summary>
+<select id="industrySelect">
+<option value="">select template</option>
+<option value="residential">Residential Renovation</option>
+<option value="office">Office Fitout</option>
+<option value="cafe">Cafe / Restaurant</option>
+<option value="retail">Retail Shop</option>
+<option value="interior">Interior Design</option>
+</select>
+<button onclick="applyIndustryTemplate()">apply template</button>
+<p class="help">Adds starter sections only.</p>
+</details>
+<details>
+<summary><b>Cover Page</b></summary>
+<label><input type="checkbox" id="coverToggle" onchange="toggleCover(this.checked)" style="width:auto"> use cover page</label>
+<input type="file" id="projectPhotoInput" accept="image/*">
+<img id="projectPhotoPreview" class="coverPhotoPreview">
+</details>
+
+<details>
+<summary><b>Recent Items</b></summary>
+<div id="recentItems"></div>
+</details>
+
+<details>
+<summary><b>Saved Quote View</b></summary>
+<div id="savedBox"></div>
+</details>
+</div>
+</div>
+</section>
+
+<section id="invoices" class="page hidden"><div class="card"><h2>invoices</h2><div id="invoiceList"></div></div></section>
+<section id="receipts" class="page hidden"><div class="card"><h2>receipts</h2><div id="receiptList"></div></div></section>
+<section id="settings" class="page hidden"><div class="card"><h2>company settings</h2><label>company logo</label><input type="file" id="logoInput" accept="image/*"><img id="logoPreview" class="logoPreview"><input id="coName" placeholder="company name"><textarea id="coAddress" placeholder="company address"></textarea><input id="coSSM" placeholder="ssm"><input id="coPhone" placeholder="phone"><input id="coEmail" placeholder="email"><textarea id="coBank" placeholder="bank details"></textarea><input id="coSign" placeholder="authorized person"><button class="gold" onclick="saveCompany()">save company</button></div><div class="card"><h2>price master</h2><input id="pmDesc" placeholder="description"><div class="grid2"><input id="pmUnit" placeholder="unit"><input type="number" id="pmRate" placeholder="rate"></div><button class="gold" onclick="savePrice()">save price item</button><button onclick="exportBackup()">export backup</button><input type="file" id="importFile" accept=".json"><button onclick="importBackup()">import backup</button><div id="priceList"></div></div></section>
+</div>
+
+<nav class="nav"><button onclick="showPage('quote')" id="nav-quote">quote</button><button onclick="showPage('invoices')" id="nav-invoices">invoice</button><button onclick="showPage('receipts')" id="nav-receipts">receipt</button><button onclick="showPage('settings')" id="nav-settings">setting</button></nav>
+<div id="previewModal" class="previewModal hidden"><div class="previewToolbar"><b id="previewTitle">preview</b><button class="gold" onclick="window.print()">print / save PDF</button><button onclick="closePreview()">close</button></div><div class="previewBody"><div id="previewMount"></div></div></div>
+<div id="printArea"></div><div id="toast" class="toast hidden">done</div>
+
+<script>
+let company=JSON.parse(localStorage.getItem("rw_company")||'{"name":"REFIT MAINTENANCE SERVICES","address":"C-08-34 centum @ oasis corporate park, oasis damansara, 47301 petaling jaya.","ssm":"201803348973","phone":"012 . 214 5922","email":"","bank":"RHB BANK A/C: 2126 1100 0235 58","sign":"Lyode ng","logo":""}');
+let priceMaster=JSON.parse(localStorage.getItem("rw_priceMaster")||"[]"),quotes=JSON.parse(localStorage.getItem("rw_quotes")||"[]"),invoices=JSON.parse(localStorage.getItem("rw_invoices")||"[]"),receipts=JSON.parse(localStorage.getItem("rw_receipts")||"[]");
+let currentQuote=JSON.parse(localStorage.getItem("rw_draft")||'{"quoteNo":"DRAFT","client":"Client name","address":"Site address","project":"Project title","items":[],"terms":"~ payment 30% upon confirmation. Progress claim 65% and balance 5% after completion.\\n~ prices valid for 30 working days from date of quotation."}');
+currentQuote.showCover=currentQuote.showCover||false;currentQuote.projectPhoto=currentQuote.projectPhoto||"";
+let editingQuoteIndex=null,letterLayout=localStorage.getItem("rw_letterLayout")||"classic";
+function money(n){return (Number(n)||0).toLocaleString("en-MY",{minimumFractionDigits:2,maximumFractionDigits:2})}function norm(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim()}function total(items){return(items||[]).reduce((s,it)=>it.type==="section"||it.omitted?s:s+(Number(it.qty)||0)*(Number(it.rate)||0),0)}
+function saveAll(){localStorage.setItem("rw_company",JSON.stringify(company));localStorage.setItem("rw_priceMaster",JSON.stringify(priceMaster));localStorage.setItem("rw_quotes",JSON.stringify(quotes));localStorage.setItem("rw_invoices",JSON.stringify(invoices));localStorage.setItem("rw_receipts",JSON.stringify(receipts));localStorage.setItem("rw_draft",JSON.stringify(currentQuote))}
+function done(msg){toast.innerText=msg||"done";toast.classList.remove("hidden");setTimeout(()=>toast.classList.add("hidden"),850)}
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("nav-"+id);if(n)n.classList.add("active");refresh()}
+function nextNo(prefix,list){return prefix+"-"+String(list.length+1).padStart(4,"0")}function layoutClass(){
+return letterLayout==="corporate"?"docCorporate":
+letterLayout==="modern"?"docModern":
+letterLayout==="creative"?"docCreative":
+letterLayout==="premium"?"docPremium":
+letterLayout==="technical"?"docTechnical":
+letterLayout==="minimal"?"docMinimal":
+letterLayout==="startup"?"docStartup":
+letterLayout==="cafe"?"docCafe":
+letterLayout==="interior"?"docInterior":
+letterLayout==="pink"?"docPink":"docClassic"
+}
+function liveLayoutClass(){
+return letterLayout==="corporate"?"liveCorporate":
+letterLayout==="modern"?"liveModern":
+letterLayout==="creative"?"liveCreative":
+letterLayout==="premium"?"livePremium":
+letterLayout==="technical"?"liveTechnical":
+letterLayout==="minimal"?"liveMinimal":
+letterLayout==="startup"?"liveStartup":
+letterLayout==="cafe"?"liveCafe":
+letterLayout==="interior"?"liveInterior":
+letterLayout==="pink"?"livePink":"liveClassic"
+}function setLetterLayout(v){letterLayout=v;localStorage.setItem("rw_letterLayout",v);renderEditable();done("layout changed")}
+function newQuote(){editingQuoteIndex=null;currentQuote={quoteNo:"DRAFT",date:new Date().toLocaleDateString(),client:"Client name",address:"Site address",project:"Project title",items:[],terms:currentQuote.terms};saveAll();renderEditable();done("new quote")}
+function renderEditable(){letterLayoutSelect.value=letterLayout;let q=currentQuote;let logo=company.logo?`<img class="liveLogo" src="${company.logo}">`:"";let rows=q.items.map((it,i)=>it.type==="section"?`<tr><td colspan="6"><div class="cellEdit" contenteditable data-type="item" data-i="${i}" data-k="title">${it.title||""}</div><button class="smallBtn" onclick="insertItem(${i+1})">＋</button><button class="smallBtn" onclick="moveItem(${i},-1)">↑</button><button class="smallBtn" onclick="moveItem(${i},1)">↓</button><button class="smallBtn danger" onclick="delItem(${i})">🗑</button></td></tr>`:`<tr class="${it.omitted?'omitted':''}"><td>${i+1}</td><td><div class="cellEdit" contenteditable data-type="item" data-i="${i}" data-k="desc">${it.desc||""}</div><small><div class="cellEdit" contenteditable data-type="item" data-i="${i}" data-k="note">${it.note||""}</div></small></td><td><div class="cellEdit" contenteditable data-type="item" data-i="${i}" data-k="unit">${it.unit||""}</div></td><td><div class="cellEdit" contenteditable data-type="item" data-i="${i}" data-k="qty">${it.qty||0}</div></td><td><div class="cellEdit" contenteditable data-type="item" data-i="${i}" data-k="rate">${it.rate||0}</div></td><td>RM ${money((it.qty||0)*(it.rate||0))}<br><button class="smallBtn" onclick="insertItem(${i})">＋↑</button><button class="smallBtn" onclick="insertItem(${i+1})">＋↓</button><button class="smallBtn" onclick="moveItem(${i},-1)">↑</button><button class="smallBtn" onclick="moveItem(${i},1)">↓</button><button class="smallBtn" onclick="omitItem(${i})">⊘</button><button class="smallBtn danger" onclick="delItem(${i})">🗑</button></td></tr>`).join("");
+editablePreview.innerHTML=`${logo}<h2>quotation</h2><p><b>${company.name}</b><br>${company.phone}</p><p><b>Attention:</b><br><span class="cellEdit" contenteditable data-type="quote" data-k="client">${q.client||""}</span><br><span class="cellEdit" contenteditable data-type="quote" data-k="address">${q.address||""}</span></p><p><b>Job Title:</b><br><span class="cellEdit" contenteditable data-type="quote" data-k="project">${q.project||""}</span></p><table class="previewTable"><tr><th>no</th><th>description</th><th>unit</th><th>qty</th><th>rate</th><th>amount/action</th></tr>${rows||"<tr><td colspan='6'>No item yet. Open + Quick Add.</td></tr>"}</table><div class="previewTotal">contract sum: RM ${money(total(q.items))}</div><p><b>Terms:</b><br><span class="cellEdit" contenteditable data-type="quote" data-k="terms">${(q.terms||"").replaceAll("\\n","<br>")}</span></p>`}
+editablePreview.addEventListener("input",function(e){let el=e.target.closest("[contenteditable]");if(!el)return;let k=el.dataset.k;if(el.dataset.type==="quote"){currentQuote[k]=el.innerText}else{let it=currentQuote.items[Number(el.dataset.i)];let v=el.innerText;if(k==="qty"||k==="rate")v=Number(v)||0;it[k]=v}localStorage.setItem("rw_draft",JSON.stringify(currentQuote))});
+editablePreview.addEventListener("blur",function(e){if(e.target.closest("[contenteditable]")){saveAll();renderEditable()}},true);
+function addBlankItem(){currentQuote.items.push({desc:"New item",unit:"lot",qty:1,rate:0,note:"",omitted:false});renderEditable();done("item added")}function addSection(){currentQuote.items.push({type:"section",title:"NEW SECTION"});renderEditable();done("section added")}function insertItem(i){currentQuote.items.splice(i,0,{desc:"New item",unit:"lot",qty:1,rate:0,note:"",omitted:false});renderEditable()}function moveItem(i,d){let j=i+d;if(j<0||j>=currentQuote.items.length)return;[currentQuote.items[i],currentQuote.items[j]]=[currentQuote.items[j],currentQuote.items[i]];renderEditable()}function omitItem(i){currentQuote.items[i].omitted=!currentQuote.items[i].omitted;renderEditable()}function delItem(i){currentQuote.items.splice(i,1);renderEditable()}
+function showSuggestions(){let q=norm(priceSearch.value);if(!q){suggestBox.classList.add("hidden");return}let list=priceMaster.map((p,i)=>({...p,i})).filter(p=>norm(p.desc).includes(q)).slice(0,10);suggestBox.innerHTML=list.map(p=>`<div onclick="addFromPrice(${p.i})"><b>${p.desc}</b><br><small>${p.unit} · RM ${money(p.rate)}</small></div>`).join("")||"<div>No match. Use direct new item.</div>";suggestBox.classList.remove("hidden")}function addFromPrice(i){let p=priceMaster[i];currentQuote.items.push({desc:p.desc,unit:p.unit,qty:p.unit==="lot"?1:10,rate:p.rate,note:"from price master",omitted:false});p.used=(p.used||0)+1;priceSearch.value="";suggestBox.classList.add("hidden");saveAll();renderEditable();refresh();done("inserted")}
+function learnItem(it){if(!it||it.type==="section"||!it.desc||Number(it.rate)<=0)return;let p=priceMaster.find(x=>norm(x.desc)===norm(it.desc)&&String(x.unit).toLowerCase()===String(it.unit).toLowerCase());if(p){p.used=(p.used||0)+1;if(Number(p.rate)!==Number(it.rate)&&confirm("Update Price Master rate?\\n"+it.desc))p.rate=Number(it.rate)}else priceMaster.push({desc:it.desc,unit:it.unit||"lot",rate:Number(it.rate)||0,used:1,source:"quote"})}
+function saveQuote(){if(!currentQuote.client||!currentQuote.project||!currentQuote.items.length){alert("fill client/project and add item");return}if(autoLearn.checked)currentQuote.items.forEach(learnItem);let q=JSON.parse(JSON.stringify(currentQuote));q.date=new Date().toLocaleDateString();if(editingQuoteIndex!==null){quotes[editingQuoteIndex]=q;done("quote updated")}else{q.quoteNo=nextNo("QT",quotes);currentQuote.quoteNo=q.quoteNo;quotes.push(q);editingQuoteIndex=quotes.length-1;done("quote saved")}saveAll();refresh()}
+function editSavedQuote(){let i=Number(quoteSelect.value);let q=quotes[i];if(!q)return;editingQuoteIndex=i;currentQuote=JSON.parse(JSON.stringify(q));saveAll();renderEditable();done("opened quote")}
+function previewCurrentQuote(){openPreview("quotation",quoteHTML(currentQuote))}function generateInvoiceFromCurrent(){if(editingQuoteIndex===null){alert("save quote first");return}generateInvoice(editingQuoteIndex)}
+function generateInvoice(i){let q=quotes[i ?? Number(quoteSelect.value)];if(!q)return;let pct=Number(prompt("Invoice percentage?","30")||0);if(!pct)return;let amount=total(q.items)*pct/100;invoices.push({invoiceNo:nextNo("INV",invoices),quoteNo:q.quoteNo,date:new Date().toLocaleDateString(),client:q.client,project:q.project,stage:"Progress Claim "+pct+"%",percent:pct,amount,paid:0,balance:amount,status:"pending"});saveAll();refresh();showPage("invoices");done("invoice generated")}
+function createReceipt(i){let inv=invoices[i],amt=Number(prompt("Received amount",inv.balance)||0);if(!amt)return;inv.paid=(inv.paid||0)+amt;inv.balance=Math.max(0,inv.amount-inv.paid);inv.status=inv.balance<=0?"paid":"partial";let r={receiptNo:nextNo("RCPT",receipts),invoiceNo:inv.invoiceNo,date:new Date().toLocaleDateString(),client:inv.client,amount:amt,method:"bank transfer",balance:inv.balance};receipts.push(r);saveAll();refresh();openPreview("receipt",receiptHTML(r))}
+function previewInvoice(i){openPreview("invoice",invoiceHTML(invoices[i]))}function previewReceipt(i){openPreview("receipt",receiptHTML(receipts[i]))}function openPreview(t,h){previewTitle.innerText=t+" preview";printArea.innerHTML=h;previewMount.innerHTML=h;previewModal.classList.remove("hidden")}function closePreview(){previewModal.classList.add("hidden")}
+function header(title,meta){let logo=company.logo?`<img class="printLogo" src="${company.logo}">`:"";return `<div class="docSheet ${layoutClass()}"><div class="printHeader"><div>${logo}<div class="printCompany"><b>${company.name}</b><br>${company.ssm}<br>${company.address}<br>${company.phone} ${company.email}</div></div><div><div class="printTitle">${title}</div><div>${meta}</div></div></div>`}
+function footer(type){let accept=type==="quotation"?`<div><p>customer name : _________________________</p><p>customer i/c or company chop n sign : _________________________</p></div>`:"";return `<div class="signatureRow"><div><p>Yours sincerely,<br>FOR . ${company.name}</p>${company.sign}</div>${accept}</div><div class="footerLine">${company.address} ${company.phone} ${company.email}</div></div>`}
+function quoteHTML(q){let rows=q.items.map((it,i)=>it.type==="section"?`<tr><td colspan="6"><b>${it.title}</b></td></tr>`:`<tr class="${it.omitted?'omitted':''}"><td>${i+1}</td><td>${it.desc}<br><small>${it.note||""}</small></td><td>${it.unit}</td><td>${it.qty}</td><td>${money(it.rate)}</td><td>${money((it.qty||0)*(it.rate||0))}</td></tr>`).join("");return coverHTML(q)+header("q u o t a t i o n",`quotation no : ${q.quoteNo}<br>date : ${q.date||new Date().toLocaleDateString()}`)+`<div class="printInfo"><div><b>attention to</b><br>${q.client}<br>${q.address||""}</div><div><b>Job Title</b><br>${q.project}</div></div><table class="previewTable"><tr><th>no</th><th>description</th><th>unit</th><th>qty</th><th>rate</th><th>amount</th></tr>${rows}</table><div class="printTotal">contract sum : RM ${money(total(q.items))}</div><div class="printTerms">${(q.terms||"").replaceAll("\\n","<br>")}<br><br><b>bank details</b><br>${company.bank.replaceAll("\\n","<br>")}</div>`+footer("quotation")}
+function invoiceHTML(i){return header("i n v o i c e",`invoice no : ${i.invoiceNo}<br>quotation no : ${i.quoteNo}<br>date : ${i.date}`)+`<table class="previewTable"><tr><th>description</th><th>%</th><th>amount</th><th>paid</th><th>balance</th><th>status</th></tr><tr><td>${i.stage}</td><td>${i.percent}%</td><td>RM ${money(i.amount)}</td><td>RM ${money(i.paid)}</td><td>RM ${money(i.balance)}</td><td>${i.status}</td></tr></table>`+footer("invoice")}
+function receiptHTML(r){return header("o f f i c i a l  r e c e i p t",`receipt no : ${r.receiptNo}<br>invoice no : ${r.invoiceNo}<br>date : ${r.date}`)+`<table class="previewTable"><tr><th>date</th><th>payment amount</th><th>balance after payment</th></tr><tr><td>${r.date}</td><td>RM ${money(r.amount)}</td><td>RM ${money(r.balance)}</td></tr></table>`+footer("receipt")}
+function saveCompany(){company={...company,name:coName.value,address:coAddress.value,ssm:coSSM.value,phone:coPhone.value,email:coEmail.value,bank:coBank.value,sign:coSign.value};saveAll();refresh();done("company saved")}function setupLogoInput(){logoInput.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>{company.logo=ev.target.result;saveAll();refresh();renderEditable()};r.readAsDataURL(f)}}function savePrice(){if(!pmDesc.value||!pmRate.value)return alert("enter description and rate");priceMaster.push({desc:pmDesc.value,unit:pmUnit.value||"lot",rate:Number(pmRate.value)||0,used:0});pmDesc.value="";pmUnit.value="";pmRate.value="";saveAll();refresh()}
+function exportBackup(){let data={company,priceMaster,quotes,invoices,receipts};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="refit_workspace_backup.json";a.click()}function importBackup(){let f=importFile.files[0];if(!f)return;let r=new FileReader();r.onload=e=>{let d=JSON.parse(e.target.result);company=d.company||company;priceMaster=d.priceMaster||[];quotes=d.quotes||[];invoices=d.invoices||[];receipts=d.receipts||[];saveAll();refresh()};r.readAsText(f)}
+
+const themeList=[
+{v:"classic",n:"🏛 Classic",c:["#1f1b16","#c7a84b","#fffaf0"]},
+{v:"corporate",n:"🏢 Corporate",c:["#0b6f9f","#ffffff","#dbeafe"]},
+{v:"modern",n:"🚀 Modern",c:["#00a99d","#ffffff","#111827"]},
+{v:"creative",n:"🎨 Creative",c:["#ff7a59","#7b61ff","#00c2a8"]},
+{v:"premium",n:"💎 Premium",c:["#111111","#c7a84b","#ffffff"]},
+{v:"technical",n:"📐 Technical",c:["#333333","#ffffff","#999999"]},
+{v:"minimal",n:"○ Minimal",c:["#ffffff","#111111","#eeeeee"]},
+{v:"startup",n:"🚀 Startup",c:["#4f46e5","#06b6d4","#ffffff"]},
+{v:"cafe",n:"☕ Cafe",c:["#5b3a29","#d6a85c","#fff7ed"]},
+{v:"interior",n:"🏠 Interior",c:["#f8f4ec","#b79b72","#2b2925"]},
+{v:"pink",n:"🌸 Pink",c:["#f9a8d4","#c084fc","#ffffff"]}
+];
+function renderThemeGallery(){
+ if(!document.getElementById("themeGallery"))return;
+ themeGallery.innerHTML=themeList.map(t=>`<div class="themeCard ${letterLayout===t.v?"active":""}" onclick="setLetterLayout('${t.v}')"><div class="themeName">${t.n}</div><div class="swatches">${t.c.map(x=>`<span style="background:${x}"></span>`).join("")}</div><small>${t.v}</small></div>`).join("");
+}
+function applyIndustryTemplate(){
+ let v=industrySelect.value;
+ const sets={
+ residential:["A. DEMOLITION / HACKING","B. WET WORKS","C. PLUMBING","D. M&E WORKS","E. PLASTER CEILING","F. FLOORING","G. PAINTING","H. CLEANING & HANDOVER"],
+ office:["A. PARTITION WORKS","B. CEILING WORKS","C. ELECTRICAL & DATA","D. FLOORING","E. DOOR & GLASS","F. LOOSE FURNITURE","G. CLEANING & HANDOVER"],
+ cafe:["A. COUNTER & FEATURE WORKS","B. KITCHEN / BACK OF HOUSE","C. M&E / LIGHTING","D. FLOORING","E. SIGNAGE","F. FURNITURE","G. CLEANING & HANDOVER"],
+ retail:["A. DISPLAY / FEATURE WALL","B. CEILING & LIGHTING","C. FLOORING","D. ELECTRICAL","E. SIGNAGE","F. COUNTER","G. CLEANING & HANDOVER"],
+ interior:["A. DESIGN & DRAWING","B. BUILT-IN CABINET","C. FEATURE WALL","D. CEILING & LIGHTING","E. FLOORING","F. PAINTING","G. STYLING & HANDOVER"]
+ };
+ if(!sets[v])return;
+ if(currentQuote.items.length&&!confirm("Add template sections to current quote?"))return;
+ sets[v].forEach(s=>currentQuote.items.push({type:"section",title:s}));
+ if(v==="cafe")setLetterLayout("cafe");
+ if(v==="interior"||v==="residential")setLetterLayout("interior");
+ if(v==="office")setLetterLayout("corporate");
+ renderEditable();saveAll();done("template added");
+}
+function toggleCover(v){currentQuote.showCover=!!v;saveAll();renderEditable();}
+function setupProjectPhoto(){
+ let input=document.getElementById("projectPhotoInput");
+ if(!input || input.dataset.ready)return;
+ input.dataset.ready="1";
+ input.onchange=function(e){
+  let f=e.target.files[0]; if(!f)return;
+  let r=new FileReader();
+  r.onload=function(ev){currentQuote.projectPhoto=ev.target.result;currentQuote.showCover=true;saveAll();refresh();renderEditable();done("project photo added")};
+  r.readAsDataURL(f);
+ }
+}
+function coverHTML(q){
+ if(!q.showCover)return "";
+ let logo=company.logo?`<img class="coverLogo" src="${company.logo}">`:"";
+ let photo=q.projectPhoto?`<img class="projectPhoto" src="${q.projectPhoto}">`:"";
+ return `<div class="coverPage">${logo}<h1>quotation</h1><h2>${q.project||""}</h2><p>${q.client||""}</p>${photo}<div class="coverMeta">Quotation No: ${q.quoteNo||"DRAFT"}<br>Date: ${q.date||new Date().toLocaleDateString()}<br>Prepared by: ${company.name}</div></div>`;
+}
+
+function refresh(){quoteSelect.innerHTML=quotes.map((q,i)=>`<option value="${i}">${q.quoteNo} - ${q.client} - RM ${money(total(q.items))}</option>`).join("");invoiceList.innerHTML=invoices.map((inv,i)=>`<div class="item"><b>${inv.invoiceNo}</b> <span class="badge">${inv.status}</span><br>${inv.client}<br>${inv.stage}<br>balance: RM ${money(inv.balance)}<br><button onclick="previewInvoice(${i})">preview</button><button class="gold" onclick="createReceipt(${i})">receive payment</button></div>`).join("")||"<div class='item'>no invoice yet</div>";receiptList.innerHTML=receipts.map((r,i)=>`<div class="item"><b>${r.receiptNo}</b><br>${r.client}<br>RM ${money(r.amount)}<br><button onclick="previewReceipt(${i})">preview receipt</button></div>`).join("")||"<div class='item'>no receipt yet</div>";recentItems.innerHTML=priceMaster.slice(-6).reverse().map((p,i)=>`<button class="light" onclick="addFromPrice(${priceMaster.indexOf(p)})">${p.desc}</button>`).join("")||"<div class='help'>no recent item</div>";priceList.innerHTML=priceMaster.map(p=>`<div class="item"><b>${p.desc}</b><br>${p.unit} · RM ${money(p.rate)} · used ${p.used||0}x</div>`).join("")||"<div class='item'>no price item yet</div>";coName.value=company.name;coAddress.value=company.address;coSSM.value=company.ssm;coPhone.value=company.phone;coEmail.value=company.email;coBank.value=company.bank;coSign.value=company.sign;logoPreview.src=company.logo||"";letterLayoutSelect.value=letterLayout;setupLogoInput();setupProjectPhoto();if(document.getElementById("coverToggle"))coverToggle.checked=!!currentQuote.showCover;if(document.getElementById("projectPhotoPreview"))projectPhotoPreview.src=currentQuote.projectPhoto||"";renderThemeGallery();renderEditable()}
+refresh();showPage("quote");
+</script>
+</body>
+</html>
