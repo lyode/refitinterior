@@ -1,12 +1,87 @@
-const REPO_OWNER="lyode";
-const REPO_NAME="refitinterior";
-const ASSET_API=`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/assets`;
-const IMAGE_EXT=/\.(jpg|jpeg|png|webp|gif)$/i;
-const EXCLUDE=/(logo|wordmark|favicon|placeholder|incometax|400px|800px|used copy|new logo|cad)/i;
-const FALLBACK_IMAGES=["project-commercial-1.jpg","project-commercial-2.jpg","project-commercial-3.jpg","project-residential-1.jpg","project-residential-2.jpg"].map(name=>({name,url:`assets/${encodeURIComponent(name)}`,type:"file"}));
-function cleanTitle(name){return name.replace(/\.[^.]+$/," ").replace(/^\d+[\s._-]*/,"").replace(/[-_]+/g," ").replace(/\s+/g," ").trim().replace(/\b\w/g,c=>c.toUpperCase())||"REFIT Project"}
-function detectCategory(name){const n=name.toLowerCase();if(/(cafe|restaurant|fnb|food|beverage|bar|kitchen)/.test(n))return{key:"fnb",label:"F&B"};if(/(residential|home|house|condo|apartment|living|bedroom|bathroom)/.test(n))return{key:"residential",label:"Residential"};if(/(commercial|office|retail|shop|showroom|studio|workspace)/.test(n))return{key:"commercial",label:"Commercial"};if(/(maintenance|repair|defect|after|before|upgrade|improvement)/.test(n))return{key:"maintenance",label:"Maintenance"};if(/(3d|render|concept|drawing|layout|plan)/.test(n))return{key:"concept",label:"Concept"};return{key:"project",label:"Project"}}
-async function getAssetImages(){try{const res=await fetch(ASSET_API,{cache:"no-store"});if(!res.ok)throw new Error("Cannot read assets folder");const data=await res.json();const images=data.filter(item=>item.type==="file"&&IMAGE_EXT.test(item.name)&&!EXCLUDE.test(item.name)).map(item=>({name:item.name,url:item.download_url||`assets/${encodeURIComponent(item.name)}`,title:cleanTitle(item.name),...detectCategory(item.name)}));return images.length?images:FALLBACK_IMAGES.map(i=>({...i,title:cleanTitle(i.name),...detectCategory(i.name)}))}catch(error){return FALLBACK_IMAGES.map(i=>({...i,title:cleanTitle(i.name),...detectCategory(i.name)}))}}
-function setupMenu(){const menuBtn=document.getElementById("menuBtn");const navLinks=document.getElementById("navLinks");if(!menuBtn||!navLinks)return;menuBtn.addEventListener("click",()=>{const open=navLinks.classList.toggle("open");menuBtn.setAttribute("aria-expanded",String(open))});navLinks.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{navLinks.classList.remove("open");menuBtn.setAttribute("aria-expanded","false")}))}
-function setupReveal(){const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add("visible")})},{threshold:.08});document.querySelectorAll(".reveal").forEach(el=>observer.observe(el))}
-function setupWhatsappForm(){const form=document.getElementById("interestForm");if(!form)return;form.addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("name").value.trim();const company=document.getElementById("company").value.trim();const product=document.getElementById("product").value;const message=document.getElementById("message").value.trim();const text=`Hello REFIT, I am ${name}${company?" from "+company:""}. I am interested in ${product}.${message?"\n\nProject / request: "+message:""}`;window.open("https://wa.me/60122145922?text="+encodeURIComponent(text),"_blank","noopener")})}
+const REPO_API = 'https://api.github.com/repos/lyode/refitinterior/contents/assets?ref=main';
+const IMAGE_EXT = /\.(png|jpe?g|webp|avif)$/i;
+const EXCLUDE = /(logo|favicon|icon|wordmark|android|apple|placeholder|qr|400px|800px)/i;
+const FALLBACK = [
+  'project-commercial-1.jpg','project-commercial-2.jpg','project-commercial-3.jpg',
+  'project-residential-1.jpg','project-residential-2.jpg','project-residential-3.jpg'
+];
+function cleanName(name){
+  return name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase()).trim();
+}
+function categoryFor(name){
+  const n=name.toLowerCase();
+  if(/fnb|f&b|cafe|coffee|restaurant|food|beverage|kopi|rail/.test(n)) return 'fnb';
+  if(/commercial|office|retail|shop|studio|showroom|mall/.test(n)) return 'commercial';
+  if(/residential|house|home|condo|apartment|kitchen|bedroom|living|wardrobe/.test(n)) return 'residential';
+  if(/maintenance|repair|defect|before|after|improvement|service/.test(n)) return 'maintenance';
+  if(/concept|3d|render|drawing|cad|visual/.test(n)) return 'concept';
+  return 'other';
+}
+function labelFor(cat){
+  return {commercial:'Commercial project reference',fnb:'F&B project reference',residential:'Residential project reference',maintenance:'Maintenance / improvement reference',concept:'Concept / design reference',other:'Project reference'}[cat] || 'Project reference';
+}
+async function getImages(){
+  try{
+    const res = await fetch(REPO_API,{headers:{Accept:'application/vnd.github+json'}});
+    if(!res.ok) throw new Error('Gallery list unavailable');
+    const data = await res.json();
+    const images = data.filter(item => item.type === 'file' && IMAGE_EXT.test(item.name) && !EXCLUDE.test(item.name))
+      .map(item => ({name:item.name, src:`assets/${encodeURIComponent(item.name)}`, category:categoryFor(item.name)}));
+    if(images.length) return images;
+  }catch(err){ console.warn(err); }
+  return FALLBACK.map(name => ({name, src:`assets/${name}`, category:categoryFor(name)}));
+}
+function makeTile(image, index){
+  const btn=document.createElement('button');
+  btn.className='project-tile';
+  btn.type='button';
+  btn.dataset.category=image.category;
+  btn.setAttribute('aria-label', cleanName(image.name));
+  btn.innerHTML = `<img loading="lazy" src="${image.src}" alt="${cleanName(image.name)}"><span class="tile-copy"><b>${cleanName(image.name) || `Project Reference ${index+1}`}</b><span>${labelFor(image.category)}</span></span>`;
+  btn.addEventListener('click',()=>openLightbox(image));
+  return btn;
+}
+function setupFilters(grid){
+  const row=document.querySelector('[data-gallery-filters]');
+  if(!row) return;
+  row.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-filter]');
+    if(!btn) return;
+    row.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter=btn.dataset.filter;
+    grid.querySelectorAll('.project-tile').forEach(tile=>{
+      tile.style.display = filter === 'all' || tile.dataset.category === filter ? '' : 'none';
+    });
+  });
+}
+function ensureLightbox(){
+  let box=document.querySelector('.lightbox');
+  if(box) return box;
+  box=document.createElement('div');
+  box.className='lightbox';
+  box.innerHTML=`<div class="lightbox-inner"><img alt="Project preview"><div class="lightbox-caption"><div><b></b><span></span></div><button class="lightbox-close" type="button">Close</button></div></div>`;
+  document.body.appendChild(box);
+  box.addEventListener('click',e=>{ if(e.target===box || e.target.closest('.lightbox-close')) box.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') box.classList.remove('open'); });
+  return box;
+}
+function openLightbox(image){
+  const box=ensureLightbox();
+  box.querySelector('img').src=image.src;
+  box.querySelector('img').alt=cleanName(image.name);
+  box.querySelector('b').textContent=cleanName(image.name);
+  box.querySelector('span').textContent=labelFor(image.category);
+  box.classList.add('open');
+}
+async function initGallery(){
+  const grids=document.querySelectorAll('[data-gallery]');
+  if(!grids.length) return;
+  const images=await getImages();
+  grids.forEach(grid=>{
+    const limit=Number(grid.dataset.galleryLimit || images.length);
+    grid.replaceChildren(...images.slice(0,limit).map(makeTile));
+    setupFilters(grid);
+  });
+}
+document.addEventListener('DOMContentLoaded', initGallery);
