@@ -528,11 +528,11 @@
         <form id="loginForm" autocomplete="off">
           <div class="field">
             <label for="email">Email address</label>
-            <input id="email" type="email" placeholder="Enter your registered email address" autocomplete="off" required />
+            <input id="email" type="email" name="refit_customer_email" placeholder="Enter your registered email address" autocomplete="off" autocapitalize="none" spellcheck="false" readonly onfocus="this.removeAttribute('readonly')" required />
           </div>
           <div class="field">
             <label for="password">Password</label>
-            <input id="password" type="password" autocomplete="current-password" required />
+            <input id="password" type="password" name="refit_customer_passcode" placeholder="Enter your password" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')" required />
           </div>
           <button id="loginButton" class="primary" type="submit">Sign in securely</button>
         </form>
@@ -607,6 +607,21 @@
     <div id="portalMessage" class="message" role="status" aria-live="polite"></div>
   </main>
 
+<script>
+  window.addEventListener("pageshow", function () {
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    if (emailInput) emailInput.value = "";
+    if (passwordInput) passwordInput.value = "";
+
+    setTimeout(function () {
+      if (emailInput) emailInput.value = "";
+      if (passwordInput) passwordInput.value = "";
+    }, 400);
+  });
+</script>
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
     import {
