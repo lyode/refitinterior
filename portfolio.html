@@ -1,18 +1,97 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="REFIT Interior project references for commercial, F&B, residential, renovation and improvement works.">
-  <meta name="theme-color" content="#141215"><title>Project References | REFIT Interior</title>
-  <link rel="icon" type="image/png" href="assets/favicon.png"><link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="REFIT Interior project gallery and selected design-build references.">
+  <meta name="theme-color" content="#050507">
+  <title>Project Gallery | REFIT Interior</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header"><div class="wrap nav-row"><a class="brand" href="index.html" aria-label="REFIT home"><img src="assets/refit-wordmark.png" alt="REFIT"></a><button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="nav-links" id="navLinks"><a href="index.html#services">Services</a><a href="index.html#framework">Framework</a><a href="portfolio.html">Full Gallery</a><a href="index.html#digital-tools">Digital Tools</a><a href="index.html#contact">Contact</a><a class="btn btn-outline" href="login.html">Client Login</a></nav></div></header>
+  <header class="site-header">
+    <div class="wrap nav-row">
+      <a class="brand" href="index.html" aria-label="REFIT home"><span class="brand-mark">refit</span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html#services">Services</a>
+        <a href="index.html#framework">Framework</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="portfolio.html">Gallery</a>
+        <a href="index.html#digital-tools">Digital Tools</a>
+        <a href="index.html#contact">Contact</a>
+        <a class="btn btn-dark" href="login.html">Client Login</a>
+      </nav>
+    </div>
+  </header>
+
   <main>
-    <section class="page-hero"><div class="wrap"><span class="eyebrow reveal">Project references</span><h1 class="reveal">A closer look at REFIT’s <span class="bracket">project capability</span></h1><p class="lead reveal">Browse project references across commercial, food & beverage, residential, renovation, improvement and concept works. Use the filters to view the areas most relevant to your project.</p><div class="filter-row reveal" data-gallery-filters><button class="filter-btn active" data-filter="all">All</button><button class="filter-btn" data-filter="commercial">Commercial</button><button class="filter-btn" data-filter="fnb">F&B</button><button class="filter-btn" data-filter="residential">Residential</button><button class="filter-btn" data-filter="maintenance">Maintenance</button><button class="filter-btn" data-filter="concept">Concept</button><button class="filter-btn" data-filter="other">Other</button></div></div></section>
-    <section class="section soft"><div class="wrap"><div class="gallery-grid reveal" data-gallery><p class="muted">Loading project references…</p></div><p class="gallery-note">Tip: clear photo names such as commercial-office-01.jpg, fnb-cafe-01.jpg and residential-condo-01.jpg help organise this gallery more accurately.</p><div class="button-row"><a class="btn btn-primary" href="index.html#contact">Discuss a Similar Project</a><a class="btn btn-outline" href="index.html">Back to Homepage</a></div></div></section>
+    <section class="hero" style="min-height:auto;padding-bottom:40px">
+      <div class="wrap">
+        <span class="eyebrow hero-kicker reveal">Full project gallery</span>
+        <h1 class="reveal">Project references for <span class="bracket">[client confidence]</span></h1>
+        <p class="lead reveal">Browse REFIT project photos across commercial, food & beverage, residential, maintenance and concept references. Click any image to view it larger.</p>
+        <div class="filter-row reveal" style="justify-content:flex-start;margin-top:34px">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="commercial">Commercial</button>
+          <button class="filter-btn" data-filter="fnb">F&B</button>
+          <button class="filter-btn" data-filter="residential">Residential</button>
+          <button class="filter-btn" data-filter="maintenance">Maintenance</button>
+          <button class="filter-btn" data-filter="concept">Concept</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section compact section-line">
+      <div class="wrap">
+        <div class="gallery-grid" id="projectGallery"></div>
+      </div>
+    </section>
+
+    <section class="section compact section-line">
+      <div class="wrap tools-panel reveal">
+        <div>
+          <span class="eyebrow">Similar project?</span>
+          <h2>Let REFIT understand your space first.</h2>
+          <p>Send a few photos, your location, rough scope and expected timing. REFIT can advise the next practical step.</p>
+        </div>
+        <div class="button-row"><a class="btn btn-primary" href="https://wa.me/60122145922">WhatsApp REFIT</a><a class="btn btn-dark" href="index.html">Back to Homepage</a></div>
+      </div>
+    </section>
   </main>
-  <footer><div class="wrap"><div class="footer-grid"><div class="brand"><img src="assets/refit-wordmark.png" alt="REFIT"><p style="margin-top:18px;max-width:430px">Interior design, renovation, fit-out, maintenance and project-control support.</p></div><div><h4>REFIT Interior</h4><div class="footer-links"><a href="index.html#services">Services</a><a href="index.html#framework">Framework</a><a href="portfolio.html">Project References</a><a href="index.html#contact">Contact</a></div></div><div><h4>Digital Tools</h4><div class="footer-links"><a href="index.html#digital-tools">Quote Pro</a><a href="index.html#digital-tools">Project Pro</a><a href="index.html#digital-tools">REFIT Complete</a><a href="login.html">Client Login</a></div></div></div><div class="footer-bottom"><span>© 2026 REFIT. All rights reserved.</span><span>From Concept to Completion.</span></div></div></footer>
-  <script src="gallery-loader.js"></script><script>const menuBtn=document.getElementById('menuBtn'),navLinks=document.getElementById('navLinks');menuBtn.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open));});navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}));const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));</script>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div><div class="brand-mark">refit</div><p>Interior design, renovation, fit-out, maintenance and project-control support.</p></div>
+        <div><h4>REFIT Interior</h4><div class="footer-links"><a href="index.html#services">Services</a><a href="index.html#framework">Framework</a><a href="portfolio.html">Gallery</a></div></div>
+        <div><h4>Digital Tools</h4><div class="footer-links"><a href="index.html#digital-tools">Quote Pro</a><a href="index.html#digital-tools">Project Pro</a><a href="login.html">Client Login</a></div></div>
+        <div><h4>Contact</h4><div class="footer-links"><a href="https://wa.me/60122145922">WhatsApp</a><a href="mailto:refitcs@gmail.com">Email REFIT</a></div></div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 REFIT. All rights reserved.</span><span>Project Gallery</span></div>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <img src="" alt="">
+      <div class="lightbox-caption">
+        <div><b data-lightbox-title></b><br><span data-lightbox-caption></span></div>
+        <button class="lightbox-close" data-lightbox-close>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="gallery-loader.js"></script>
+  <script>
+    const menuBtn=document.getElementById('menuBtn');
+    const navLinks=document.getElementById('navLinks');
+    menuBtn.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open));});
+    navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}));
+    const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:.08});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+    initGallery({targetId:"projectGallery"});
+  </script>
 </body>
 </html>
