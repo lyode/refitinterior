@@ -23,21 +23,27 @@ function isImageFile(name) {
 
 function categoryFromName(name) {
   const lower = name.toLowerCase();
-  if (lower.includes("fnb") || lower.includes("cafe") || lower.includes("coffee") || lower.includes("restaurant") || lower.includes("food")) return "fnb";
-  if (lower.includes("residential") || lower.includes("home") || lower.includes("house") || lower.includes("condo") || lower.includes("apartment")) return "residential";
-  if (lower.includes("maintenance") || lower.includes("repair") || lower.includes("defect") || lower.includes("improvement")) return "maintenance";
-  if (lower.includes("concept") || lower.includes("render") || lower.includes("3d") || lower.includes("drawing")) return "concept";
+  if (lower.includes("fnb") || lower.includes("cafe") || lower.includes("coffee") || lower.includes("restaurant") || lower.includes("food") || lower.includes("rail")) return "fnb";
+  if (lower.includes("residential") || lower.includes("home") || lower.includes("house") || lower.includes("condo") || lower.includes("apartment") || lower.includes("master") || lower.includes("bedroom")) return "residential";
+  if (lower.includes("maintenance") || lower.includes("repair") || lower.includes("defect") || lower.includes("improvement") || lower.includes("before") || lower.includes("after")) return "maintenance";
+  if (lower.includes("concept") || lower.includes("render") || lower.includes("3d") || lower.includes("drawing") || lower.includes("cad")) return "concept";
   if (lower.includes("commercial") || lower.includes("office") || lower.includes("retail") || lower.includes("shop")) return "commercial";
-  return "commercial";
+  return "project";
+}
+
+function categoryLabel(category) {
+  return {
+    commercial: "Commercial",
+    fnb: "Food & Beverage",
+    residential: "Residential",
+    maintenance: "Maintenance",
+    concept: "Concept",
+    project: "Project"
+  }[category] || "Project";
 }
 
 function titleFromName(name, index) {
-  const clean = name
-    .replace(/\.[^/.]+$/, "")
-    .replace(/[_-]+/g, " ")
-    .replace(/\b\w/g, c => c.toUpperCase());
-  if (clean && !clean.match(/^Project\s?\d*$/i)) return clean;
-  return `REFIT Project Reference ${index + 1}`;
+  return `Project Reference ${String(index + 1).padStart(2, "0")}`;
 }
 
 async function fetchAssetImages() {
@@ -53,27 +59,17 @@ async function fetchAssetImages() {
         name: file.name,
         title: titleFromName(file.name, index),
         category: categoryFromName(file.name),
-        caption: categoryLabel(categoryFromName(file.name)) + " project reference"
+        caption: `${categoryLabel(categoryFromName(file.name))} reference`
       }));
   } catch (error) {
     return REFIT_GALLERY.fallback.map((src, index) => ({
       src,
       name: src.split("/").pop(),
-      title: `REFIT Project Reference ${index + 1}`,
+      title: titleFromName(src, index),
       category: categoryFromName(src),
-      caption: categoryLabel(categoryFromName(src)) + " project reference"
+      caption: `${categoryLabel(categoryFromName(src))} reference`
     }));
   }
-}
-
-function categoryLabel(category) {
-  return {
-    commercial: "Commercial",
-    fnb: "Food & Beverage",
-    residential: "Residential",
-    maintenance: "Maintenance",
-    concept: "Concept"
-  }[category] || "Project";
 }
 
 function createGalleryCard(item, index, largeEvery = true) {
@@ -114,13 +110,13 @@ function closeLightbox() {
   document.body.classList.remove("lightbox-open");
 }
 
-async function initGallery({ targetId = "projectGallery", limit = null } = {}) {
+async function initGallery({ targetId = "projectGallery", limit = null, scroller = false } = {}) {
   const target = document.getElementById(targetId);
   if (!target) return;
   const allImages = await fetchAssetImages();
   const images = limit ? allImages.slice(0, limit) : allImages;
   target.innerHTML = "";
-  images.forEach((item, index) => target.append(createGalleryCard(item, index, true)));
+  images.forEach((item, index) => target.append(createGalleryCard(item, index, !scroller)));
 
   document.querySelectorAll("[data-filter]").forEach(button => {
     button.addEventListener("click", () => {

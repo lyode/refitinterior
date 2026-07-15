@@ -13,14 +13,14 @@
   <header class="site-header">
     <div class="wrap nav-row">
       <a class="brand" href="#home" aria-label="REFIT home">
-        <span class="brand-mark">refit</span>
+        <img src="assets/refit-wordmark.png" alt="REFIT">
       </a>
       <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
       <nav class="nav-links" id="navLinks">
         <a href="#services">Services</a>
         <a href="#framework">Framework</a>
-        <a href="#projects">Projects</a>
-        <a href="portfolio.html">Gallery</a>
+        <a href="#projects">References</a>
+        <a href="portfolio.html">Full Gallery</a>
         <a href="#digital-tools">Digital Tools</a>
         <a href="#contact">Contact</a>
         <a class="btn btn-dark" href="login.html">Client Login</a>
@@ -139,15 +139,18 @@
       <div class="wrap">
         <div class="gallery-head reveal">
           <div>
-            <span class="eyebrow">Project references</span>
+            <span class="eyebrow">Project References</span>
             <h2>Real spaces. Practical delivery. <span class="bracket">[Clearer control]</span></h2>
           </div>
           <div>
-            <p>Explore selected REFIT project references across commercial, food & beverage, residential, renovation and improvement works. These photos help new clients understand our design direction, workmanship, site coordination and project delivery capability.</p>
+            <p>Explore REFIT project references across commercial, food & beverage, residential, renovation and improvement works. Scroll through the photos to understand our design direction, workmanship, site coordination and project delivery capability.</p>
             <div class="button-row"><a class="btn btn-primary" href="portfolio.html">View Full Gallery</a></div>
           </div>
         </div>
-        <div class="gallery-grid" id="projectGallery"></div>
+        <div class="gallery-scroller-wrap reveal">
+          <div class="gallery-scroller" id="projectScroller"></div>
+          <div class="gallery-note">Scroll sideways to view more project photos. Click any photo to enlarge.</div>
+        </div>
       </div>
     </section>
 
@@ -155,10 +158,15 @@
       <div class="wrap">
         <div class="tools-panel reveal">
           <div>
+            <span class="promo-badge">Promo / Demo / Pilot stage</span>
             <span class="eyebrow">Digital project documents & tools</span>
             <h2>Created from REFIT’s <span class="bracket">[site experience]</span></h2>
-            <p>Digital tools are the second layer of REFIT. They help small project businesses prepare quotations, track progress and control project documents more clearly.</p>
-            <div class="button-row"><a class="btn btn-primary" href="quote-pro-demo.html">Quote Pro Demo</a><a class="btn btn-dark" href="project-pro-demo.html">Project Pro Prototype</a></div>
+            <p>Digital tools are the final section of the website. They support REFIT’s real project delivery experience and help small project businesses prepare quotations, track progress and control project documents more clearly.</p>
+            <div class="button-row">
+              <a class="btn btn-primary" href="quote-pro-demo.html">Quote Pro Demo</a>
+              <a class="btn btn-dark" href="project-pro-demo.html">Project Pro Prototype</a>
+              <a class="btn btn-pink" href="login.html">Client Login</a>
+            </div>
           </div>
           <div class="tools-grid">
             <article class="tool-card"><span>Closest to launch</span><h3>Quote Pro</h3><p>Quotation, invoice, receipt and price master.</p><div class="price">RM299 <small>planned intro licence</small></div></article>
@@ -204,8 +212,8 @@
   <footer>
     <div class="wrap">
       <div class="footer-grid">
-        <div><div class="brand-mark">refit</div><p>Interior design, renovation, fit-out, maintenance and project-control support. Digital tools are developed from real site experience.</p></div>
-        <div><h4>REFIT Interior</h4><div class="footer-links"><a href="#services">Services</a><a href="#framework">Framework</a><a href="#projects">Projects</a><a href="#contact">Contact</a></div></div>
+        <div><img class="footer-logo" src="assets/refit-wordmark.png" alt="REFIT"><p>Interior design, renovation, fit-out, maintenance and project-control support. Digital tools are developed from real site experience.</p></div>
+        <div><h4>REFIT Interior</h4><div class="footer-links"><a href="#services">Services</a><a href="#framework">Framework</a><a href="#projects">References</a><a href="#contact">Contact</a></div></div>
         <div><h4>Digital Tools</h4><div class="footer-links"><a href="#digital-tools">Quote Pro</a><a href="#digital-tools">Project Pro</a><a href="login.html">Client Login</a></div></div>
         <div><h4>Contact</h4><div class="footer-links"><a href="https://wa.me/60122145922">WhatsApp</a><a href="mailto:refitcs@gmail.com">Email REFIT</a><a href="portfolio.html">Project Gallery</a></div></div>
       </div>
@@ -231,7 +239,7 @@
     navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}));
     const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:.08});
     document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-    initGallery({targetId:"projectGallery", limit:8});
+    initGallery({targetId:"projectScroller", scroller:true});
     document.getElementById('interestForm').addEventListener('submit',function(e){
       e.preventDefault();
       const name=document.getElementById('name').value.trim();
