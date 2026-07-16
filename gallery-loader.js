@@ -1,7 +1,8 @@
 /*
-  REFIT Gallery Loader V5.4
+  REFIT Gallery Loader V5.5
   - Project Album Library jump buttons
   - Album title sections + album enquiry buttons
+  - Lightbox Previous / Next browsing
 */
 
 const REFIT_GALLERY_SOURCES = [
@@ -41,6 +42,9 @@ const albumRules = [
 
 const extraAlbum = { id:"album-extra", albumNo:9, rangeLabel:"Extra", name:"Additional Project References", shortName:"Additional", category:"project", description:"Additional references collected from REFIT project media and supporting visual records." };
 const hiddenReferenceNumbers = buildNumberSet([[65,68]]);
+
+let currentLightboxImages = [];
+let currentLightboxIndex = 0;
 
 function injectGalleryStyle() {
   if (document.getElementById("refit-gallery-v54-style")) return;
@@ -89,6 +93,39 @@ function injectGalleryStyle() {
     .album-cta span{display:block;color:#a8a2a0;font-size:13px}
     .album-cta a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;background:#25D366;color:#fff;font-size:13px;font-weight:900;text-decoration:none;white-space:nowrap;box-shadow:0 16px 38px rgba(37,211,102,.28)}
 
+    .lightbox-nav-btn{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:20;
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(0,0,0,.55);
+      color:#fff;
+      font-size:26px;
+      line-height:1;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      backdrop-filter:blur(10px);
+      box-shadow:0 18px 42px rgba(0,0,0,.32);
+    }
+    .lightbox-nav-btn:hover{background:rgba(229,129,150,.82)}
+    .lightbox-nav-prev{left:18px}
+    .lightbox-nav-next{right:18px}
+    .lightbox-counter{
+      display:inline-flex;
+      align-items:center;
+      margin-left:12px;
+      color:#a8a2a0;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
     @media(max-width:900px){
       .portfolio-album-nav-top{align-items:flex-start;flex-direction:column}
       .album-heading{grid-template-columns:1fr}
@@ -104,6 +141,10 @@ function injectGalleryStyle() {
       .album-heading p{font-size:14px}
       .album-grid .gallery-card,.album-grid .gallery-card.large{min-height:290px}
       .album-cta a{width:100%}
+      .lightbox-nav-btn{width:44px;height:44px;font-size:21px}
+      .lightbox-nav-prev{left:10px}
+      .lightbox-nav-next{right:10px}
+      .lightbox-counter{display:block;margin-left:0;margin-top:5px}
     }`;
   document.head.append(style);
 }
@@ -299,14 +340,81 @@ function applyFilter(target, filter) {
   });
 }
 
-function openLightbox(item) {
+function ensureLightboxControls() {
   const lightbox = document.getElementById("lightbox");
   if (!lightbox) return;
+  const content = lightbox.querySelector(".lightbox-content") || lightbox;
+
+  if (!lightbox.querySelector(".lightbox-nav-prev")) {
+    const prev = document.createElement("button");
+    prev.className = "lightbox-nav-btn lightbox-nav-prev";
+    prev.type = "button";
+    prev.setAttribute("aria-label", "Previous photo");
+    prev.textContent = "‹";
+    prev.addEventListener("click", event => {
+      event.stopPropagation();
+      moveLightbox(-1);
+    });
+    content.append(prev);
+  }
+
+  if (!lightbox.querySelector(".lightbox-nav-next")) {
+    const next = document.createElement("button");
+    next.className = "lightbox-nav-btn lightbox-nav-next";
+    next.type = "button";
+    next.setAttribute("aria-label", "Next photo");
+    next.textContent = "›";
+    next.addEventListener("click", event => {
+      event.stopPropagation();
+      moveLightbox(1);
+    });
+    content.append(next);
+  }
+
+  const caption = lightbox.querySelector("[data-lightbox-caption]");
+  if (caption && !lightbox.querySelector(".lightbox-counter")) {
+    const counter = document.createElement("span");
+    counter.className = "lightbox-counter";
+    counter.setAttribute("data-lightbox-counter", "");
+    caption.after(counter);
+  }
+}
+
+function showLightboxImage(index) {
+  const lightbox = document.getElementById("lightbox");
+  if (!lightbox || !currentLightboxImages.length) return;
+
+  currentLightboxIndex = (index + currentLightboxImages.length) % currentLightboxImages.length;
+  const item = currentLightboxImages[currentLightboxIndex];
+
   const img = lightbox.querySelector("img");
   img.src = item.src;
   img.alt = `${item.albumName} - ${item.caption}`;
+
   lightbox.querySelector("[data-lightbox-title]").textContent = item.albumName;
   lightbox.querySelector("[data-lightbox-caption]").textContent = `Album ${pad2(item.albumNo)} · ${item.caption}`;
+
+  const counter = lightbox.querySelector("[data-lightbox-counter]");
+  if (counter) {
+    counter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+  }
+}
+
+function moveLightbox(direction) {
+  showLightboxImage(currentLightboxIndex + direction);
+}
+
+function openLightbox(item) {
+  const lightbox = document.getElementById("lightbox");
+  if (!lightbox) return;
+
+  ensureLightboxControls();
+
+  const foundIndex = currentLightboxImages.findIndex(image =>
+    image.src === item.src && image.referenceNo === item.referenceNo
+  );
+
+  showLightboxImage(foundIndex >= 0 ? foundIndex : 0);
   lightbox.classList.add("show");
   document.body.classList.add("lightbox-open");
 }
@@ -331,6 +439,7 @@ async function initGallery({ targetId = "projectGallery", limit = null, scroller
   try {
     const allImages = await fetchAssetImages();
     const images = limit ? allImages.slice(0, limit) : allImages;
+    currentLightboxImages = images;
     if (scroller) renderScroller(target, images);
     else renderAlbumSections(target, images);
     document.querySelectorAll("[data-filter]").forEach(button => {
@@ -360,6 +469,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   document.addEventListener("keydown", event => {
+    const lightbox = document.getElementById("lightbox");
+    const isOpen = lightbox && lightbox.classList.contains("show");
     if (event.key === "Escape") closeLightbox();
+    if (!isOpen) return;
+    if (event.key === "ArrowLeft") moveLightbox(-1);
+    if (event.key === "ArrowRight") moveLightbox(1);
   });
 });
