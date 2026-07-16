@@ -1,0 +1,208 @@
+/* REFIT Floating UI layer
+   Add after the main page CSS.
+   Gives text blocks, cards and buttons a softer floating premium feel.
+   Also changes the client login wordmark text into the original REFIT logo image.
+*/
+
+:root {
+  --refit-float-shadow: 0 22px 70px rgba(0, 0, 0, .32);
+  --refit-float-shadow-soft: 0 14px 42px rgba(0, 0, 0, .22);
+  --refit-float-border: rgba(255, 255, 255, .16);
+}
+
+/* Original REFIT logo for client login page */
+.wordmark {
+  display: inline-block !important;
+  width: 154px !important;
+  height: 58px !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  letter-spacing: 0 !important;
+  color: transparent !important;
+  background: url("assets/refit-wordmark.png") center / contain no-repeat !important;
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.18));
+}
+
+.brand-copy small {
+  transform: translateY(-2px);
+}
+
+/* Floating text feel */
+.hero-copy,
+.hero .wrap > .reveal,
+.section .wrap > .reveal,
+.framework-head,
+.tools-panel > div,
+.contact-card,
+.intro,
+.card,
+.welcome-panel,
+.section-heading {
+  filter: drop-shadow(0 16px 34px rgba(0,0,0,.18));
+}
+
+h1,
+h2,
+h3,
+.lead,
+.section-intro,
+.eyebrow,
+.subcopy,
+.small-note,
+.welcome-panel p,
+.summary-card strong,
+.licence-card h3 {
+  text-shadow: 0 12px 32px rgba(0,0,0,.22);
+}
+
+/* Floating buttons */
+.btn,
+.primary,
+.secondary,
+.text-button,
+.filter-btn,
+.product-link,
+.back-link,
+button[type="submit"] {
+  position: relative;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.24), 0 0 0 1px rgba(255,255,255,.08) inset !important;
+}
+
+.btn:hover,
+.primary:hover,
+.secondary:hover,
+.text-button:hover,
+.filter-btn:hover,
+.product-link:hover,
+.back-link:hover,
+button[type="submit"]:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 24px 54px rgba(0,0,0,.34), 0 0 0 1px rgba(255,255,255,.12) inset !important;
+}
+
+/* Floating cards and panels */
+.problem-card,
+.problem-item,
+.framework,
+.framework-step,
+.dark-card,
+.gallery-card,
+.tools-panel,
+.tool-card,
+.contact-card,
+.intro,
+.card,
+.trust-item,
+.summary-card,
+.licence-card,
+.meta,
+.welcome-panel {
+  box-shadow: var(--refit-float-shadow-soft) !important;
+  transform: translateY(-2px);
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+
+.problem-card:hover,
+.problem-item:hover,
+.framework-step:hover,
+.dark-card:hover,
+.gallery-card:hover,
+.tool-card:hover,
+.trust-item:hover,
+.summary-card:hover,
+.licence-card:hover,
+.meta:hover {
+  transform: translateY(-7px);
+  box-shadow: var(--refit-float-shadow) !important;
+  border-color: var(--refit-float-border) !important;
+}
+
+/* Soft premium animation, not too strong */
+.hero-copy,
+.hero-visual,
+.intro,
+.card,
+.tools-panel,
+.contact-card,
+.framework,
+.welcome-panel {
+  animation: refitSoftFloat 7s ease-in-out infinite;
+}
+
+.hero-visual,
+.card,
+.contact-card {
+  animation-delay: .8s;
+}
+
+@keyframes refitSoftFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+/* Inputs also feel lifted, but stay stable */
+input,
+textarea,
+select {
+  box-shadow: 0 10px 28px rgba(0,0,0,.08) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 14px 36px rgba(0,0,0,.16), 0 0 0 4px rgba(229,129,150,.16) !important;
+}
+
+/* Login page softer center card effect */
+#loginView .intro,
+#loginView .card {
+  background: rgba(255,255,255,.9) !important;
+  backdrop-filter: blur(14px);
+}
+
+#loginView .primary {
+  background: linear-gradient(135deg, #1d1a1b, #3a3034) !important;
+}
+
+/* Mobile: keep floating effect lighter */
+@media (max-width: 640px) {
+  .wordmark {
+    width: 128px !important;
+    height: 48px !important;
+  }
+
+  .hero-copy,
+  .hero-visual,
+  .intro,
+  .card,
+  .tools-panel,
+  .contact-card,
+  .framework,
+  .welcome-panel {
+    animation: none;
+  }
+
+  .problem-card,
+  .problem-item,
+  .framework-step,
+  .dark-card,
+  .gallery-card,
+  .tool-card,
+  .trust-item,
+  .summary-card,
+  .licence-card,
+  .meta {
+    transform: none;
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: .01ms !important;
+  }
+}
