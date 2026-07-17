@@ -273,3 +273,14 @@ footer h4{margin:0 0 15px;color:white}
   .hero-visual{min-height:430px}.photo-label b{font-size:19px}
   .brand img{width:128px}
 }
+/* Hide top logo when footer logo is visible */
+.site-header .brand{
+  transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
+}
+
+body.footer-logo-visible .site-header .brand{
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
