@@ -302,17 +302,21 @@
           <label for="name">Name</label><input id="name" required placeholder="Your name">
           <label for="company">Company / Property</label><input id="company" placeholder="Company or property name">
           <label for="interest">What do you need?</label>
-          <select id="interest">
-            <option>RM99 Project Readiness Pass</option>
-            <option>Design & Build / Renovation</option>
-            <option>Commercial fit-out</option>
-            <option>Residential renovation</option>
-            <option>Maintenance / Improvement work</option>
-            <option>REFIT Quote Pro</option>
-            <option>REFIT Project Pro</option>
-            <option>Guided demonstration</option>
-          </select>
-          <label for="message">Tell us briefly</label><textarea id="message" placeholder="Briefly describe your space, renovation work or digital-tool interest."></textarea>
+<select id="interest">
+  <option>RM99 Check</option>
+  <option>Design & Build / Renovation</option>
+  <option>Commercial Fit-Out</option>
+  <option>Residential Renovation</option>
+  <option>Maintenance / Improvement</option>
+  <option>Quote Pro Demo</option>
+  <option>Project Pro Demo</option>
+  <option>Client Login / Existing Customer</option>
+</select>
+
+<label for="message">Tell us briefly</label>
+<textarea id="message" placeholder="Please share your project details."></textarea>
+
+<div id="contactGuide" class="gallery-note" style="white-space:pre-line;margin-top:10px;"></div>
           <button class="btn btn-primary" type="submit">Send by WhatsApp</button>
         </form>
       </div>
@@ -350,15 +354,104 @@
     const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:.08});
     document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
     initGallery({targetId:"projectScroller", scroller:true});
-    document.getElementById('interestForm').addEventListener('submit',function(e){
-      e.preventDefault();
-      const name=document.getElementById('name').value.trim();
-      const company=document.getElementById('company').value.trim();
-      const interest=document.getElementById('interest').value;
-      const message=document.getElementById('message').value.trim();
-      const text=`Hello REFIT, I am ${name}${company?' from '+company:''}. I am interested in ${interest}.${message?'\n\nProject / request: '+message:''}`;
-      window.open('https://wa.me/60122145922?text='+encodeURIComponent(text),'_blank','noopener');
-    });
+    const contactGuides={
+  "RM99 Check":
+`Please share:
+1. Property type
+2. Location
+3. Photos / video ready?
+4. Main renovation worry
+5. Budget direction
+6. Expected timing`,
+
+  "Design & Build / Renovation":
+`Please share:
+1. Property type
+2. Location
+3. Estimated size
+4. Renovation scope
+5. Budget direction
+6. Target start date`,
+
+  "Commercial Fit-Out":
+`Please share:
+1. Business type
+2. Location
+3. Estimated size
+4. Target opening date
+5. Scope needed
+6. Photos / layout plan ready?`,
+
+  "Residential Renovation":
+`Please share:
+1. House / condo type
+2. Location
+3. Area to renovate
+4. Main concern
+5. Budget direction
+6. Expected timing`,
+
+  "Maintenance / Improvement":
+`Please share:
+1. Problem / issue
+2. Location
+3. Urgency
+4. Photos / video ready?
+5. Preferred timing`,
+
+  "Quote Pro Demo":
+`Please share:
+1. Company / business type
+2. Current quotation method
+3. What document problem you want to solve
+4. Preferred demo timing`,
+
+  "Project Pro Demo":
+`Please share:
+1. Company / business type
+2. Number of active projects
+3. What project-control problem you want to solve
+4. Preferred demo timing`,
+
+  "Client Login / Existing Customer":
+`Please share:
+1. Registered email
+2. Company / project name
+3. What access issue you are facing
+4. Screenshot if available`
+};
+
+const interestEl=document.getElementById('interest');
+const messageEl=document.getElementById('message');
+const guideEl=document.getElementById('contactGuide');
+
+function updateContactGuide(){
+  const guide=contactGuides[interestEl.value] || "Please share your project details.";
+  messageEl.placeholder=guide;
+  guideEl.textContent=guide;
+}
+
+interestEl.addEventListener('change',updateContactGuide);
+updateContactGuide();
+
+document.getElementById('interestForm').addEventListener('submit',function(e){
+  e.preventDefault();
+
+  const name=document.getElementById('name').value.trim();
+  const company=document.getElementById('company').value.trim();
+  const interest=interestEl.value;
+  const message=messageEl.value.trim();
+  const guide=contactGuides[interest] || "";
+
+  const text=
+`Hello REFIT, I am ${name}${company?' from '+company:''}.
+
+I am interested in ${interest}.
+
+${message ? 'Details:\n'+message : guide}`;
+
+  window.open('https://wa.me/60122145922?text='+encodeURIComponent(text),'_blank','noopener');
+});
   </script>
   <script src="whatsapp-widget-v5.js"></script>
   <script>
