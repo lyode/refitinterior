@@ -87,7 +87,53 @@
       </div>
     </div>
   </div>
+  <button class="back-top-btn" id="backTopBtn" type="button" aria-label="Back to top">
+    ↑
+  </button>
 
+  <style>
+    .back-top-btn{
+      position:fixed;
+      left:20px;
+      bottom:20px;
+      z-index:9999;
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      font-size:22px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 14px 34px rgba(0,0,0,.28);
+      backdrop-filter:blur(12px);
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(16px) scale(.88);
+      transition:opacity .22s ease, transform .22s ease, visibility .22s ease, background .2s ease;
+    }
+
+    .back-top-btn.show{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(0) scale(1);
+    }
+
+    .back-top-btn:hover{
+      background:rgba(229,129,150,.85);
+    }
+
+    @media(max-width:640px){
+      .back-top-btn{
+        left:14px;
+        bottom:14px;
+        width:38px;
+        height:38px;
+        font-size:19px;
+      }
+    }
+  </style>
   <script src="whatsapp-widget-v5.js"></script>
   <script>
     const menuBtn=document.getElementById('menuBtn');
@@ -97,8 +143,25 @@
     const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:.08});
     document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
     initGallery({targetId:"projectGallery"});
+    const backTopBtn=document.getElementById('backTopBtn');
+
+    function toggleBackTop(){
+      if(window.scrollY>600){
+        backTopBtn.classList.add('show');
+      }else{
+        backTopBtn.classList.remove('show');
+      }
+    }
+
+    window.addEventListener('scroll',toggleBackTop,{passive:true});
+
+    backTopBtn.addEventListener('click',()=>{
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    toggleBackTop();
+    
   </script>
-<script src="whatsapp-widget.js"></script>
   
 </body>
 </html>
