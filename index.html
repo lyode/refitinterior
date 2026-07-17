@@ -361,6 +361,17 @@
     });
   </script>
   <script src="whatsapp-widget-v5.js"></script>
-  
+  <script>
+  const footerLogo=document.querySelector('.footer-logo');
+  if(footerLogo){
+    const logoObserver=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        document.body.classList.toggle('footer-logo-visible', entry.isIntersecting);
+      });
+    },{threshold:.25});
+
+    logoObserver.observe(footerLogo);
+  }
+</script>
 </body>
 </html>
