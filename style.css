@@ -284,3 +284,66 @@ body.footer-logo-visible .site-header .brand{
   transform: translateY(-8px);
   pointer-events: none;
 }
+body.footer-logo-visible .site-header .brand{
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+/* REFIT product note buttons */
+.tool-note-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+}
+
+.tool-note{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:8px 12px;
+  border-radius:10px 14px 10px 14px;
+  background:linear-gradient(135deg,#f8d36a,#f2a93b);
+  color:#2f220f;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.02em;
+  text-decoration:none;
+  border:1px solid rgba(120,84,16,.18);
+  box-shadow:0 10px 24px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.35);
+  transform:rotate(-1deg);
+  transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.tool-note:nth-child(even){
+  transform:rotate(1deg);
+}
+
+.tool-note:hover{
+  transform:translateY(-2px) rotate(0deg);
+  filter:brightness(1.03);
+  box-shadow:0 14px 28px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.4);
+}
+
+.tool-note::after{
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  width:0;
+  height:0;
+  border-style:solid;
+  border-width:0 0 12px 12px;
+  border-color:transparent transparent rgba(255,255,255,.45) transparent;
+  border-top-right-radius:8px;
+}
+
+@media(max-width:640px){
+  .tool-note{
+    font-size:11px;
+    min-height:32px;
+    padding:7px 10px;
+  }
+}
