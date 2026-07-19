@@ -1,5 +1,6 @@
 (function(){
   const WA_PHONE = "60122145922";
+  const IRIS_MEMORY_KEY = "refit_iris_chat_memory_v2";
 
   const irisIntro =
 `Hi, I’m Iris, REFIT’s Operations Director.
@@ -281,31 +282,60 @@ There’s no pressure to buy. I’ll give you a clear and honest picture of what
     const form = panel.querySelector("#irisForm");
     const close = panel.querySelector(".iris-close");
 
-    function addBubble(type, text, links){
-      const bubble = document.createElement("div");
-      bubble.className = "iris-bubble " + type;
-      bubble.textContent = text;
+   function getSavedChat(){
+  try{
+    return JSON.parse(localStorage.getItem(IRIS_MEMORY_KEY) || "[]");
+  }catch(e){
+    return [];
+  }
+}
 
-      if(links && links.length){
-        const row = document.createElement("div");
-        row.className = "iris-link-row";
-        links.forEach(link=>{
-          const a = document.createElement("a");
-          a.href = link.href;
-          a.textContent = link.label;
-          if(link.href.startsWith("http")){
-            a.target = "_blank";
-            a.rel = "noopener";
-          }
-          row.appendChild(a);
-        });
-        bubble.appendChild(row);
+function saveBubble(type, text, links){
+  const saved = getSavedChat();
+  saved.push({
+    type:type,
+    text:text,
+    links:links || []
+  });
+  localStorage.setItem(IRIS_MEMORY_KEY, JSON.stringify(saved.slice(-40)));
+}
+
+function addBubble(type, text, links, shouldSave){
+  const bubble = document.createElement("div");
+  bubble.className = "iris-bubble " + type;
+  bubble.textContent = text;
+
+  if(links && links.length){
+    const row = document.createElement("div");
+    row.className = "iris-link-row";
+    links.forEach(link=>{
+      const a = document.createElement("a");
+      a.href = link.href;
+      a.textContent = link.label;
+      if(link.href.startsWith("http")){
+        a.target = "_blank";
+        a.rel = "noopener";
       }
+      row.appendChild(a);
+    });
+    bubble.appendChild(row);
+  }
 
-      chat.appendChild(bubble);
-      chat.scrollTop = chat.scrollHeight;
-    }
+  chat.appendChild(bubble);
+  chat.scrollTop = chat.scrollHeight;
 
+  if(shouldSave !== false){
+    saveBubble(type, text, links);
+  }
+}
+
+function restoreChat(){
+  const saved = getSavedChat();
+  saved.forEach(item=>{
+    addBubble(item.type, item.text, item.links, false);
+  });
+  return saved.length;
+}
     function productLink(key){
       const p = products[key];
       if(!p) return [];
@@ -488,16 +518,23 @@ I’ll be honest with you — if REFIT can help, I’ll explain why. If it is no
     }
 
     btn.onclick = function(e){
-      e.preventDefault();
-      panel.classList.toggle("open");
-      if(panel.classList.contains("open")){
-        if(!chat.dataset.started){
-          addBubble("iris", irisIntro);
-          chat.dataset.started = "1";
-        }
-        setTimeout(()=>input.focus(), 120);
+  e.preventDefault();
+  panel.classList.toggle("open");
+
+  if(panel.classList.contains("open")){
+    if(!chat.dataset.started){
+      const restored = restoreChat();
+
+      if(!restored){
+        addBubble("iris", irisIntro);
       }
-    };
+
+      chat.dataset.started = "1";
+    }
+
+    setTimeout(()=>input.focus(), 120);
+  }
+};
 
     close.onclick = function(){
       panel.classList.remove("open");
