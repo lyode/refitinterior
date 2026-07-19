@@ -1,7 +1,9 @@
 (function(){
   const WA_PHONE = "60122145922";
-  const IRIS_MEMORY_KEY = "refit_iris_chat_memory_v2";
-
+  const IRIS_MEMORY_KEY = "refit_iris_chat_memory_v3";
+  const IRIS_INTRO_KEY = "refit_iris_intro_seen_v1";
+  const IRIS_TYPE_SPEED = 18;
+  
   const irisIntro =
 `Hi, I’m Iris, REFIT’s Operations Director.
 
@@ -297,13 +299,13 @@ function saveBubble(type, text, links){
     text:text,
     links:links || []
   });
-  localStorage.setItem(IRIS_MEMORY_KEY, JSON.stringify(saved.slice(-40)));
+  localStorage.setItem(IRIS_MEMORY_KEY, JSON.stringify(saved.slice(-50)));
 }
 
-function addBubble(type, text, links, shouldSave){
+function buildBubble(type, text, links){
   const bubble = document.createElement("div");
   bubble.className = "iris-bubble " + type;
-  bubble.textContent = text;
+  bubble.textContent = text || "";
 
   if(links && links.length){
     const row = document.createElement("div");
@@ -321,6 +323,11 @@ function addBubble(type, text, links, shouldSave){
     bubble.appendChild(row);
   }
 
+  return bubble;
+}
+
+function addBubble(type, text, links, shouldSave){
+  const bubble = buildBubble(type, text, links);
   chat.appendChild(bubble);
   chat.scrollTop = chat.scrollHeight;
 
@@ -336,6 +343,44 @@ function restoreChat(){
   });
   return saved.length;
 }
+
+function typeIris(text, links){
+  const bubble = buildBubble("iris", "", []);
+  chat.appendChild(bubble);
+  chat.scrollTop = chat.scrollHeight;
+
+  let i = 0;
+  const cleanText = text || "";
+
+  const timer = setInterval(()=>{
+    bubble.textContent = cleanText.slice(0, i);
+    i++;
+    chat.scrollTop = chat.scrollHeight;
+
+    if(i > cleanText.length){
+      clearInterval(timer);
+
+      if(links && links.length){
+        const row = document.createElement("div");
+        row.className = "iris-link-row";
+        links.forEach(link=>{
+          const a = document.createElement("a");
+          a.href = link.href;
+          a.textContent = link.label;
+          if(link.href.startsWith("http")){
+            a.target = "_blank";
+            a.rel = "noopener";
+          }
+          row.appendChild(a);
+        });
+        bubble.appendChild(row);
+      }
+
+      saveBubble("iris", cleanText, links);
+    }
+  }, IRIS_TYPE_SPEED);
+}
+    
     function productLink(key){
       const p = products[key];
       if(!p) return [];
@@ -482,41 +527,32 @@ However, I will treat this as useful feedback for management review. Hopefully t
       }
 
       return {
-        text:
-`Thank you for sharing that.
+  text:
+`I hear you.
 
-To guide you better, may I know which direction is closest to your need?
+I can talk with you in a more natural way, not only about REFIT products.
 
-1. Renovation / design help
-2. Retail Fit-Out Toolkit
-3. Maintenance Ops
-4. Quote Pro
-5. Project Pro
-6. REFIT Complete bundle
-7. Pricing / discount / billing
-8. Login or after-purchase support
+For now, I’m still the website version of Iris, so I may not be as open and intelligent as a full AI assistant yet. But I can still help you think through renovation concerns, customer questions, business direction, product choice, pricing direction, operation flow, or what next step may make sense.
 
-I’ll be honest with you — if REFIT can help, I’ll explain why. If it is not suitable yet, I’ll tell you clearly too.`,
-        links: [
-          {label:"Digital Tools", href:"index.html#digital-tools"},
-          {label:"Contact REFIT", href:"index.html#contact"}
-        ]
-      };
-    }
-
+Tell me a little more in your own words. I’ll stay warm, honest and simple.`,
+  links: [
+    {label:"Digital Tools", href:"index.html#digital-tools"},
+    {label:"Contact REFIT", href:"index.html#contact"}
+  ]
+};
+      
     function ask(text){
-      const clean = (text || "").trim();
-      if(!clean) return;
+  const clean = (text || "").trim();
+  if(!clean) return;
 
-      addBubble("user", clean);
-      input.value = "";
+  addBubble("user", clean);
+  input.value = "";
 
-      setTimeout(()=>{
-        const ans = reply(clean);
-        addBubble("iris", ans.text, ans.links);
-      }, 260);
-    }
-
+  setTimeout(()=>{
+    const ans = reply(clean);
+    typeIris(ans.text, ans.links);
+  }, 520);
+}
     btn.onclick = function(e){
   e.preventDefault();
   panel.classList.toggle("open");
@@ -526,13 +562,18 @@ I’ll be honest with you — if REFIT can help, I’ll explain why. If it is no
       const restored = restoreChat();
 
       if(!restored){
-        addBubble("iris", irisIntro);
+        if(!localStorage.getItem(IRIS_INTRO_KEY)){
+          typeIris(irisIntro);
+          localStorage.setItem(IRIS_INTRO_KEY, "1");
+        }else{
+          typeIris("Hi, welcome back. I’m here with you. You can ask me about REFIT, renovation, business direction, pricing, products, or even just talk through what you are unsure about.");
+        }
       }
 
       chat.dataset.started = "1";
     }
 
-    setTimeout(()=>input.focus(), 120);
+    setTimeout(()=>input.focus(), 180);
   }
 };
 
