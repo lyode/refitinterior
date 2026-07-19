@@ -118,13 +118,27 @@ There’s no pressure to buy. I’ll give you a clear and honest picture of what
     const css = document.createElement("style");
     css.textContent = `
       .iris-float-btn{
-        position:fixed;right:22px;bottom:92px;z-index:9998;
-        border:1px solid rgba(248,211,106,.45);
-        background:linear-gradient(135deg,#f8d36a,#f2a93b);
-        color:#2f220f;border-radius:999px;padding:12px 16px;
-        font-weight:900;font-size:13px;cursor:pointer;
-        box-shadow:0 18px 46px rgba(0,0,0,.28);
-      }
+  position:fixed;
+  right:22px;
+  bottom:92px;
+  z-index:9998;
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  border:1px solid rgba(248,211,106,.45);
+  background:linear-gradient(135deg,#f8d36a,#f2a93b);
+  color:#2f220f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0;
+  font-weight:900;
+  font-size:13px;
+  line-height:1.1;
+  cursor:pointer;
+  box-shadow:0 18px 46px rgba(0,0,0,.28);
+}      }
       .iris-panel{
         position:fixed;right:22px;bottom:146px;z-index:9999;
         width:min(390px,calc(100vw - 28px));max-height:72vh;overflow:auto;
@@ -160,15 +174,24 @@ There’s no pressure to buy. I’ll give you a clear and honest picture of what
       .iris-primary{background:#fff;color:#09090b}
       .iris-dark{background:rgba(255,255,255,.06);color:white}
       @media(max-width:640px){
-        .iris-float-btn{right:14px;bottom:82px}
-        .iris-panel{right:14px;bottom:132px}
-      }
+  .iris-float-btn{
+    right:14px;
+    bottom:82px;
+    width:54px;
+    height:54px;
+    font-size:12px;
+  }
+  .iris-panel{
+    right:14px;
+    bottom:132px;
+  }
+}
     `;
     document.head.appendChild(css);
 
     const btn = document.createElement("button");
     btn.className = "iris-float-btn";
-    btn.textContent = "Ask Iris";
+    btn.innerHTML = "Iris";
 
     const panel = document.createElement("div");
     panel.className = "iris-panel";
