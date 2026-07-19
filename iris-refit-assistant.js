@@ -540,8 +540,10 @@ Tell me a little more in your own words. I’ll stay warm, honest and simple.`,
     {label:"Contact REFIT", href:"index.html#contact"}
   ]
 };
-      
-    function ask(text){
+
+}
+
+function ask(text){
   const clean = (text || "").trim();
   if(!clean) return;
 
