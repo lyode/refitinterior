@@ -2,7 +2,7 @@
   const WA_PHONE = "60122145922";
   const IRIS_MEMORY_KEY = "refit_iris_chat_memory_v3";
   const IRIS_INTRO_KEY = "refit_iris_intro_seen_v1";
-  const IRIS_TYPE_SPEED = 18;
+  const IRIS_TYPE_SPEED = 20;
   
   const irisIntro =
 `Hi, I’m Iris, REFIT’s Operations Director.
@@ -352,14 +352,11 @@ function typeIris(text, links){
   let i = 0;
   const cleanText = text || "";
 
-  const timer = setInterval(()=>{
+  function nextKey(){
     bubble.textContent = cleanText.slice(0, i);
-    i++;
     chat.scrollTop = chat.scrollHeight;
 
-    if(i > cleanText.length){
-      clearInterval(timer);
-
+    if(i >= cleanText.length){
       if(links && links.length){
         const row = document.createElement("div");
         row.className = "iris-link-row";
@@ -377,12 +374,33 @@ function typeIris(text, links){
       }
 
       saveBubble("iris", cleanText, links);
+      return;
     }
-  }, IRIS_TYPE_SPEED);
+
+    const currentChar = cleanText.charAt(i);
+    i++;
+
+    let delay = IRIS_TYPE_SPEED + Math.floor(Math.random() * 18);
+
+    if(currentChar === "." || currentChar === "?" || currentChar === "!"){
+      delay += 260;
+    }
+
+    if(currentChar === "," || currentChar === ";"){
+      delay += 150;
+    }
+
+    if(currentChar === "\n"){
+      delay += 220;
+    }
+
+    setTimeout(nextKey, delay);
+  }
+
+  setTimeout(nextKey, 420);
 }
     
-    function productLink(key){
-      const p = products[key];
+    const p = products[key];
       if(!p) return [];
       return [{label:"Open " + p.name, href:p.link}];
     }
