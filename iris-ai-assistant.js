@@ -35,6 +35,10 @@
   function injectStyles() {
     const style = document.createElement("style");
     style.textContent = `
+      body.iris-ai-open{
+        overflow:hidden;
+      }
+
       .iris-ai-root{
         position:fixed;
         left:18px;
@@ -44,47 +48,77 @@
       }
 
       .iris-ai-button{
-        width:64px;
-        height:64px;
+        width:66px;
+        height:66px;
         border-radius:999px;
-        border:1px solid rgba(255,255,255,.18);
+        border:1px solid rgba(255,224,128,.74);
         background:
-          radial-gradient(circle at 32% 24%, rgba(255,255,255,.35), transparent 26%),
-          linear-gradient(145deg,#40121f,#111116 60%,#8a5b24);
+          radial-gradient(circle at 34% 28%, rgba(255,255,255,.78), transparent 18%),
+          radial-gradient(circle at 50% 50%, #fff1a8 0 12%, #f5ca49 13% 34%, #c88419 35% 58%, #421414 59% 100%);
         color:#fff;
         display:flex;
         align-items:center;
         justify-content:center;
         cursor:pointer;
-        box-shadow:0 18px 46px rgba(0,0,0,.45);
+        position:relative;
+        overflow:visible;
+        box-shadow:
+          0 0 0 1px rgba(255,227,135,.72),
+          0 0 12px rgba(255,205,80,.38),
+          0 0 26px rgba(255,205,80,.22),
+          0 18px 46px rgba(0,0,0,.45);
         transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
       }
 
       .iris-ai-button:hover{
-        transform:translateY(-3px);
-        box-shadow:0 22px 56px rgba(0,0,0,.55);
-        filter:brightness(1.06);
+        transform:translateY(-3px) scale(1.02);
+        box-shadow:
+          0 0 0 1px rgba(255,227,135,.9),
+          0 0 16px rgba(255,205,80,.48),
+          0 0 34px rgba(255,205,80,.28),
+          0 22px 56px rgba(0,0,0,.55);
+        filter:brightness(1.05);
       }
 
       .iris-ai-mark{
-        width:38px;
-        height:38px;
+        width:32px;
+        height:32px;
         border-radius:999px;
         background:
-          radial-gradient(circle at 50% 48%, #fff 0 18%, #d9b46a 19% 26%, #7b2037 27% 42%, #16161b 43% 100%);
-        box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);
+          radial-gradient(circle at 50% 50%, #fff 0 13%, #ffd75c 14% 28%, #a93445 29% 48%, #18080d 49% 100%);
+        box-shadow:
+          inset 0 0 0 1px rgba(255,255,255,.35),
+          0 0 12px rgba(255,213,92,.55);
+      }
+
+      .iris-ai-label{
+        position:absolute;
+        left:74px;
+        top:50%;
+        transform:translateY(-50%);
+        white-space:nowrap;
+        padding:7px 11px;
+        border-radius:999px;
+        background:rgba(12,12,16,.88);
+        border:1px solid rgba(255,215,112,.45);
+        color:#ffe39a;
+        font-size:12px;
+        font-weight:800;
+        letter-spacing:.02em;
+        box-shadow:0 10px 24px rgba(0,0,0,.38), 0 0 12px rgba(255,205,80,.16);
+        pointer-events:none;
       }
 
       .iris-ai-panel{
         position:absolute;
         left:0;
-        bottom:82px;
-        width:min(380px,calc(100vw - 34px));
-        height:min(560px,calc(100vh - 126px));
+        bottom:88px;
+        width:min(390px,calc(100vw - 34px));
+        height:min(570px,calc(100vh - 126px));
         display:none;
         overflow:hidden;
         border-radius:24px;
-        background:linear-gradient(180deg,rgba(22,22,26,.98),rgba(8,8,10,.98));
+        background:linear-gradient(180deg,rgba(22,22,26,.985),rgba(8,8,10,.985));
         border:1px solid rgba(255,255,255,.14);
         box-shadow:0 28px 80px rgba(0,0,0,.58);
       }
@@ -95,16 +129,17 @@
       }
 
       .iris-ai-head{
+        flex:0 0 auto;
         padding:18px 18px 14px;
         border-bottom:1px solid rgba(255,255,255,.1);
         background:
-          radial-gradient(circle at 15% 0%, rgba(138,91,36,.35), transparent 34%),
-          radial-gradient(circle at 85% 0%, rgba(122,32,55,.35), transparent 34%);
+          radial-gradient(circle at 15% 0%, rgba(138,91,36,.36), transparent 34%),
+          radial-gradient(circle at 85% 0%, rgba(122,32,55,.36), transparent 34%);
       }
 
       .iris-ai-title{
         display:flex;
-        align-items:center;
+        align-items:flex-start;
         justify-content:space-between;
         gap:12px;
       }
@@ -120,6 +155,7 @@
         margin-top:3px;
         color:rgba(255,255,255,.62);
         font-size:12px;
+        line-height:1.35;
       }
 
       .iris-ai-close{
@@ -130,6 +166,7 @@
         height:30px;
         border-radius:999px;
         cursor:pointer;
+        flex:0 0 auto;
       }
 
       .iris-ai-intro{
@@ -140,10 +177,11 @@
       }
 
       .iris-ai-messages{
-        flex:1;
+        flex:1 1 auto;
         overflow:auto;
         padding:16px;
         scroll-behavior:smooth;
+        -webkit-overflow-scrolling:touch;
       }
 
       .iris-ai-msg{
@@ -166,19 +204,20 @@
       }
 
       .iris-ai-msg.assistant .iris-ai-bubble{
-        color:rgba(255,255,255,.86);
-        background:rgba(255,255,255,.075);
-        border:1px solid rgba(255,255,255,.08);
+        color:rgba(255,255,255,.88);
+        background:rgba(255,255,255,.085);
+        border:1px solid rgba(255,255,255,.09);
         border-bottom-left-radius:7px;
       }
 
       .iris-ai-msg.user .iris-ai-bubble{
         color:#23180d;
-        background:linear-gradient(135deg,#f7d87a,#d9a643);
+        background:linear-gradient(135deg,#f8dc78,#d9a643);
         border-bottom-right-radius:7px;
       }
 
       .iris-ai-suggestions{
+        flex:0 0 auto;
         display:flex;
         flex-wrap:wrap;
         gap:8px;
@@ -195,12 +234,21 @@
         cursor:pointer;
       }
 
+      .iris-ai-small{
+        flex:0 0 auto;
+        padding:0 16px 10px;
+        color:rgba(255,255,255,.42);
+        font-size:10.5px;
+        line-height:1.4;
+      }
+
       .iris-ai-form{
+        flex:0 0 auto;
         display:flex;
         gap:8px;
         padding:12px;
         border-top:1px solid rgba(255,255,255,.1);
-        background:rgba(0,0,0,.22);
+        background:rgba(0,0,0,.24);
       }
 
       .iris-ai-input{
@@ -228,9 +276,10 @@
         border:0;
         border-radius:16px;
         cursor:pointer;
-        background:linear-gradient(135deg,#f4ce6b,#9b662b);
+        background:linear-gradient(135deg,#f6d66c,#dfae37);
         color:#201409;
         font-weight:800;
+        box-shadow:0 0 0 1px rgba(255,219,120,.72), 0 0 12px rgba(255,196,77,.18);
       }
 
       .iris-ai-send:disabled{
@@ -238,27 +287,134 @@
         cursor:not-allowed;
       }
 
-      .iris-ai-small{
-        padding:0 16px 12px;
-        color:rgba(255,255,255,.42);
-        font-size:10.5px;
-        line-height:1.4;
-      }
-
       @media(max-width:640px){
         .iris-ai-root{
-          left:14px;
-          bottom:16px;
+          left:0;
+          right:0;
+          bottom:0;
+          z-index:99998;
         }
 
         .iris-ai-button{
-          width:58px;
-          height:58px;
+          position:fixed;
+          left:18px;
+          bottom:calc(18px + env(safe-area-inset-bottom));
+          width:62px;
+          height:62px;
+          z-index:99998;
+        }
+
+        .iris-ai-label{
+          left:68px;
+          font-size:11.5px;
+          padding:6px 10px;
+        }
+
+        body.iris-ai-open .iris-ai-button{
+          opacity:0;
+          pointer-events:none;
         }
 
         .iris-ai-panel{
-          bottom:74px;
-          height:min(560px,calc(100vh - 108px));
+          position:fixed;
+          inset:0;
+          width:100vw;
+          height:100dvh;
+          max-width:100vw;
+          max-height:100dvh;
+          border-radius:0;
+          border:0;
+          box-shadow:none;
+          background:linear-gradient(180deg,rgba(17,17,22,.992),rgba(7,7,10,.992));
+        }
+
+        .iris-ai-head{
+          padding:calc(16px + env(safe-area-inset-top)) 18px 14px;
+        }
+
+        .iris-ai-title strong{
+          font-size:19px;
+          line-height:1.24;
+        }
+
+        .iris-ai-title span{
+          font-size:14px;
+          line-height:1.4;
+        }
+
+        .iris-ai-close{
+          width:38px;
+          height:38px;
+          font-size:20px;
+          background:rgba(255,255,255,.1);
+        }
+
+        .iris-ai-intro{
+          font-size:15px;
+          line-height:1.55;
+          margin-top:14px;
+        }
+
+        .iris-ai-messages{
+          padding:18px 18px 10px;
+        }
+
+        .iris-ai-bubble{
+          max-width:92%;
+          font-size:17px;
+          line-height:1.62;
+          padding:15px 16px;
+          border-radius:19px;
+          margin-bottom:4px;
+        }
+
+        .iris-ai-suggestions{
+          flex-wrap:nowrap;
+          overflow-x:auto;
+          gap:10px;
+          padding:0 18px 12px;
+          scrollbar-width:none;
+        }
+
+        .iris-ai-suggestions::-webkit-scrollbar{
+          display:none;
+        }
+
+        .iris-ai-chip{
+          flex:0 0 auto;
+          font-size:14px;
+          padding:10px 13px;
+          border-radius:999px;
+        }
+
+        .iris-ai-small{
+          order:4;
+          padding:0 18px 8px;
+          font-size:12px;
+          line-height:1.45;
+        }
+
+        .iris-ai-form{
+          order:5;
+          padding:10px 14px calc(12px + env(safe-area-inset-bottom));
+          gap:10px;
+          background:linear-gradient(180deg,rgba(8,8,12,.7),rgba(8,8,12,.98));
+        }
+
+        .iris-ai-input{
+          min-height:54px;
+          font-size:16px;
+          line-height:1.45;
+          padding:14px 15px;
+          border-radius:18px;
+        }
+
+        .iris-ai-send{
+          width:56px;
+          height:56px;
+          border-radius:18px;
+          font-size:20px;
+          flex:0 0 auto;
         }
       }
     `;
@@ -398,18 +554,19 @@
           <button class="iris-ai-chip" type="button">Is RM99 Check suitable for me?</button>
         </div>
 
+        <div class="iris-ai-small">
+          Iris gives general guidance first. For confirmed pricing, site details or urgent work, REFIT may continue by WhatsApp.
+        </div>
+
         <form class="iris-ai-form">
           <textarea class="iris-ai-input" rows="1" maxlength="700" placeholder="Talk to Iris..."></textarea>
           <button class="iris-ai-send" type="submit">➤</button>
         </form>
-
-        <div class="iris-ai-small">
-          Iris gives general guidance first. For confirmed pricing, site details or urgent work, REFIT may continue by WhatsApp.
-        </div>
       </section>
 
       <button class="iris-ai-button" type="button" aria-label="Open Iris">
         <span class="iris-ai-mark"></span>
+        <span class="iris-ai-label">Ask Iris</span>
       </button>
     `;
 
@@ -424,6 +581,7 @@
     function openIris() {
       isOpen = true;
       panel.classList.add("open");
+      document.body.classList.add("iris-ai-open");
 
       if (!panel.dataset.started) {
         panel.dataset.started = "yes";
@@ -440,6 +598,7 @@
     function closeIris() {
       isOpen = false;
       panel.classList.remove("open");
+      document.body.classList.remove("iris-ai-open");
     }
 
     openBtn.addEventListener("click", () => {
