@@ -314,7 +314,17 @@
           opacity:0;
           pointer-events:none;
         }
+body.iris-ai-open #refitWhatsappWidget{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  transform:translateY(18px) scale(.82) !important;
+}
 
+body.iris-ai-open #refitWhatsappWidget::before{
+  animation:none !important;
+  opacity:0 !important;
+}
         .iris-ai-panel{
           position:fixed;
           inset:0;
@@ -333,12 +343,12 @@
         }
 
         .iris-ai-title strong{
-          font-size:19px;
+          font-size:20px;
           line-height:1.24;
         }
 
         .iris-ai-title span{
-          font-size:14px;
+          font-size:15px;
           line-height:1.4;
         }
 
@@ -382,7 +392,7 @@
 
         .iris-ai-chip{
           flex:0 0 auto;
-          font-size:14px;
+          font-size:15px;
           padding:10px 13px;
           border-radius:999px;
         }
@@ -390,7 +400,7 @@
         .iris-ai-small{
           order:4;
           padding:0 18px 8px;
-          font-size:12px;
+          font-size:13px;
           line-height:1.45;
         }
 
@@ -403,7 +413,7 @@
 
         .iris-ai-input{
           min-height:54px;
-          font-size:16px;
+          font-size:18px;
           line-height:1.45;
           padding:14px 15px;
           border-radius:18px;
