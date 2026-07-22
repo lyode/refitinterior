@@ -158,7 +158,48 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-MAX_HISTORY)));
     } catch (error) {}
   }
+  function stopIrisVoice() {
+    try {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    } catch (error) {}
+  }
 
+  function speakIrisText(text) {
+    try {
+      if (!("speechSynthesis" in window)) {
+        alert("Voice reading is not supported on this browser.");
+        return;
+      }
+
+      stopIrisVoice();
+
+      const cleanText = String(text || "")
+        .replace(/\[[^\]]+\]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (!cleanText) return;
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.rate = 0.92;
+      utterance.pitch = 1.02;
+      utterance.volume = 0.86;
+
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice =
+        voices.find((voice) => /female|zira|samantha|google uk english female/i.test(voice.name)) ||
+        voices.find((voice) => /^en/i.test(voice.lang)) ||
+        voices[0];
+
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    } catch (error) {}
+  }
   function injectStyles() {
     const style = document.createElement("style");
     style.textContent = `
@@ -328,7 +369,27 @@ body.iris-ai-open #refitWhatsappWidget::before{
         display:flex;
         margin:0 0 12px;
       }
+      .iris-ai-voice{
+        flex:0 0 auto;
+        width:28px;
+        height:28px;
+        margin:3px 6px 0 0;
+        border:1px solid rgba(255,215,112,.35);
+        border-radius:999px;
+        background:rgba(255,255,255,.07);
+        color:#ffe39a;
+        cursor:pointer;
+        font-size:13px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        opacity:.78;
+      }
 
+      .iris-ai-voice:hover{
+        opacity:1;
+        background:rgba(255,215,112,.12);
+      }
       .iris-ai-msg.user{
         justify-content:flex-end;
       }
@@ -623,10 +684,22 @@ body.iris-ai-open #refitWhatsappWidget::before{
     document.head.appendChild(style);
   }
 
-  function createMessage(role, text, typing) {
+    function createMessage(role, text, typing) {
     const messages = document.querySelector(".iris-ai-messages");
     const row = document.createElement("div");
     row.className = "iris-ai-msg " + role;
+
+    if (role === "assistant") {
+      const voiceButton = document.createElement("button");
+      voiceButton.className = "iris-ai-voice";
+      voiceButton.type = "button";
+      voiceButton.setAttribute("aria-label", "Read Iris reply aloud");
+      voiceButton.textContent = "🔊";
+      voiceButton.addEventListener("click", () => {
+        speakIrisText(text);
+      });
+      row.appendChild(voiceButton);
+    }
 
     const bubble = document.createElement("div");
     bubble.className = "iris-ai-bubble";
@@ -642,7 +715,7 @@ body.iris-ai-open #refitWhatsappWidget::before{
     messages.scrollTop = messages.scrollHeight;
     return bubble;
   }
-
+  
     function typeText(element, text) {
     let i = 0;
     element.textContent = "";
@@ -814,8 +887,9 @@ const thinking = showThinking();
       setTimeout(() => input.focus(), 120);
     }
 
-    function closeIris() {
+        function closeIris() {
       isOpen = false;
+      stopIrisVoice();
       panel.classList.remove("open");
       document.body.classList.remove("iris-ai-open");
     }
