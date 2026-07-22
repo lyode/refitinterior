@@ -183,15 +183,16 @@
       if (!cleanText) return;
 
       const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.rate = 0.92;
-      utterance.pitch = 1.02;
-      utterance.volume = 0.86;
-
+      utterance.rate = 0.96;
+      utterance.pitch = 1.16;
+      utterance.volume = 0.78;
+      
       const voices = window.speechSynthesis.getVoices();
       const preferredVoice =
-        voices.find((voice) => /female|zira|samantha|google uk english female/i.test(voice.name)) ||
-        voices.find((voice) => /^en/i.test(voice.lang)) ||
-        voices[0];
+  voices.find((voice) => /samantha|zira|aria|jenny|google uk english female|google us english/i.test(voice.name)) ||
+  voices.find((voice) => /^en/i.test(voice.lang) && /female|woman|aria|jenny|samantha|zira/i.test(voice.name)) ||
+  voices.find((voice) => /^en/i.test(voice.lang)) ||
+  voices[0];
 
       if (preferredVoice) {
         utterance.voice = preferredVoice;
