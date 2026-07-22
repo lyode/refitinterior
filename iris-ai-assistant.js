@@ -9,6 +9,79 @@
   let isOpen = false;
   let isBusy = false;
 
+    let selectedIrisImages = [];
+
+  function fileToDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("Could not read image."));
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function prepareIrisImages(files) {
+    const imageFiles = Array.from(files || []).slice(0, 2);
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    const maxSize = 5 * 1024 * 1024;
+
+    const prepared = [];
+
+    for (const file of imageFiles) {
+      if (!allowedTypes.includes(file.type)) {
+        alert("Iris can accept JPG, PNG or WEBP images only.");
+        continue;
+      }
+
+      if (file.size > maxSize) {
+        alert("Each image must be below 5MB.");
+        continue;
+      }
+
+      const dataUrl = await fileToDataUrl(file);
+
+      prepared.push({
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        dataUrl
+      });
+    }
+
+    return prepared;
+  }
+
+  function updateIrisImagePreview() {
+    const preview = document.querySelector(".iris-ai-image-preview");
+    if (!preview) return;
+
+    if (!selectedIrisImages.length) {
+      preview.innerHTML = "";
+      preview.style.display = "none";
+      return;
+    }
+
+    preview.style.display = "flex";
+    preview.innerHTML = selectedIrisImages
+      .map((image, index) => `
+        <div class="iris-ai-image-chip">
+          <span>Image ${index + 1}</span>
+          <button type="button" data-iris-remove-image="${index}">×</button>
+        </div>
+      `)
+      .join("");
+
+    preview.querySelectorAll("[data-iris-remove-image]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const index = Number(button.getAttribute("data-iris-remove-image"));
+        selectedIrisImages.splice(index, 1);
+        updateIrisImagePreview();
+      });
+    });
+  }
+
     let irisAudioContext = null;
   let lastKeySoundAt = 0;
 
@@ -309,6 +382,53 @@ body.iris-ai-open #refitWhatsappWidget::before{
         line-height:1.4;
       }
 
+      .iris-ai-image-preview{
+        flex:0 0 auto;
+        display:none;
+        gap:8px;
+        padding:0 12px 10px;
+        flex-wrap:wrap;
+      }
+
+      .iris-ai-image-chip{
+        display:flex;
+        align-items:center;
+        gap:7px;
+        padding:7px 9px;
+        border-radius:999px;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.12);
+        color:rgba(255,255,255,.78);
+        font-size:11.5px;
+      }
+
+      .iris-ai-image-chip button{
+        width:20px;
+        height:20px;
+        border:0;
+        border-radius:999px;
+        background:rgba(255,255,255,.12);
+        color:#fff;
+        cursor:pointer;
+      }
+
+      .iris-ai-attach{
+        width:42px;
+        border:1px solid rgba(255,255,255,.12);
+        border-radius:16px;
+        background:rgba(255,255,255,.06);
+        color:#ffe39a;
+        cursor:pointer;
+        font-size:18px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+
+      .iris-ai-file{
+        display:none;
+      }
+
       .iris-ai-form{
         flex:0 0 auto;
         display:flex;
@@ -551,8 +671,29 @@ body.iris-ai-open #refitWhatsappWidget::before{
     return createMessage("assistant", "Iris is reading your message softly...", false);
   }
 
-  async function sendToIris(message) {
+    async function sendToIris(message, images) {
     const history = loadHistory();
+
+    const response = await fetch(IRIS_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message,
+        images: images || [],
+        history
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Iris could not respond.");
+    }
+
+    return data.reply || "I’m here. Could you share a little more with me?";
+  }
 
     const response = await fetch(IRIS_ENDPOINT, {
       method: "POST",
@@ -576,7 +717,7 @@ body.iris-ai-open #refitWhatsappWidget::before{
 
   async function handleSend(text) {
     const message = String(text || "").trim();
-    if (!message || isBusy) return;
+if ((!message && !selectedIrisImages.length) || isBusy) return;
 
     isBusy = true;
 
@@ -586,12 +727,16 @@ body.iris-ai-open #refitWhatsappWidget::before{
     if (input) input.value = "";
     if (send) send.disabled = true;
 
-    createMessage("user", message, false);
-    const thinking = showThinking();
+    const imagesToSend = selectedIrisImages.slice();
+selectedIrisImages = [];
+updateIrisImagePreview();
+
+createMessage("user", imagesToSend.length ? `${message || "Please review these images."}\n\n[${imagesToSend.length} image attached]` : message, false);
+const thinking = showThinking();
 
     try {
-      const reply = await sendToIris(message);
-
+      const reply = await sendToIris(message || "Please review these images.", imagesToSend);
+      
       thinking.remove();
       createMessage("assistant", reply, true);
 
@@ -644,8 +789,12 @@ body.iris-ai-open #refitWhatsappWidget::before{
         <div class="iris-ai-small">
           Iris gives general guidance first. For confirmed pricing, site details or urgent work, REFIT may continue by WhatsApp.
         </div>
-
-        <form class="iris-ai-form">
+        
+        <div class="iris-ai-image-preview"></div>
+        
+                <form class="iris-ai-form">
+          <button class="iris-ai-attach" type="button" aria-label="Attach images">＋</button>
+          <input class="iris-ai-file" type="file" accept="image/jpeg,image/png,image/webp" multiple>
           <textarea class="iris-ai-input" rows="1" maxlength="700" placeholder="Talk to Iris..."></textarea>
           <button class="iris-ai-send" type="submit">➤</button>
         </form>
@@ -664,6 +813,9 @@ body.iris-ai-open #refitWhatsappWidget::before{
     const closeBtn = root.querySelector(".iris-ai-close");
     const form = root.querySelector(".iris-ai-form");
     const input = root.querySelector(".iris-ai-input");
+
+        const attachBtn = root.querySelector(".iris-ai-attach");
+    const fileInput = root.querySelector(".iris-ai-file");
 
     function openIris() {
       isOpen = true;
@@ -694,8 +846,18 @@ body.iris-ai-open #refitWhatsappWidget::before{
       if (isOpen) closeIris();
       else openIris();
     });
-    closeBtn.addEventListener("click", closeIris);
+        attachBtn.addEventListener("click", () => {
+      unlockIrisSound();
+      fileInput.click();
+    });
 
+    fileInput.addEventListener("change", async () => {
+      const prepared = await prepareIrisImages(fileInput.files);
+      selectedIrisImages = prepared.slice(0, 2);
+      updateIrisImagePreview();
+      fileInput.value = "";
+    });
+    
         form.addEventListener("submit", (event) => {
       event.preventDefault();
       unlockIrisSound();
