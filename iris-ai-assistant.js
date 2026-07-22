@@ -695,26 +695,6 @@ body.iris-ai-open #refitWhatsappWidget::before{
     return data.reply || "I’m here. Could you share a little more with me?";
   }
 
-    const response = await fetch(IRIS_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message,
-        history
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Iris could not respond.");
-    }
-
-    return data.reply || "I’m here. Could you share a little more with me?";
-  }
-
   async function handleSend(text) {
     const message = String(text || "").trim();
 if ((!message && !selectedIrisImages.length) || isBusy) return;
