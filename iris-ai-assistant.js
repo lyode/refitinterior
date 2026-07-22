@@ -1053,7 +1053,8 @@ const thinking = showThinking();
       panel.classList.remove("open");
       document.body.classList.remove("iris-ai-open");
     }
-
+    closeBtn.addEventListener("click", closeIris);
+    
         openBtn.addEventListener("click", () => {
       unlockIrisSound();
 
