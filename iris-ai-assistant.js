@@ -38,18 +38,29 @@
       body.iris-ai-open{
         overflow:hidden;
       }
+body.iris-ai-open #refitWhatsappWidget{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  transform:translateY(18px) scale(.82) !important;
+}
 
+body.iris-ai-open #refitWhatsappWidget::before{
+  animation:none !important;
+  opacity:0 !important;
+}
       .iris-ai-root{
-        position:fixed;
-        left:18px;
-        bottom:22px;
-        z-index:9998;
-        font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      }
+  position:fixed;
+  right:20px;
+  bottom:78px;
+  left:auto;
+  z-index:2147483646;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
 
       .iris-ai-button{
-        width:66px;
-        height:66px;
+        width:52px;
+        height:52px;
         border-radius:999px;
         border:1px solid rgba(255,224,128,.74);
         background:
@@ -81,8 +92,8 @@
       }
 
       .iris-ai-mark{
-        width:32px;
-        height:32px;
+        width:25px;
+        height:25px;
         border-radius:999px;
         background:
           radial-gradient(circle at 50% 50%, #fff 0 13%, #ffd75c 14% 28%, #a93445 29% 48%, #18080d 49% 100%);
@@ -93,7 +104,8 @@
 
       .iris-ai-label{
         position:absolute;
-        left:74px;
+        left:auto;
+        right:60px;
         top:50%;
         transform:translateY(-50%);
         white-space:nowrap;
@@ -111,7 +123,8 @@
 
       .iris-ai-panel{
         position:absolute;
-        left:0;
+        left:auto;
+        right:0;
         bottom:88px;
         width:min(390px,calc(100vw - 34px));
         height:min(570px,calc(100vh - 126px));
@@ -296,19 +309,24 @@
         }
 
         .iris-ai-button{
-          position:fixed;
-          left:18px;
-          bottom:calc(18px + env(safe-area-inset-bottom));
-          width:62px;
-          height:62px;
-          z-index:99998;
-        }
-
+  position:fixed;
+  right:14px;
+  left:auto;
+  bottom:64px;
+  width:42px;
+  height:42px;
+  z-index:2147483646;
+}
         .iris-ai-label{
-          left:68px;
-          font-size:11.5px;
-          padding:6px 10px;
-        }
+  left:auto;
+  right:50px;
+  font-size:11px;
+  padding:6px 9px;
+}
+.iris-ai-mark{
+  width:21px;
+  height:21px;
+}
 
         body.iris-ai-open .iris-ai-button{
           opacity:0;
