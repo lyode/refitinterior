@@ -9,6 +9,60 @@
   let isOpen = false;
   let isBusy = false;
 
+    let irisAudioContext = null;
+  let lastKeySoundAt = 0;
+
+  function getIrisAudioContext() {
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return null;
+
+      if (!irisAudioContext) {
+        irisAudioContext = new AudioContextClass();
+      }
+
+      if (irisAudioContext.state === "suspended") {
+        irisAudioContext.resume().catch(() => {});
+      }
+
+      return irisAudioContext;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function unlockIrisSound() {
+    getIrisAudioContext();
+  }
+
+  function playSoftKeyboardSound() {
+    const now = Date.now();
+
+    if (now - lastKeySoundAt < 60) return;
+    lastKeySoundAt = now;
+
+    try {
+      const audio = getIrisAudioContext();
+      if (!audio || audio.state !== "running") return;
+
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(820 + Math.random() * 120, audio.currentTime);
+
+      gain.gain.setValueAtTime(0.0001, audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.015, audio.currentTime + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.045);
+
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+
+      oscillator.start(audio.currentTime);
+      oscillator.stop(audio.currentTime + 0.05);
+    } catch (error) {}
+  }
+
   function ready(fn) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", fn);
@@ -469,25 +523,30 @@ body.iris-ai-open #refitWhatsappWidget::before{
     return bubble;
   }
 
-  function typeText(element, text) {
+    function typeText(element, text) {
     let i = 0;
     element.textContent = "";
 
     function step() {
-      element.textContent += text.charAt(i);
+      const character = text.charAt(i);
+      element.textContent += character;
+
+      if (character && character.trim() && i % 3 === 0) {
+        playSoftKeyboardSound();
+      }
+
       i += 1;
 
       const messages = document.querySelector(".iris-ai-messages");
       if (messages) messages.scrollTop = messages.scrollHeight;
 
       if (i < text.length) {
-        setTimeout(step, 18);
+        setTimeout(step, 22);
       }
     }
 
     step();
   }
-
   function showThinking() {
     return createMessage("assistant", "Iris is reading your message softly...", false);
   }
@@ -629,18 +688,19 @@ body.iris-ai-open #refitWhatsappWidget::before{
       document.body.classList.remove("iris-ai-open");
     }
 
-    openBtn.addEventListener("click", () => {
+        openBtn.addEventListener("click", () => {
+      unlockIrisSound();
+
       if (isOpen) closeIris();
       else openIris();
     });
-
     closeBtn.addEventListener("click", closeIris);
 
-    form.addEventListener("submit", (event) => {
+        form.addEventListener("submit", (event) => {
       event.preventDefault();
+      unlockIrisSound();
       handleSend(input.value);
     });
-
     input.addEventListener("keydown", (event) => {
       if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
@@ -649,7 +709,8 @@ body.iris-ai-open #refitWhatsappWidget::before{
     });
 
     root.querySelectorAll(".iris-ai-chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
+            chip.addEventListener("click", () => {
+        unlockIrisSound();
         openIris();
         handleSend(chip.textContent);
       });
