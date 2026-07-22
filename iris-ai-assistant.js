@@ -4,8 +4,9 @@
 
   const IRIS_ENDPOINT = "https://asia-southeast1-refit-digital-tools.cloudfunctions.net/irisChat";
   const STORAGE_KEY = "refit_iris_ai_history_v1";
-  const MAX_HISTORY = 12;
-
+const VOICE_KEY = "refit_iris_voice_choice_v1";
+const MAX_HISTORY = 12;
+  
   let isOpen = false;
   let isBusy = false;
 
@@ -158,12 +159,132 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-MAX_HISTORY)));
     } catch (error) {}
   }
-  function stopIrisVoice() {
+    function stopIrisVoice() {
     try {
       if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
     } catch (error) {}
+  }
+
+  function getIrisVoiceChoice() {
+    try {
+      return localStorage.getItem(VOICE_KEY) || "emotional";
+    } catch (error) {
+      return "emotional";
+    }
+  }
+
+  function setIrisVoiceChoice(choice) {
+    try {
+      localStorage.setItem(VOICE_KEY, choice);
+    } catch (error) {}
+  }
+
+  function chooseLadyVoice(voices, choice) {
+    const englishVoices = voices.filter((voice) => /^en/i.test(voice.lang));
+
+    const softLady =
+      voices.find((voice) => /samantha|jenny|aria|zira|google uk english female|google us english/i.test(voice.name)) ||
+      englishVoices.find((voice) => /female|woman|samantha|jenny|aria|zira/i.test(voice.name)) ||
+      englishVoices[0] ||
+      voices[0];
+
+    if (choice === "sweet") {
+      return voices.find((voice) => /samantha|jenny|aria|google us english/i.test(voice.name)) || softLady;
+    }
+
+    if (choice === "calm") {
+      return voices.find((voice) => /aria|samantha|google uk english female/i.test(voice.name)) || softLady;
+    }
+
+    if (choice === "emotional") {
+      return voices.find((voice) => /samantha|jenny|aria|google uk english female/i.test(voice.name)) || softLady;
+    }
+
+    if (choice === "intimate") {
+      return voices.find((voice) => /samantha|aria|jenny/i.test(voice.name)) || softLady;
+    }
+
+    if (choice === "warm") {
+      return voices.find((voice) => /jenny|aria|samantha|google uk english female/i.test(voice.name)) || softLady;
+    }
+
+    if (choice === "clear") {
+      return voices.find((voice) => /zira|jenny|google us english|microsoft/i.test(voice.name)) || softLady;
+    }
+
+    if (choice === "mature") {
+      return voices.find((voice) => /zira|google uk english female|microsoft/i.test(voice.name)) || softLady;
+    }
+
+    if (choice === "bright") {
+      return voices.find((voice) => /jenny|aria|google us english/i.test(voice.name)) || softLady;
+    }
+
+    return softLady;
+  }
+
+  function applyVoiceMood(utterance, choice) {
+    if (choice === "sweet") {
+      utterance.rate = 0.88;
+      utterance.pitch = 1.16;
+      utterance.volume = 0.72;
+      return;
+    }
+
+    if (choice === "calm") {
+      utterance.rate = 0.82;
+      utterance.pitch = 1.02;
+      utterance.volume = 0.66;
+      return;
+    }
+
+    if (choice === "emotional") {
+      utterance.rate = 0.84;
+      utterance.pitch = 1.08;
+      utterance.volume = 0.68;
+      return;
+    }
+
+    if (choice === "intimate") {
+      utterance.rate = 0.78;
+      utterance.pitch = 1.04;
+      utterance.volume = 0.58;
+      return;
+    }
+
+    if (choice === "warm") {
+      utterance.rate = 0.86;
+      utterance.pitch = 1.1;
+      utterance.volume = 0.7;
+      return;
+    }
+
+    if (choice === "clear") {
+      utterance.rate = 0.96;
+      utterance.pitch = 1.04;
+      utterance.volume = 0.78;
+      return;
+    }
+
+    if (choice === "mature") {
+      utterance.rate = 0.86;
+      utterance.pitch = 0.98;
+      utterance.volume = 0.74;
+      return;
+    }
+
+    if (choice === "bright") {
+      utterance.rate = 0.94;
+      utterance.pitch = 1.18;
+      utterance.volume = 0.74;
+      return;
+    }
+
+    utterance.rate = 0.84;
+    utterance.pitch = 1.08;
+    utterance.volume = 0.68;
   }
 
   function speakIrisText(text) {
@@ -182,17 +303,12 @@
 
       if (!cleanText) return;
 
+      const choice = getIrisVoiceChoice();
       const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.rate = 0.84;
-      utterance.pitch = 1.08;
-      utterance.volume = 0.68;
-      
+      applyVoiceMood(utterance, choice);
+
       const voices = window.speechSynthesis.getVoices();
-      const preferredVoice =
-  voices.find((voice) => /samantha|jenny|aria|zira|google uk english female|google us english/i.test(voice.name)) ||
-  voices.find((voice) => /^en/i.test(voice.lang) && /female|woman|samantha|jenny|aria|zira/i.test(voice.name)) ||
-  voices.find((voice) => /^en/i.test(voice.lang)) ||
-  voices[0];
+      const preferredVoice = chooseLadyVoice(voices, choice);
 
       if (preferredVoice) {
         utterance.voice = preferredVoice;
@@ -357,7 +473,28 @@ body.iris-ai-open #refitWhatsappWidget::before{
         font-size:12.5px;
         line-height:1.55;
       }
+      .iris-ai-voice-row{
+        margin-top:10px;
+        display:flex;
+        align-items:center;
+        gap:8px;
+        color:rgba(255,255,255,.58);
+        font-size:11.5px;
+      }
 
+      .iris-ai-voice-select{
+        border:1px solid rgba(255,215,112,.28);
+        border-radius:999px;
+        background:rgba(255,255,255,.07);
+        color:#ffe39a;
+        padding:6px 9px;
+        font-size:11.5px;
+        outline:none;
+      }
+
+      .iris-ai-voice-select option{
+        color:#111;
+      }
       .iris-ai-messages{
         flex:1 1 auto;
         overflow:auto;
@@ -830,6 +967,18 @@ const thinking = showThinking();
           <div class="iris-ai-intro">
             Hi, I’m Iris. I’ll help you understand REFIT clearly — no pressure to buy, only the next step that makes sense.
           </div>
+                    <div class="iris-ai-voice-row">
+            <span>Voice</span>
+            <select class="iris-ai-voice-select" aria-label="Choose Iris voice tone">
+              <option value="sweet">Sweet Lady</option>
+              <option value="calm">Calm Lady</option>
+              <option value="emotional">Soft Emotional</option>
+              <option value="intimate">Intimate Soft</option>
+              <option value="warm">Warm Caring</option>
+              <option value="clear">Gentle Clear</option>
+              <option value="mature">Mature Premium</option>
+              <option value="bright">Bright Soft</option>
+            </select>          
         </div>
 
         <div class="iris-ai-messages"></div>
@@ -870,6 +1019,16 @@ const thinking = showThinking();
 
         const attachBtn = root.querySelector(".iris-ai-attach");
     const fileInput = root.querySelector(".iris-ai-file");
+        const voiceSelect = root.querySelector(".iris-ai-voice-select");
+
+    if (voiceSelect) {
+      voiceSelect.value = getIrisVoiceChoice();
+
+      voiceSelect.addEventListener("change", () => {
+        setIrisVoiceChoice(voiceSelect.value);
+        stopIrisVoice();
+      });
+    }
 
     function openIris() {
       isOpen = true;
