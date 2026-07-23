@@ -406,26 +406,27 @@ body.iris-ai-open #refitWhatsappWidget::before{
         pointer-events:none;
       }
 
-                  .iris-ai-panel{
+      .iris-ai-panel{
         position:fixed;
         right:28px;
-        bottom:138px;
+        top:110px;
+        bottom:90px;
         width:min(390px,calc(100vw - 32px));
-        height:min(560px,calc(100dvh - 160px));
-        max-height:calc(100dvh - 160px);
+        height:auto;
+        max-height:none;
         display:none;
-        overflow:hidden;
+        overflow-y:auto;
+        overflow-x:hidden;
         box-sizing:border-box;
         border-radius:24px;
         background:linear-gradient(180deg,rgba(22,22,26,.985),rgba(8,8,10,.985));
         border:1px solid rgba(255,255,255,.14);
         box-shadow:0 28px 80px rgba(0,0,0,.58);
+        -webkit-overflow-scrolling:touch;
       }
 
-              .iris-ai-panel.open{
-        display:flex;
-        flex-direction:column;
-        min-height:0;
+      .iris-ai-panel.open{
+        display:block;
       }
       
       .iris-ai-head{
@@ -498,12 +499,11 @@ body.iris-ai-open #refitWhatsappWidget::before{
         color:#111;
       }
       .iris-ai-messages{
-        flex:1 1 auto;
-        min-height:0;
-        overflow-y:auto;
-        overflow-x:hidden;
+        overflow:visible;
         padding:12px 16px 8px;
-        scroll-behavior:smooth;
+      }
+      
+      scroll-behavior:smooth;
         -webkit-overflow-scrolling:touch;
       }
 
@@ -605,7 +605,7 @@ body.iris-ai-open #refitWhatsappWidget::before{
         font-size:11.5px;
       }
 
-      .iris-ai-image-chip button{
+        .iris-ai-image-chip button{
         width:20px;
         height:20px;
         border:0;
@@ -615,7 +615,7 @@ body.iris-ai-open #refitWhatsappWidget::before{
         cursor:pointer;
       }
 
-      .iris-ai-attach{
+        .iris-ai-attach{
         width:42px;
         border:1px solid rgba(255,255,255,.12);
         border-radius:16px;
@@ -628,18 +628,21 @@ body.iris-ai-open #refitWhatsappWidget::before{
         justify-content:center;
       }
 
-      .iris-ai-file{
+        .iris-ai-file{
         display:none;
       }
 
-      .iris-ai-form{
-  flex:0 0 auto;
-  display:flex;
-  gap:8px;
-  padding:10px 12px 12px;
-  border-top:1px solid rgba(255,255,255,.1);
-  background:rgba(0,0,0,.36);
-}
+         .iris-ai-form{
+        position:sticky;
+        bottom:0;
+        display:flex;
+        gap:8px;
+        padding:10px 12px 12px;
+        border-top:1px solid rgba(255,255,255,.1);
+        background:rgba(0,0,0,.88);
+        backdrop-filter:blur(12px);
+      }
+
 
       .iris-ai-input{
         flex:1;
@@ -676,7 +679,55 @@ body.iris-ai-open #refitWhatsappWidget::before{
         opacity:.5;
         cursor:not-allowed;
       }
+      /* EMERGENCY DESKTOP LAYOUT OVERRIDE - DO NOT REMOVE */
+      @media(min-width:641px){
+        .iris-ai-panel{
+          position:fixed !important;
+          right:24px !important;
+          top:92px !important;
+          bottom:86px !important;
+          width:min(390px,calc(100vw - 32px)) !important;
+          height:auto !important;
+          max-height:none !important;
+          display:none !important;
+          overflow-y:auto !important;
+          overflow-x:hidden !important;
+          box-sizing:border-box !important;
+          -webkit-overflow-scrolling:touch !important;
+        }
 
+        .iris-ai-panel.open{
+          display:block !important;
+        }
+
+        .iris-ai-head,
+        .iris-ai-suggestions,
+        .iris-ai-small,
+        .iris-ai-image-preview{
+          flex:none !important;
+        }
+
+        .iris-ai-messages{
+          display:block !important;
+          overflow:visible !important;
+          min-height:auto !important;
+          height:auto !important;
+          max-height:none !important;
+          padding:12px 16px 8px !important;
+        }
+
+        .iris-ai-form{
+          position:sticky !important;
+          bottom:0 !important;
+          z-index:20 !important;
+          display:flex !important;
+          gap:8px !important;
+          padding:10px 12px 12px !important;
+          border-top:1px solid rgba(255,255,255,.1) !important;
+          background:rgba(0,0,0,.92) !important;
+          backdrop-filter:blur(12px) !important;
+        }
+      }
       @media(max-width:640px){
         .iris-ai-root{
           left:0;
