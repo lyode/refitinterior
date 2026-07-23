@@ -9,6 +9,144 @@
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="refit-floating-ui.css">
+
+<style>
+  .hero-copy{
+    position:relative;
+  }
+
+  .hero-micro-magic{
+    align-items:center;
+  }
+
+  .hero-micro-magic .micro-action{
+    appearance:none;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.045);
+    color:#d8d1ca;
+    min-height:34px;
+    padding:8px 12px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:780;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    cursor:pointer;
+    transform:translateY(-3px);
+    box-shadow:
+      0 3px 0 rgba(255,255,255,.08),
+      0 13px 30px rgba(0,0,0,.30);
+    transition:transform .2s ease, border .2s ease, box-shadow .2s ease, color .2s ease, background .2s ease;
+  }
+
+  .hero-micro-magic .micro-action i{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--pink);
+    box-shadow:0 0 12px rgba(255,178,193,.6);
+  }
+
+  .hero-micro-magic .micro-action:hover,
+  .hero-micro-magic .micro-action.active{
+    color:#fff1b8;
+    border-color:rgba(255,215,112,.68);
+    background:rgba(202,168,102,.12);
+    transform:translateY(-6px);
+    box-shadow:
+      0 3px 0 rgba(255,215,112,.18),
+      0 0 18px rgba(255,215,112,.20),
+      0 16px 34px rgba(0,0,0,.42);
+  }
+
+  .hero-micro-magic .micro-action:active{
+    transform:translateY(0);
+  }
+
+  .hero-magic-paper{
+    width:min(560px,100%);
+    min-height:94px;
+    margin-top:18px;
+    padding:16px 18px;
+    border-radius:22px;
+    border:1px solid rgba(255,215,112,.46);
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025)),
+      rgba(8,8,12,.34);
+    backdrop-filter:blur(16px);
+    box-shadow:
+      inset 0 0 22px rgba(255,255,255,.035),
+      0 0 0 1px rgba(229,129,150,.12),
+      0 0 26px rgba(255,215,112,.16),
+      0 22px 54px rgba(0,0,0,.38);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transform:translateY(14px) scale(.98);
+    filter:blur(12px);
+    transition:
+      opacity 1.25s ease,
+      visibility 1.25s ease,
+      transform 1.25s ease,
+      filter 1.25s ease;
+  }
+
+  .hero-magic-paper.show{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(-3px) scale(1);
+    filter:blur(0);
+  }
+
+  .hero-magic-paper.dissolve{
+    opacity:0;
+    transform:translateY(16px) scale(.96);
+    filter:blur(14px);
+  }
+
+  .hero-magic-paper strong{
+    display:block;
+    color:#fff1b8;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    margin-bottom:7px;
+    text-shadow:
+      0 0 10px rgba(255,215,112,.42),
+      0 0 18px rgba(229,129,150,.22);
+  }
+
+  .hero-magic-paper p{
+    margin:0;
+    color:#f1e9df;
+    font-size:14px;
+    line-height:1.55;
+    text-shadow:0 0 12px rgba(255,255,255,.10);
+  }
+
+  @media(max-width:640px){
+    .hero-micro-magic{
+      gap:10px;
+    }
+
+    .hero-micro-magic .micro-action{
+      min-height:38px;
+      font-size:12px;
+      padding:9px 12px;
+    }
+
+    .hero-magic-paper{
+      min-height:110px;
+      padding:16px;
+      margin-top:16px;
+    }
+  }
+</style>
+  
 </head>
 <body>
   <header class="site-header">
@@ -43,13 +181,33 @@
             <a class="btn btn-dark" href="#services">Explore Services</a>
             <a class="btn btn-pink" href="#contact">Talk to REFIT</a>
           </div>
-          <div class="micro">
-            <span><i></i>Design</span>
-            <span><i></i>Build</span>
-            <span><i></i>Renovate</span>
-            <span><i></i>Maintain</span>
-            <span><i></i>Control</span>
-          </div>
+          <div class="micro hero-micro-magic">
+  <button class="micro-action" type="button" data-title="Design" data-text="We shape the space direction, layout flow, mood, material direction and practical design intent before work starts.">
+    <i></i><span>Design</span>
+  </button>
+
+  <button class="micro-action" type="button" data-title="Build" data-text="We turn approved ideas into actual site works, coordinating workers, materials, sequence and workmanship on site.">
+    <i></i><span>Build</span>
+  </button>
+
+  <button class="micro-action" type="button" data-title="Renovate" data-text="We improve existing spaces by upgrading finishes, layout, function, comfort and practical daily use.">
+    <i></i><span>Renovate</span>
+  </button>
+
+  <button class="micro-action" type="button" data-title="Maintain" data-text="We support repairs, touch-ups, improvement works and practical maintenance so the space continues to perform.">
+    <i></i><span>Maintain</span>
+  </button>
+
+  <button class="micro-action" type="button" data-title="Control" data-text="We connect scope, quotation, schedule, progress, site decisions and handover so the project stays clearer.">
+    <i></i><span>Control</span>
+  </button>
+</div>
+
+<div class="hero-magic-paper" id="heroMagicPaper" aria-live="polite" aria-hidden="true">
+  <strong id="heroMagicTitle"></strong>
+  <p id="heroMagicText"></p>
+</div>
+          
         </div>
 
         <div class="hero-visual reveal">
@@ -601,6 +759,59 @@ ${message ? 'Details:\n'+message : guide}`;
   window.open('https://wa.me/60122145922?text='+encodeURIComponent(text),'_blank','noopener');
 });
   </script>
+
+  <script>
+  (function(){
+    const paper = document.getElementById("heroMagicPaper");
+    const title = document.getElementById("heroMagicTitle");
+    const text = document.getElementById("heroMagicText");
+    const buttons = document.querySelectorAll(".hero-micro-magic .micro-action");
+
+    if(!paper || !title || !text || !buttons.length) return;
+
+    let magicTimer = null;
+    let dissolveTimer = null;
+
+    function showMagic(button){
+      clearTimeout(magicTimer);
+      clearTimeout(dissolveTimer);
+
+      buttons.forEach(function(btn){
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      title.textContent = button.getAttribute("data-title") || "";
+      text.textContent = button.getAttribute("data-text") || "";
+
+      paper.classList.remove("dissolve");
+      paper.classList.add("show");
+      paper.setAttribute("aria-hidden", "false");
+
+      magicTimer = setTimeout(function(){
+        paper.classList.add("dissolve");
+
+        buttons.forEach(function(btn){
+          btn.classList.remove("active");
+        });
+
+        dissolveTimer = setTimeout(function(){
+          paper.classList.remove("show");
+          paper.classList.remove("dissolve");
+          paper.setAttribute("aria-hidden", "true");
+        }, 1300);
+      }, 4000);
+    }
+
+    buttons.forEach(function(button){
+      button.addEventListener("click", function(){
+        showMagic(button);
+      });
+    });
+  })();
+</script>
+  
   <script src="whatsapp-widget-v5.js"></script>
 <script src="iris-ai-assistant.js"></script>
 <script>
