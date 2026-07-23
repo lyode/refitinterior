@@ -851,7 +851,8 @@ body.iris-ai-open #refitWhatsappWidget::before{
           min-height:0;
           overflow-y:auto;
           overflow-x:hidden;
-          padding:18px 18px 10px;
+          padding:18px 18px 86px;
+          scroll-padding-bottom:86px;
         }
         
         .iris-ai-bubble{
