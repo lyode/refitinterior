@@ -146,6 +146,81 @@
     }
   }
 </style>
+<style>
+  .nav-free-offer{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    white-space:nowrap;
+  }
+
+  .nav-rm99-slashed{
+    position:relative;
+    color:rgba(255,255,255,.48) !important;
+    opacity:1 !important;
+  }
+
+  .nav-rm99-slashed:after{
+    content:"";
+    position:absolute;
+    left:-4px;
+    right:-4px;
+    top:52%;
+    height:2px;
+    border-radius:999px;
+    background:linear-gradient(90deg, transparent, #ff4f92, #ffe39a, #ff4f92, transparent);
+    box-shadow:
+      0 0 8px rgba(255,79,146,.9),
+      0 0 14px rgba(255,227,154,.55);
+    transform:rotate(-9deg);
+    pointer-events:none;
+  }
+
+  .nav-free-iris{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:26px;
+    padding:3px 9px;
+    border-radius:999px;
+    border:1px solid rgba(255,227,154,.65);
+    background:rgba(255,215,112,.08);
+    color:#ffe39a !important;
+    font-size:12px;
+    font-weight:950;
+    letter-spacing:.1em;
+    opacity:1 !important;
+    text-shadow:
+      0 0 8px rgba(255,227,154,.9),
+      0 0 16px rgba(255,79,146,.42);
+    box-shadow:
+      0 0 10px rgba(255,227,154,.18),
+      0 10px 22px rgba(0,0,0,.32);
+    transform:translateY(-3px);
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+
+  .nav-free-iris:hover{
+    transform:translateY(-5px);
+    background:rgba(255,215,112,.16);
+    box-shadow:
+      0 0 14px rgba(255,227,154,.34),
+      0 14px 28px rgba(0,0,0,.42);
+  }
+
+  @media(max-width:760px){
+    .nav-free-offer{
+      justify-content:flex-start;
+      gap:8px;
+    }
+
+    .nav-free-iris{
+      min-height:30px;
+      padding:4px 11px;
+    }
+  }
+</style>
   
 </head>
 <body>
@@ -159,7 +234,11 @@
         <a href="#services">Services</a>
         <a href="#framework">Framework</a>
         <a href="#projects">References</a>
-        <a href="#readiness-pass">RM99 Check</a>
+        <span class="nav-free-offer">
+          
+  <a class="nav-rm99-slashed" href="#readiness-pass">RM99 Check</a>
+  <a class="nav-free-iris" href="#ask-iris" data-open-iris-free>FREE</a>
+</span>
         <a href="#faq">FAQ</a>
         <a href="portfolio.html">Full Gallery</a>
         <a href="#digital-tools">Digital Tools</a>
@@ -813,6 +892,44 @@ ${message ? 'Details:\n'+message : guide}`;
 </script>
   
   <script src="whatsapp-widget-v5.js"></script>
+<script>
+  document.addEventListener("click", function(event){
+    const freeLink = event.target.closest("[data-open-iris-free]");
+    if(!freeLink) return;
+
+    event.preventDefault();
+
+    let attempts = 0;
+
+    function openIrisFree(){
+      const irisButton = document.querySelector(".iris-ai-button");
+
+      if(irisButton){
+        if(!document.body.classList.contains("iris-ai-open")){
+          irisButton.click();
+        }
+
+        setTimeout(function(){
+          const irisInput = document.querySelector(".iris-ai-input");
+          if(irisInput && !irisInput.value.trim()){
+            irisInput.value = "I saw the FREE check offer. Please guide me.";
+            irisInput.focus();
+          }
+        }, 450);
+
+        return;
+      }
+
+      attempts += 1;
+      if(attempts < 10){
+        setTimeout(openIrisFree, 150);
+      }
+    }
+
+    openIrisFree();
+  });
+</script>
+  
 <script src="iris-ai-assistant.js"></script>
 <script>
   
