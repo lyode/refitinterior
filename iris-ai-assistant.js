@@ -406,23 +406,28 @@ body.iris-ai-open #refitWhatsappWidget::before{
         pointer-events:none;
       }
 
-      bottom:88px;
-width:min(390px,calc(100vw - 34px));
-height:min(570px,calc(100vh - 126px));
-display:none;
-overflow:hidden;
-
+            .iris-ai-panel{
+        position:absolute;
+        left:auto;
+        right:0;
+        bottom:74px;
+        width:min(410px,calc(100vw - 28px));
+        height:min(650px,calc(100dvh - 96px));
+        max-height:calc(100dvh - 96px);
+        display:none;
+        overflow:hidden;
+        box-sizing:border-box;
         border-radius:24px;
         background:linear-gradient(180deg,rgba(22,22,26,.985),rgba(8,8,10,.985));
         border:1px solid rgba(255,255,255,.14);
         box-shadow:0 28px 80px rgba(0,0,0,.58);
       }
 
-            .iris-ai-panel.open{
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-}
+        .iris-ai-panel.open{
+        display:flex;
+        flex-direction:column;
+        min-height:0;
+      }
       
       .iris-ai-head{
         flex:0 0 auto;
