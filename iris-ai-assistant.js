@@ -470,6 +470,41 @@ body.iris-ai-open #refitWhatsappWidget::before{
         flex:0 0 auto;
       }
 
+      .iris-ai-top{
+        position:sticky;
+        left:14px;
+        bottom:76px;
+        z-index:30;
+        width:36px;
+        height:36px;
+        margin:0 0 10px 14px;
+        border-radius:999px;
+        border:1px solid rgba(255,215,112,.48);
+        background:rgba(12,12,16,.92);
+        color:#ffe39a;
+        font-size:20px;
+        font-weight:900;
+        cursor:pointer;
+        box-shadow:0 12px 30px rgba(0,0,0,.42), 0 0 14px rgba(255,205,80,.15);
+        opacity:0;
+        visibility:hidden;
+        pointer-events:none;
+        transform:translateY(8px);
+        transition:opacity .22s ease, visibility .22s ease, transform .22s ease, background .22s ease;
+      }
+
+      .iris-ai-top.show{
+        opacity:1;
+        visibility:visible;
+        pointer-events:auto;
+        transform:translateY(-3px);
+      }
+
+      .iris-ai-top:hover{
+        background:rgba(40,28,18,.96);
+        transform:translateY(-5px);
+      }
+
       .iris-ai-intro{
         margin-top:12px;
         color:rgba(255,255,255,.74);
@@ -1058,8 +1093,9 @@ const thinking = showThinking();
             </select>          
         </div>
 
-        <div class="iris-ai-messages"></div>
-
+            <div class="iris-ai-messages"></div>
+            <button class="iris-ai-top" type="button" aria-label="Go to top of Iris chat">↑</button>
+        
         <div class="iris-ai-suggestions">
           <button class="iris-ai-chip" type="button">I feel unsure where to start.</button>
           <button class="iris-ai-chip" type="button">Explain REFIT digital tools.</button>
@@ -1094,6 +1130,9 @@ const thinking = showThinking();
     const form = root.querySelector(".iris-ai-form");
     const input = root.querySelector(".iris-ai-input");
 
+    const irisTopBtn = root.querySelector(".iris-ai-top");
+    const irisMessages = root.querySelector(".iris-ai-messages");
+    
         const attachBtn = root.querySelector(".iris-ai-attach");
     const fileInput = root.querySelector(".iris-ai-file");
         const voiceSelect = root.querySelector(".iris-ai-voice-select");
@@ -1131,6 +1170,48 @@ const thinking = showThinking();
       document.body.classList.remove("iris-ai-open");
     }
     closeBtn.addEventListener("click", closeIris);
+
+    function updateIrisTopButton() {
+      if (!irisTopBtn) return;
+
+      const panelScroll = panel ? panel.scrollTop : 0;
+      const messageScroll = irisMessages ? irisMessages.scrollTop : 0;
+
+      if (Math.max(panelScroll, messageScroll) > 220) {
+        irisTopBtn.classList.add("show");
+      } else {
+        irisTopBtn.classList.remove("show");
+      }
+    }
+
+    function goIrisTop() {
+      try {
+        if (irisMessages) {
+          irisMessages.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        if (panel) {
+          panel.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      } catch (error) {
+        if (irisMessages) irisMessages.scrollTop = 0;
+        if (panel) panel.scrollTop = 0;
+      }
+
+      setTimeout(updateIrisTopButton, 400);
+    }
+
+    if (irisTopBtn) {
+      irisTopBtn.addEventListener("click", goIrisTop);
+    }
+
+    if (panel) {
+      panel.addEventListener("scroll", updateIrisTopButton, { passive:true });
+    }
+
+    if (irisMessages) {
+      irisMessages.addEventListener("scroll", updateIrisTopButton, { passive:true });
+    }
     
         openBtn.addEventListener("click", () => {
       unlockIrisSound();
