@@ -913,9 +913,26 @@ body.iris-ai-open #refitWhatsappWidget::before{
     return bubble;
   }
   
-    function typeText(element, text) {
+      function typeText(element, text) {
+    const messages = document.querySelector(".iris-ai-messages");
+    const panel = document.querySelector(".iris-ai-panel");
+
     let i = 0;
     element.textContent = "";
+
+    function scrollDown() {
+      requestAnimationFrame(() => {
+        if (messages) {
+          messages.scrollTop = messages.scrollHeight;
+        }
+
+        if (panel) {
+          panel.scrollTop = panel.scrollHeight;
+        }
+
+        element.scrollIntoView({ block: "end", behavior: "auto" });
+      });
+    }
 
     function step() {
       const character = text.charAt(i);
@@ -926,21 +943,22 @@ body.iris-ai-open #refitWhatsappWidget::before{
       }
 
       i += 1;
-
-      const messages = document.querySelector(".iris-ai-messages");
-      if (messages) messages.scrollTop = messages.scrollHeight;
+      scrollDown();
 
       if (i < text.length) {
         setTimeout(step, 22);
+      } else {
+        scrollDown();
       }
     }
 
     step();
   }
-  function showThinking() {
+  
+    function showThinking() {
     return createMessage("assistant", "Iris is reading your message softly...", false);
   }
-
+  
     async function sendToIris(message, images) {
     const history = loadHistory();
 
