@@ -616,5 +616,86 @@ ${message ? 'Details:\n'+message : guide}`;
     logoObserver.observe(footerLogo);
   }
 </script>
+  <button id="refitBackTop" class="refit-back-top" type="button" aria-label="Back to top">↑</button>
+
+  <style>
+    .refit-back-top{
+      position:fixed;
+      left:26px;
+      right:auto;
+      bottom:148px;
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      border:1px solid rgba(255,215,112,.55);
+      background:rgba(12,12,16,.88);
+      color:#ffe39a;
+      font-size:22px;
+      font-weight:900;
+      line-height:1;
+      cursor:pointer;
+      z-index:2147483645;
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(14px) scale(.92);
+      transition:opacity .25s ease, transform .25s ease, visibility .25s ease, background .25s ease;
+      box-shadow:0 14px 36px rgba(0,0,0,.42), 0 0 16px rgba(255,205,80,.16);
+    }
+
+    .refit-back-top.show{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(0) scale(1);
+    }
+
+    .refit-back-top:hover{
+      background:rgba(40,28,18,.96);
+      transform:translateY(-3px) scale(1.03);
+    }
+
+    body.iris-ai-open .refit-back-top{
+      opacity:0 !important;
+      visibility:hidden !important;
+      pointer-events:none !important;
+    }
+
+    @media(max-width:640px){
+      .refit-back-top{
+        left:14px;
+        right:auto;
+        bottom:118px;
+        width:38px;
+        height:38px;
+        font-size:20px;
+      }
+    }
+  </style>
+
+  <script>
+    
+    (function(){
+      const backTop = document.getElementById('refitBackTop');
+      if(!backTop) return;
+
+      function toggleBackTop(){
+        if(window.scrollY > 520){
+          backTop.classList.add('show');
+        }else{
+          backTop.classList.remove('show');
+        }
+      }
+
+      backTop.addEventListener('click', function(){
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+
+      window.addEventListener('scroll', toggleBackTop, { passive:true });
+      toggleBackTop();
+    })();
+  </script>
+  
 </body>
 </html>
