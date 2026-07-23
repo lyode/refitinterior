@@ -421,11 +421,12 @@ body.iris-ai-open #refitWhatsappWidget::before{
         box-shadow:0 28px 80px rgba(0,0,0,.58);
       }
 
-      .iris-ai-panel.open{
+            .iris-ai-panel.open{
         display:flex;
         flex-direction:column;
+        min-height:0;
       }
-
+      
       .iris-ai-head{
         flex:0 0 auto;
         padding:18px 18px 14px;
@@ -495,9 +496,11 @@ body.iris-ai-open #refitWhatsappWidget::before{
       .iris-ai-voice-select option{
         color:#111;
       }
-      .iris-ai-messages{
+            .iris-ai-messages{
         flex:1 1 auto;
-        overflow:auto;
+        min-height:0;
+        overflow-y:auto;
+        overflow-x:hidden;
         padding:16px;
         scroll-behavior:smooth;
         -webkit-overflow-scrolling:touch;
@@ -757,9 +760,13 @@ body.iris-ai-open #refitWhatsappWidget::before{
         }
 
         .iris-ai-messages{
+          flex:1 1 auto;
+          min-height:0;
+          overflow-y:auto;
+          overflow-x:hidden;
           padding:18px 18px 10px;
         }
-
+        
         .iris-ai-bubble{
           max-width:92%;
           font-size:17px;
