@@ -406,15 +406,12 @@ body.iris-ai-open #refitWhatsappWidget::before{
         pointer-events:none;
       }
 
-      .iris-ai-panel{
-        position:absolute;
-        left:auto;
-        right:0;
-        bottom:88px;
-        width:min(390px,calc(100vw - 34px));
-        height:min(570px,calc(100vh - 126px));
-        display:none;
-        overflow:hidden;
+      bottom:88px;
+width:min(390px,calc(100vw - 34px));
+height:min(570px,calc(100vh - 126px));
+display:none;
+overflow:hidden;
+
         border-radius:24px;
         background:linear-gradient(180deg,rgba(22,22,26,.985),rgba(8,8,10,.985));
         border:1px solid rgba(255,255,255,.14);
@@ -422,10 +419,10 @@ body.iris-ai-open #refitWhatsappWidget::before{
       }
 
             .iris-ai-panel.open{
-        display:flex;
-        flex-direction:column;
-        min-height:0;
-      }
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
       
       .iris-ai-head{
         flex:0 0 auto;
@@ -497,14 +494,14 @@ body.iris-ai-open #refitWhatsappWidget::before{
         color:#111;
       }
             .iris-ai-messages{
-        flex:1 1 auto;
-        min-height:0;
-        overflow-y:auto;
-        overflow-x:hidden;
-        padding:16px;
-        scroll-behavior:smooth;
-        -webkit-overflow-scrolling:touch;
-      }
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:14px 16px 10px;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+}
 
       .iris-ai-msg{
         display:flex;
@@ -632,13 +629,13 @@ body.iris-ai-open #refitWhatsappWidget::before{
       }
 
       .iris-ai-form{
-        flex:0 0 auto;
-        display:flex;
-        gap:8px;
-        padding:12px;
-        border-top:1px solid rgba(255,255,255,.1);
-        background:rgba(0,0,0,.24);
-      }
+  flex:0 0 auto;
+  display:flex;
+  gap:8px;
+  padding:10px 12px 12px;
+  border-top:1px solid rgba(255,255,255,.1);
+  background:rgba(0,0,0,.36);
+}
 
       .iris-ai-input{
         flex:1;
@@ -777,12 +774,12 @@ body.iris-ai-open #refitWhatsappWidget::before{
         }
 
         .iris-ai-suggestions{
-          flex-wrap:nowrap;
-          overflow-x:auto;
-          gap:10px;
-          padding:0 18px 12px;
-          scrollbar-width:none;
-        }
+  flex:0 0 auto;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:0 16px 8px;
+}
 
         .iris-ai-suggestions::-webkit-scrollbar{
           display:none;
