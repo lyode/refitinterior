@@ -260,7 +260,7 @@
   position:absolute;
   right:6px;
   top:78px;
-  z-index:4;
+  z-index:20;
   width:260px;
   padding:0 2px;
   border:0;
@@ -302,12 +302,16 @@
 
   @media(max-width:640px){
     .process-road-note{
-      left:16px;
-      right:auto;
-      top:62px;
-      width:calc(100vw - 64px);
-      font-size:12.5px;
-    }
+  left:auto;
+  right:18px;
+  top:64px;
+  width:260px;
+  max-width:calc(100vw - 56px);
+  font-size:12px;
+  line-height:1.55;
+  z-index:20;
+  text-align:left;
+}
   }
 </style>
   
