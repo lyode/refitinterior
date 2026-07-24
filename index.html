@@ -1115,21 +1115,22 @@ ${message ? 'Details:\n'+message : guide}`;
     }
 
     body.iris-ai-open .refit-back-top{
-      opacity:0 !important;
-      visibility:hidden !important;
-      pointer-events:none !important;
-    }
-
-    .process-road-note{
-  left:16px;
-  right:auto;
-  top:70px;
-  width:260px;
-  max-width:calc(100vw - 42px);
-  font-size:12px;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
 }
-    }
-  </style>
+
+@media(max-width:640px){
+  .refit-back-top{
+    left:14px;
+    right:auto;
+    bottom:118px;
+    width:38px;
+    height:38px;
+    font-size:20px;
+  }
+}
+</style>
 
   <script>
     
