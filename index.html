@@ -216,74 +216,77 @@
 
   <style>
   .process-road-sign{
-    appearance:none;
-    -webkit-appearance:none;
-    cursor:pointer;
-    color:#fff6bd;
-    border:1px solid rgba(255,215,112,.58);
-    background:
-      linear-gradient(135deg,rgba(229,129,150,.92),rgba(128,39,67,.92));
-    text-shadow:
-      0 0 8px rgba(255,215,112,.55),
-      0 0 16px rgba(255,178,193,.32);
-    box-shadow:
-      0 3px 0 rgba(255,215,112,.18),
-      0 0 18px rgba(255,215,112,.18),
-      0 18px 38px rgba(0,0,0,.36);
-    clip-path:polygon(0 0,86% 0,100% 50%,86% 100%,0 100%,8% 50%);
-    border-radius:0;
-    transform:translateY(-3px);
-    transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
-  }
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  color:#fff6bd;
+  border:1px solid rgba(255,215,112,.58);
+  background:
+    linear-gradient(135deg,rgba(229,129,150,.94),rgba(128,39,67,.94));
+  text-shadow:
+    0 0 8px rgba(255,215,112,.55),
+    0 0 16px rgba(255,178,193,.32);
+  box-shadow:
+    0 3px 0 rgba(255,215,112,.18),
+    0 0 18px rgba(255,215,112,.18),
+    0 18px 38px rgba(0,0,0,.36);
+
+  min-width:260px;
+  min-height:46px;
+  padding:14px 30px 14px 28px;
+  font-size:13px;
+  line-height:1.15;
+
+  clip-path:polygon(0 0,88% 0,98% 50%,88% 100%,0 100%,6% 50%);
+  border-radius:0;
+  transform:translateY(-3px);
+  transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
 
   .process-road-sign:hover{
-    transform:translateY(-5px);
-    filter:brightness(1.08);
-    box-shadow:
-      0 3px 0 rgba(255,215,112,.24),
-      0 0 24px rgba(255,215,112,.25),
-      0 22px 44px rgba(0,0,0,.44);
-  }
+  transform:translateY(-5px);
+  filter:brightness(1.08);
+  box-shadow:
+    0 3px 0 rgba(255,215,112,.24),
+    0 0 24px rgba(255,215,112,.25),
+    0 22px 44px rgba(0,0,0,.44);
+}
 
   .process-road-sign:active{
     transform:translateY(0);
   }
 
   .process-road-note{
-    position:absolute;
-    right:6px;
-    top:72px;
-    z-index:4;
-    width:min(330px,86vw);
-    padding:13px 16px;
-    border-radius:18px;
-    border:1px solid rgba(255,215,112,.42);
-    background:rgba(8,8,12,.56);
-    backdrop-filter:blur(14px);
-    color:#ffe39a;
-    font-size:13px;
-    line-height:1.45;
-    font-weight:650;
-    text-shadow:
-      0 0 8px rgba(255,215,112,.65),
-      0 0 18px rgba(255,215,112,.28);
-    box-shadow:
-      inset 0 0 18px rgba(255,255,255,.035),
-      0 0 22px rgba(255,215,112,.14),
-      0 18px 42px rgba(0,0,0,.38);
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-    transform:translateY(-12px) scaleY(.88);
-    transform-origin:top center;
-    transition:
-      opacity .55s ease,
-      visibility .55s ease,
-      transform .55s ease,
-      filter .55s ease;
-    filter:blur(8px);
-  }
-
+  position:absolute;
+  right:6px;
+  top:78px;
+  z-index:4;
+  width:260px;
+  padding:0 2px;
+  border:0;
+  background:transparent;
+  color:#ffe39a;
+  font-size:12.5px;
+  line-height:1.55;
+  font-weight:650;
+  text-shadow:
+    0 0 8px rgba(255,215,112,.72),
+    0 0 18px rgba(255,215,112,.34),
+    0 0 28px rgba(229,129,150,.18);
+  box-shadow:none;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateY(-12px) scaleY(.88);
+  transform-origin:top center;
+  transition:
+    opacity .65s ease,
+    visibility .65s ease,
+    transform .65s ease,
+    filter .65s ease;
+  filter:blur(8px);
+}
+    
   .process-road-note.show{
     opacity:1;
     visibility:visible;
@@ -382,7 +385,12 @@
 </button>
 
 <div class="process-road-note" id="processRoadNote" aria-hidden="true">
-  A simple direction: plan clearly, build carefully, control the work, and hand over with confidence.
+  Start with clear scope.<br>
+  Confirm budget direction early.<br>
+  Plan drawing, material and timing.<br>
+  Coordinate site work step by step.<br>
+  Check progress before handover.<br>
+  Complete the space with clearer control.
 </div>
           
           <div class="hero-photo">
@@ -1112,15 +1120,14 @@ ${message ? 'Details:\n'+message : guide}`;
       pointer-events:none !important;
     }
 
-    @media(max-width:640px){
-      .refit-back-top{
-        left:14px;
-        right:auto;
-        bottom:118px;
-        width:38px;
-        height:38px;
-        font-size:20px;
-      }
+    .process-road-note{
+  left:16px;
+  right:auto;
+  top:70px;
+  width:260px;
+  max-width:calc(100vw - 42px);
+  font-size:12px;
+}
     }
   </style>
 
