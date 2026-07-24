@@ -535,9 +535,10 @@ h2 .bracket{
           you practical first-step advice before you spend on the wrong work.
         </p>
         <div class="button-row">
-          <a class="btn btn-primary" href="https://wa.me/60122145922?text=Hello%20REFIT%2C%20I%20am%20interested%20in%20the%20RM99%20Project%20Readiness%20Pass.%20I%20would%20like%20to%20send%20my%20space%20photos%20for%20a%20first-step%20review.">
-            Get RM99 Readiness Check
-          </a>
+          <a class="btn btn-primary readiness-free-btn" href="#ask-iris" data-open-iris-free aria-label="Open Iris for FREE readiness check">
+  <span class="readiness-rm99-slashed">Get RM99 Readiness Check</span>
+  <span class="readiness-free-neon">FREE</span>
+</a>
           <a class="btn btn-dark" href="#contact">Ask REFIT First</a>
         </div>
       </div>
@@ -1307,6 +1308,67 @@ ${message ? 'Details:\n'+message : guide}`;
   .stat-type-note{
     font-size:15px;
     line-height:1.38;
+  }
+}
+    .readiness-free-btn{
+  position:relative;
+  overflow:visible;
+  isolation:isolate;
+  min-width:260px;
+  padding-left:30px;
+  padding-right:30px;
+}
+
+.readiness-rm99-slashed{
+  position:relative;
+  display:inline-block;
+  z-index:1;
+}
+
+.readiness-rm99-slashed::after{
+  content:"";
+  position:absolute;
+  left:-8px;
+  right:-8px;
+  top:52%;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#e10028,#ff3b58,transparent);
+  transform:rotate(-7deg);
+  box-shadow:
+    0 0 6px rgba(255,30,60,.75),
+    0 0 14px rgba(255,30,60,.45);
+}
+
+.readiness-free-neon{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:3;
+  transform:translate(-50%,-50%) rotate(-10deg);
+  color:#ffe86f;
+  font-size:17px;
+  font-weight:950;
+  letter-spacing:.12em;
+  text-shadow:
+    0 0 6px rgba(255,232,111,.95),
+    0 0 14px rgba(255,232,111,.72),
+    0 0 24px rgba(255,232,111,.45);
+  pointer-events:none;
+}
+
+.readiness-free-btn:hover .readiness-free-neon{
+  color:#fff4a3;
+  transform:translate(-50%,-54%) rotate(-10deg);
+}
+
+@media(max-width:640px){
+  .readiness-free-btn{
+    width:100%;
+    min-width:0;
+  }
+
+  .readiness-free-neon{
+    font-size:16px;
   }
 }
     
