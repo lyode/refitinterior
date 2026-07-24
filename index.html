@@ -409,10 +409,22 @@
             <h3>REFIT Project Control</h3>
             <p>Scope, quotation, schedule, progress, claims and handover stay connected.</p>
             <div class="stat-grid">
-              <div class="stat"><strong>01</strong><small>Scope</small></div>
-              <div class="stat"><strong>02</strong><small>Site</small></div>
-              <div class="stat"><strong>03</strong><small>Handover</small></div>
-            </div>
+  <button class="stat stat-touch" type="button" data-stat-note="Confirm what is included, excluded, priced and documented before work starts.">
+    <span class="stat-main"><strong>01</strong><small>Scope</small></span>
+    <span class="stat-type-note" aria-hidden="true"></span>
+  </button>
+
+  <button class="stat stat-touch" type="button" data-stat-note="Coordinate trades, timing, materials and site decisions so daily progress stays clearer.">
+    <span class="stat-main"><strong>02</strong><small>Site</small></span>
+    <span class="stat-type-note" aria-hidden="true"></span>
+  </button>
+
+  <button class="stat stat-touch" type="button" data-stat-note="Check completion, defects, records and final items before the space is handed over.">
+    <span class="stat-main"><strong>03</strong><small>Handover</small></span>
+    <span class="stat-type-note" aria-hidden="true"></span>
+  </button>
+</div>
+            
           </div>
         </div>
       </div>
@@ -1028,6 +1040,83 @@ ${message ? 'Details:\n'+message : guide}`;
     });
   })();
 </script>
+
+  <script>
+  (function(){
+    const statCards = document.querySelectorAll(".stat-touch");
+    if(!statCards.length) return;
+
+    let activeCard = null;
+    let typeTimer = null;
+    let hideTimer = null;
+    let resetTimer = null;
+
+    function resetCard(card){
+      if(!card) return;
+
+      const note = card.querySelector(".stat-type-note");
+      card.classList.remove("stat-note-show");
+      card.classList.remove("stat-note-out");
+
+      if(note){
+        note.textContent = "";
+      }
+    }
+
+    function showStatNote(card){
+      const note = card.querySelector(".stat-type-note");
+      const fullText = card.getAttribute("data-stat-note") || "";
+
+      if(!note || !fullText) return;
+
+      clearTimeout(typeTimer);
+      clearTimeout(hideTimer);
+      clearTimeout(resetTimer);
+
+      if(activeCard && activeCard !== card){
+        resetCard(activeCard);
+      }
+
+      activeCard = card;
+      note.textContent = "";
+
+      card.classList.remove("stat-note-out");
+      card.classList.add("stat-note-show");
+
+      let i = 0;
+
+      function typeStep(){
+        note.textContent += fullText.charAt(i);
+        i += 1;
+
+        if(i < fullText.length){
+          typeTimer = setTimeout(typeStep, 18);
+        }
+      }
+
+      typeStep();
+
+      hideTimer = setTimeout(function(){
+        card.classList.remove("stat-note-show");
+        card.classList.add("stat-note-out");
+
+        resetTimer = setTimeout(function(){
+          resetCard(card);
+
+          if(activeCard === card){
+            activeCard = null;
+          }
+        }, 520);
+      }, 4000);
+    }
+
+    statCards.forEach(function(card){
+      card.addEventListener("click", function(){
+        showStatNote(card);
+      });
+    });
+  })();
+</script>
   
   <script src="whatsapp-widget-v5.js"></script>
 <script>
@@ -1135,6 +1224,82 @@ ${message ? 'Details:\n'+message : guide}`;
     font-size:20px;
   }
 }
+
+.stat-touch{
+  appearance:none;
+  -webkit-appearance:none;
+  width:100%;
+  min-height:92px;
+  display:grid;
+  grid-template-columns:78px 1fr;
+  gap:12px;
+  align-items:center;
+  text-align:left;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  color:inherit;
+}
+
+.stat-main{
+  position:relative;
+  z-index:2;
+}
+
+.stat-type-note{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  height:100%;
+  width:100%;
+  color:#ffffff;
+  font-size:15px;
+  line-height:1.35;
+  font-weight:300;
+  letter-spacing:.01em;
+  text-shadow:
+    0 0 8px rgba(255,255,255,.9),
+    0 0 18px rgba(255,255,255,.38),
+    0 0 28px rgba(255,215,112,.18);
+  opacity:0;
+  transform:translateX(42px);
+  filter:blur(5px);
+  pointer-events:none;
+  transition:
+    opacity .28s ease,
+    transform .55s ease,
+    filter .55s ease;
+}
+
+.stat-touch.stat-note-show .stat-type-note{
+  opacity:1;
+  transform:translateX(0);
+  filter:blur(0);
+}
+
+.stat-touch.stat-note-out .stat-type-note{
+  opacity:0;
+  transform:translateX(120%);
+  filter:blur(3px);
+  transition:
+    opacity .22s ease,
+    transform .42s ease,
+    filter .42s ease;
+}
+
+@media(max-width:480px){
+  .stat-touch{
+    grid-template-columns:74px 1fr;
+    min-height:98px;
+    padding:16px;
+  }
+
+  .stat-type-note{
+    font-size:15px;
+    line-height:1.38;
+  }
+}
+    
 </style>
 
   <script>
