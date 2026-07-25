@@ -341,7 +341,7 @@ h2 .bracket{
         <span class="nav-free-offer"> 
           
   <a class="nav-rm99-slashed" href="#ask-iris" data-open-iris-free>RM99 Check</a>
-  <a class="nav-free-iris" href="#ask-iris" data-open-iris-free>FREE</a>
+  <a class="nav-free-iris" href="#ask-iris" data-cinematic-link data-open-iris-free>FREE</a>
 </span>
         <a href="#faq">FAQ</a>
         <a href="portfolio.html">Full Gallery</a>
@@ -513,7 +513,7 @@ h2 .bracket{
           </div>
           <div>
             <p>Explore REFIT project references across commercial, food & beverage, residential, renovation and improvement works. Scroll through the photos to understand our design direction, workmanship, site coordination and project delivery capability.</p>
-            <div class="button-row"><a class="btn btn-primary" href="portfolio.html">View Full Gallery</a></div>
+            <div class="button-row"><a class="btn btn-primary" href="portfolio.html" data-cinematic-link>View Full Gallery</a></div>
           </div>
         </div>
         <div class="gallery-scroller-wrap reveal">
@@ -535,7 +535,7 @@ h2 .bracket{
           you practical first-step advice before you spend on the wrong work.
         </p>
         <div class="button-row">
-          <a class="btn btn-primary readiness-free-btn" href="#ask-iris" data-open-iris-free aria-label="Open Iris for FREE readiness check">
+          <a class="btn btn-primary readiness-free-btn" href="#ask-iris" data-cinematic-link data-open-iris-free aria-label="Open Iris for FREE readiness check">
   <span class="readiness-rm99-slashed">Get RM99 Readiness Check</span>
   <span class="readiness-free-neon">FREE</span>
 </a>
@@ -612,7 +612,7 @@ h2 .bracket{
           </p>
           <div class="price">Pilot <small>Customer Edition</small></div>
           <div class="tool-note-row">
-  <a class="tool-note" href="retail-fitout-toolkit.html">Open Starter Kit</a>
+  <a class="btn btn-primary" href="retail-fitout-toolkit.html" data-cinematic-link>Open Starter Kit</a>
 </div>
         </article>
 
@@ -639,7 +639,7 @@ h2 .bracket{
   </p>
   <div class="price">Demo Preview <small>Enquiry after preview</small></div>
   <div class="tool-note-row">
-  <a class="tool-note" href="quote-pro-demo.html">Open Quote Pro Demo</a>
+  <a class="btn btn-primary" href="quote-pro-demo.html" data-cinematic-link>Open Quote Pro Demo</a>
 </div>
 </article>
         <article class="tool-card">
@@ -651,7 +651,7 @@ h2 .bracket{
   </p>
   <div class="price">Demo Preview <small>Prototype preview</small></div>
   <div class="tool-note-row">
-  <a class="tool-note" href="project-pro-demo.html">Open Project Pro Demo</a>
+  <a class="btn btn-primary" href="project-pro-demo.html" data-cinematic-link>Open Project Pro Demo</a>
 </div>
 </article> 
         <article class="tool-card" style="opacity:.45;filter:grayscale(.35);">
@@ -738,7 +738,7 @@ h2 .bracket{
         </p>
         <div class="button-row">
           <a class="btn btn-dark" href="#contact" data-cinematic-target="#contact">Ask REFIT</a>
-          <a class="btn btn-primary rm99-check-cta" href="#contact" data-cinematic-target="#contact" data-open-iris-free>Get RM99 Readiness Check</a>
+          <a class="btn btn-primary rm99-check-cta" href="#ask-iris" data-cinematic-link data-open-iris-free>Get RM99 Readiness Check</a>
         </div>
       </div>
 
@@ -1130,9 +1130,8 @@ ${message ? 'Details:\n'+message : guide}`;
 </script>
 
   <script>
-  
   (function(){
-    const cinematicButtons = document.querySelectorAll("[data-cinematic-target]");
+    const cinematicButtons = document.querySelectorAll("[data-cinematic-target], [data-cinematic-link]");
 
     if(!cinematicButtons.length) return;
 
@@ -1161,20 +1160,43 @@ ${message ? 'Details:\n'+message : guide}`;
       requestAnimationFrame(step);
     }
 
+    function openIrisFree(){
+      const irisButton = document.querySelector(".iris-ai-button");
+
+      if(irisButton && !document.body.classList.contains("iris-ai-open")){
+        irisButton.click();
+      }
+
+      document.dispatchEvent(new CustomEvent("refit:free-check-clicked"));
+    }
+
     cinematicButtons.forEach(function(button){
       button.addEventListener("click", function(event){
         const targetSelector = button.getAttribute("data-cinematic-target");
-        const target = document.querySelector(targetSelector);
+        const href = button.getAttribute("href");
+        const isIrisFree = button.hasAttribute("data-open-iris-free");
 
-        if(!target) return;
+        let target = null;
+
+        if(targetSelector){
+          target = document.querySelector(targetSelector);
+        }else if(href && href.charAt(0) === "#"){
+          target = document.querySelector(href);
+        }
 
         event.preventDefault();
+
+        if(isIrisFree){
+          event.stopPropagation();
+        }
 
         document.body.classList.remove("refit-project-release");
         document.body.classList.add("refit-project-pull");
 
         setTimeout(function(){
-          quickSlideTo(target, 320);
+          if(target){
+            quickSlideTo(target, 320);
+          }
 
           setTimeout(function(){
             document.body.classList.add("refit-project-release");
@@ -1184,8 +1206,23 @@ ${message ? 'Details:\n'+message : guide}`;
             document.body.classList.remove("refit-project-pull");
             document.body.classList.remove("refit-project-release");
 
-            if(history.pushState){
+            if(isIrisFree){
+              openIrisFree();
+              return;
+            }
+
+            if(targetSelector && history.pushState){
               history.pushState(null, "", targetSelector);
+              return;
+            }
+
+            if(href && href.charAt(0) === "#" && history.pushState){
+              history.pushState(null, "", href);
+              return;
+            }
+
+            if(href){
+              window.location.href = href;
             }
           }, 680);
         }, 520);
