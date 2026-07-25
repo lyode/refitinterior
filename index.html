@@ -360,7 +360,7 @@ h2 .bracket{
           <h1>Design & build interiors for <span class="bracket">[clearer project delivery]</span></h1>
           <p class="lead">REFIT helps clients plan, renovate, fit-out, maintain and hand over practical interior spaces with better site coordination, clearer documents and stronger project control.</p>
           <div class="button-row">
-            <a class="btn btn-primary" href="#projects">View Project References</a>
+            <a class="btn btn-primary" href="#projects" data-project-cinematic>View Project References</a>
             <a class="btn btn-dark" href="#services">Explore Services</a>
             <a class="btn btn-pink" href="#contact">Talk to REFIT</a>
           </div>
@@ -1128,6 +1128,64 @@ ${message ? 'Details:\n'+message : guide}`;
     });
   })();
 </script>
+
+  <script>
+  (function(){
+    const projectButton = document.querySelector("[data-project-cinematic]");
+    const target = document.querySelector("#projects");
+
+    if(!projectButton || !target) return;
+
+    function easeOutCubic(t){
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function quickSlideTo(element, duration){
+      const headerOffset = 86;
+      const startY = window.scrollY || window.pageYOffset;
+      const targetY = element.getBoundingClientRect().top + startY - headerOffset;
+      const distance = targetY - startY;
+      const startTime = performance.now();
+
+      function step(now){
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = easeOutCubic(progress);
+
+        window.scrollTo(0, startY + distance * eased);
+
+        if(progress < 1){
+          requestAnimationFrame(step);
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    projectButton.addEventListener("click", function(event){
+      event.preventDefault();
+
+      document.body.classList.remove("refit-project-release");
+      document.body.classList.add("refit-project-pull");
+
+      setTimeout(function(){
+        quickSlideTo(target, 680);
+
+        setTimeout(function(){
+          document.body.classList.add("refit-project-release");
+        }, 360);
+
+        setTimeout(function(){
+          document.body.classList.remove("refit-project-pull");
+          document.body.classList.remove("refit-project-release");
+
+          if(history.pushState){
+            history.pushState(null, "", "#projects");
+          }
+        }, 950);
+      }, 300);
+    });
+  })();
+</script>
   
   <script src="whatsapp-widget-v5.js"></script>
 <script>
@@ -1371,6 +1429,48 @@ ${message ? 'Details:\n'+message : guide}`;
 
   .readiness-free-neon{
     font-size:16px;
+  }
+}
+body.refit-project-pull{
+  overflow-x:hidden;
+}
+
+body.refit-project-pull main{
+  transform:scale(.94) translateY(20px);
+  transform-origin:center 18%;
+  filter:brightness(.72) saturate(.88) blur(.35px);
+  transition:
+    transform .9s cubic-bezier(.16,1,.3,1),
+    filter .9s ease;
+}
+
+body.refit-project-pull .site-header{
+  transform:translateY(-8px);
+  opacity:.78;
+  transition:
+    transform .9s cubic-bezier(.16,1,.3,1),
+    opacity .9s ease;
+}
+
+body.refit-project-release main{
+  transform:scale(1) translateY(0);
+  filter:none;
+  transition:
+    transform .35s ease,
+    filter .35s ease;
+}
+
+body.refit-project-release .site-header{
+  transform:translateY(0);
+  opacity:1;
+  transition:
+    transform .35s ease,
+    opacity .35s ease;
+}
+
+@media(max-width:640px){
+  body.refit-project-pull main{
+    transform:scale(.92) translateY(18px);
   }
 }
     
