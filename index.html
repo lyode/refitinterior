@@ -1171,18 +1171,36 @@ ${message ? 'Details:\n'+message : guide}`;
         quickSlideTo(target, 680);
 
         setTimeout(function(){
-          document.body.classList.add("refit-project-release");
-        }, 360);
+  quickSlideTo(target, 680);
 
-        setTimeout(function(){
-          document.body.classList.remove("refit-project-pull");
-          document.body.classList.remove("refit-project-release");
+  setTimeout(function(){
+    document.body.classList.add("refit-project-release");
+  }, 360);
 
-          if(history.pushState){
-            history.pushState(null, "", "#projects");
-          }
-        }, 950);
-      }, 300);
+  setTimeout(function(){
+    document.body.classList.remove("refit-project-pull");
+    document.body.classList.remove("refit-project-release");
+
+    if(history.pushState){
+      history.pushState(null, "", "#projects");
+    }
+  }, 950);
+}, 300);setTimeout(function(){
+  quickSlideTo(target, 1100);
+
+  setTimeout(function(){
+    document.body.classList.add("refit-project-release");
+  }, 620);
+
+  setTimeout(function(){
+    document.body.classList.remove("refit-project-pull");
+    document.body.classList.remove("refit-project-release");
+
+    if(history.pushState){
+      history.pushState(null, "", "#projects");
+    }
+  }, 1450);
+}, 420);
     });
   })();
 </script>
