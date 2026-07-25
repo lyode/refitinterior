@@ -360,9 +360,9 @@ h2 .bracket{
           <h1>Design & build interiors for <span class="bracket">[clearer project delivery]</span></h1>
           <p class="lead">REFIT helps clients plan, renovate, fit-out, maintain and hand over practical interior spaces with better site coordination, clearer documents and stronger project control.</p>
           <div class="button-row">
-            <a class="btn btn-primary" href="#projects" data-project-cinematic>View Project References</a>
-            <a class="btn btn-dark" href="#services">Explore Services</a>
-            <a class="btn btn-pink" href="#contact">Talk to REFIT</a>
+            <a class="btn btn-primary" href="#projects" data-cinematic-target="#projects">View Project References</a>
+            <a class="btn btn-dark" href="#services" data-cinematic-target="#services">Explore Services</a>
+            <a class="btn btn-pink" href="#contact" data-cinematic-target="#contact">Talk to REFIT</a>
           </div>
           <div class="micro hero-micro-magic">
   <button class="micro-action" type="button" data-title="Design" data-text="We shape the space direction, layout flow, mood, material direction and practical design intent before work starts.">
@@ -1130,11 +1130,11 @@ ${message ? 'Details:\n'+message : guide}`;
 </script>
 
   <script>
+  
   (function(){
-    const projectButton = document.querySelector("[data-project-cinematic]");
-    const target = document.querySelector("#projects");
+    const cinematicButtons = document.querySelectorAll("[data-cinematic-target]");
 
-    if(!projectButton || !target) return;
+    if(!cinematicButtons.length) return;
 
     function easeOutCubic(t){
       return 1 - Math.pow(1 - t, 3);
@@ -1161,28 +1161,35 @@ ${message ? 'Details:\n'+message : guide}`;
       requestAnimationFrame(step);
     }
 
-    projectButton.addEventListener("click", function(event){
-      event.preventDefault();
+    cinematicButtons.forEach(function(button){
+      button.addEventListener("click", function(event){
+        const targetSelector = button.getAttribute("data-cinematic-target");
+        const target = document.querySelector(targetSelector);
 
-      document.body.classList.remove("refit-project-release");
-      document.body.classList.add("refit-project-pull");
+        if(!target) return;
 
-      setTimeout(function(){
-  quickSlideTo(target, 320);
+        event.preventDefault();
 
-  setTimeout(function(){
-    document.body.classList.add("refit-project-release");
-  }, 260);
+        document.body.classList.remove("refit-project-release");
+        document.body.classList.add("refit-project-pull");
 
-  setTimeout(function(){
-    document.body.classList.remove("refit-project-pull");
-    document.body.classList.remove("refit-project-release");
+        setTimeout(function(){
+          quickSlideTo(target, 320);
 
-    if(history.pushState){
-      history.pushState(null, "", "#projects");
-    }
-  }, 680);
-}, 520);
+          setTimeout(function(){
+            document.body.classList.add("refit-project-release");
+          }, 260);
+
+          setTimeout(function(){
+            document.body.classList.remove("refit-project-pull");
+            document.body.classList.remove("refit-project-release");
+
+            if(history.pushState){
+              history.pushState(null, "", targetSelector);
+            }
+          }, 680);
+        }, 520);
+      });
     });
   })();
 </script>
