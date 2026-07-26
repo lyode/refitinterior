@@ -386,6 +386,100 @@ h2 .bracket{
     font-size:17px;
   }
 }
+
+.how-start-click-item{
+  cursor:pointer;
+  transform-origin:left center;
+  transition:
+    transform .34s ease,
+    color .34s ease,
+    filter .34s ease,
+    text-shadow .34s ease,
+    border-color .34s ease,
+    background .34s ease,
+    box-shadow .34s ease,
+    font-size .34s ease;
+}
+
+.how-start-emboss-on{
+  transform:translateY(-5px) scale(1.04);
+  filter:brightness(1.48) contrast(1.1);
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.9),
+    0 0 12px rgba(255,190,105,.88),
+    0 0 26px rgba(255,132,42,.58),
+    0 0 42px rgba(255,96,20,.34),
+    0 12px 20px rgba(0,0,0,.78);
+}
+
+.how-start-emboss-on{
+  color:#fff2df !important;
+}
+
+.framework-head h2.how-start-emboss-on{
+  font-size:clamp(40px,5.8vw,80px);
+}
+
+.framework-head p.how-start-emboss-on{
+  font-size:20px;
+}
+
+.framework-step.how-start-emboss-on{
+  border-color:rgba(255,150,62,.78);
+  background:rgba(255,125,38,.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 0 0 1px rgba(255,150,62,.20),
+    0 0 30px rgba(255,132,42,.25),
+    0 22px 44px rgba(0,0,0,.50);
+}
+
+.framework-step.how-start-emboss-on span{
+  color:#ffd1a1;
+  font-size:17px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.65),
+    0 0 12px rgba(255,150,62,.88),
+    0 8px 16px rgba(0,0,0,.72);
+}
+
+.framework-step.how-start-emboss-on h3{
+  color:#fff8ef;
+  font-size:28px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.85),
+    0 0 16px rgba(255,190,105,.82),
+    0 0 30px rgba(255,132,42,.52),
+    0 11px 20px rgba(0,0,0,.78);
+}
+
+.framework-step.how-start-emboss-on p{
+  color:#fff2df;
+  font-size:18px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.52),
+    0 0 14px rgba(255,190,105,.56),
+    0 0 26px rgba(255,132,42,.32),
+    0 9px 18px rgba(0,0,0,.74);
+}
+
+@media(max-width:640px){
+  .framework-head h2.how-start-emboss-on{
+    font-size:clamp(38px,9vw,54px);
+  }
+
+  .framework-head p.how-start-emboss-on{
+    font-size:19px;
+  }
+
+  .framework-step.how-start-emboss-on h3{
+    font-size:26px;
+  }
+
+  .framework-step.how-start-emboss-on p{
+    font-size:17px;
+  }
+}
   
 </style>
 <style>
@@ -1506,6 +1600,42 @@ ${message ? 'Details:\n'+message : guide}`;
         digitalTimer = setTimeout(function(){
           item.classList.remove("digital-tools-emboss-on");
         }, 4500);
+      });
+    });
+  })();
+</script>
+
+<script>
+  (function(){
+    const frameworkBlocks = document.querySelectorAll(".framework");
+
+    frameworkBlocks.forEach(function(block){
+      const eyebrow = block.querySelector(".eyebrow");
+      if(!eyebrow) return;
+
+      const eyebrowText = eyebrow.textContent.trim().toLowerCase();
+      if(eyebrowText !== "how to start with refit") return;
+
+      const howStartItems = block.querySelectorAll(
+        ".framework-head h2, .framework-head p, .framework-step"
+      );
+
+      if(!howStartItems.length) return;
+
+      howStartItems.forEach(function(item){
+        item.classList.add("how-start-click-item");
+
+        let howStartTimer = null;
+
+        item.addEventListener("click", function(){
+          clearTimeout(howStartTimer);
+
+          item.classList.add("how-start-emboss-on");
+
+          howStartTimer = setTimeout(function(){
+            item.classList.remove("how-start-emboss-on");
+          }, 5500);
+        });
       });
     });
   })();
