@@ -480,6 +480,101 @@ h2 .bracket{
     font-size:17px;
   }
 }
+
+#services h2,
+#services .section-intro,
+#services .problem-item{
+  cursor:pointer;
+  transform-origin:left center;
+  transition:
+    transform .34s ease,
+    color .34s ease,
+    filter .34s ease,
+    text-shadow .34s ease,
+    border-color .34s ease,
+    background .34s ease,
+    box-shadow .34s ease,
+    font-size .34s ease;
+}
+
+#services .site-reality-emboss-on{
+  transform:translateY(-5px) scale(1.04);
+  filter:brightness(1.52) contrast(1.12);
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.88),
+    0 0 12px rgba(255,155,155,.88),
+    0 0 26px rgba(255,58,58,.62),
+    0 0 44px rgba(255,0,0,.38),
+    0 12px 20px rgba(0,0,0,.80);
+}
+
+#services h2.site-reality-emboss-on{
+  color:#fff0f0;
+  font-size:clamp(40px,5.8vw,80px);
+}
+
+#services .section-intro.site-reality-emboss-on{
+  color:#fff0f0;
+  font-size:20px;
+}
+
+#services .problem-item.site-reality-emboss-on{
+  border-color:rgba(255,68,68,.78);
+  background:rgba(255,40,40,.095);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    0 0 0 1px rgba(255,58,58,.22),
+    0 0 32px rgba(255,38,38,.26),
+    0 22px 44px rgba(0,0,0,.52);
+}
+
+#services .problem-item.site-reality-emboss-on b{
+  color:#ffd1d1;
+  font-size:22px;
+  background:rgba(255,40,40,.24);
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.65),
+    0 0 12px rgba(255,80,80,.88),
+    0 8px 16px rgba(0,0,0,.72);
+}
+
+#services .problem-item.site-reality-emboss-on h3{
+  color:#fff5f5;
+  font-size:24px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.85),
+    0 0 16px rgba(255,155,155,.82),
+    0 0 30px rgba(255,58,58,.55),
+    0 11px 20px rgba(0,0,0,.78);
+}
+
+#services .problem-item.site-reality-emboss-on p{
+  color:#fff0f0;
+  font-size:18px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.50),
+    0 0 14px rgba(255,155,155,.56),
+    0 0 26px rgba(255,58,58,.34),
+    0 9px 18px rgba(0,0,0,.74);
+}
+
+@media(max-width:640px){
+  #services h2.site-reality-emboss-on{
+    font-size:clamp(38px,9vw,54px);
+  }
+
+  #services .section-intro.site-reality-emboss-on{
+    font-size:19px;
+  }
+
+  #services .problem-item.site-reality-emboss-on h3{
+    font-size:23px;
+  }
+
+  #services .problem-item.site-reality-emboss-on p{
+    font-size:17px;
+  }
+}
   
 </style>
 <style>
@@ -1636,6 +1731,30 @@ ${message ? 'Details:\n'+message : guide}`;
             item.classList.remove("how-start-emboss-on");
           }, 5500);
         });
+      });
+    });
+  })();
+</script>
+
+<script>
+  (function(){
+    const siteRealityItems = document.querySelectorAll(
+      "#services h2, #services .section-intro, #services .problem-item"
+    );
+
+    if(!siteRealityItems.length) return;
+
+    siteRealityItems.forEach(function(item){
+      let siteRealityTimer = null;
+
+      item.addEventListener("click", function(){
+        clearTimeout(siteRealityTimer);
+
+        item.classList.add("site-reality-emboss-on");
+
+        siteRealityTimer = setTimeout(function(){
+          item.classList.remove("site-reality-emboss-on");
+        }, 5500);
       });
     });
   })();
