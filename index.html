@@ -575,6 +575,100 @@ h2 .bracket{
     font-size:17px;
   }
 }
+
+#faq h2,
+#faq .tools-panel > div:first-child > p,
+#faq .tool-card{
+  cursor:pointer;
+  transform-origin:left center;
+  transition:
+    transform .34s ease,
+    color .34s ease,
+    filter .34s ease,
+    text-shadow .34s ease,
+    border-color .34s ease,
+    background .34s ease,
+    box-shadow .34s ease,
+    font-size .34s ease;
+}
+
+#faq .faq-green-emboss-on{
+  transform:translateY(-5px) scale(1.04);
+  filter:brightness(1.52) contrast(1.12);
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.88),
+    0 0 12px rgba(175,255,190,.90),
+    0 0 26px rgba(55,255,105,.64),
+    0 0 44px rgba(0,220,80,.40),
+    0 12px 20px rgba(0,0,0,.80);
+}
+
+#faq h2.faq-green-emboss-on{
+  color:#effff3;
+  font-size:clamp(40px,5.8vw,80px);
+}
+
+#faq .tools-panel > div:first-child > p.faq-green-emboss-on{
+  color:#effff3;
+  font-size:20px;
+}
+
+#faq .tool-card.faq-green-emboss-on{
+  border-color:rgba(88,255,128,.78);
+  background:rgba(45,255,105,.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    0 0 0 1px rgba(88,255,128,.22),
+    0 0 32px rgba(55,255,105,.26),
+    0 22px 44px rgba(0,0,0,.52);
+}
+
+#faq .tool-card.faq-green-emboss-on span{
+  color:#caffd2;
+  font-size:15px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.65),
+    0 0 12px rgba(88,255,128,.90),
+    0 8px 16px rgba(0,0,0,.72);
+}
+
+#faq .tool-card.faq-green-emboss-on h3{
+  color:#f4fff6;
+  font-size:28px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.85),
+    0 0 16px rgba(175,255,190,.84),
+    0 0 30px rgba(55,255,105,.55),
+    0 11px 20px rgba(0,0,0,.78);
+}
+
+#faq .tool-card.faq-green-emboss-on p{
+  color:#effff3;
+  font-size:18px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.50),
+    0 0 14px rgba(175,255,190,.58),
+    0 0 26px rgba(55,255,105,.35),
+    0 9px 18px rgba(0,0,0,.74);
+}
+
+@media(max-width:640px){
+  #faq h2.faq-green-emboss-on{
+    font-size:clamp(38px,9vw,54px);
+  }
+
+  #faq .tools-panel > div:first-child > p.faq-green-emboss-on{
+    font-size:19px;
+  }
+
+  #faq .tool-card.faq-green-emboss-on h3{
+    font-size:26px;
+  }
+
+  #faq .tool-card.faq-green-emboss-on p{
+    font-size:17px;
+  }
+}
   
 </style>
 <style>
@@ -1754,6 +1848,30 @@ ${message ? 'Details:\n'+message : guide}`;
 
         siteRealityTimer = setTimeout(function(){
           item.classList.remove("site-reality-emboss-on");
+        }, 5500);
+      });
+    });
+  })();
+</script>
+
+<script>
+  (function(){
+    const faqItems = document.querySelectorAll(
+      "#faq h2, #faq .tools-panel > div:first-child > p, #faq .tool-card"
+    );
+
+    if(!faqItems.length) return;
+
+    faqItems.forEach(function(item){
+      let faqTimer = null;
+
+      item.addEventListener("click", function(){
+        clearTimeout(faqTimer);
+
+        item.classList.add("faq-green-emboss-on");
+
+        faqTimer = setTimeout(function(){
+          item.classList.remove("faq-green-emboss-on");
         }, 5500);
       });
     });
