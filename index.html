@@ -167,36 +167,87 @@ h2 .bracket{
     text-shadow .34s ease,
     border-color .34s ease,
     background .34s ease,
-    box-shadow .34s ease;
+    box-shadow .34s ease,
+    font-size .34s ease;
 }
 
 #readiness-pass .readiness-emboss-on{
-  transform:translateY(-2px) scale(1.028);
-  filter:brightness(1.22);
+  transform:translateY(-5px) scale(1.04);
+  filter:brightness(1.42) contrast(1.08);
   text-shadow:
-    0 0 8px rgba(255,255,255,.42),
-    0 0 18px rgba(255,215,112,.22),
-    0 0 28px rgba(229,129,150,.18);
+    0 1px 0 rgba(255,255,255,.9),
+    0 2px 0 rgba(255,215,112,.22),
+    0 0 10px rgba(255,255,255,.72),
+    0 0 22px rgba(255,215,112,.42),
+    0 0 34px rgba(229,129,150,.28),
+    0 10px 18px rgba(0,0,0,.78);
 }
 
-#readiness-pass h2.readiness-emboss-on,
+#readiness-pass h2.readiness-emboss-on{
+  color:#ffffff;
+  font-size:clamp(40px,5.8vw,80px);
+}
+
 #readiness-pass .tools-panel > div:first-child > p.readiness-emboss-on{
   color:#ffffff;
+  font-size:20px;
 }
 
 #readiness-pass .tool-card.readiness-emboss-on{
-  border-color:rgba(255,215,112,.48);
-  background:rgba(255,255,255,.07);
+  border-color:rgba(255,232,150,.72);
+  background:rgba(255,255,255,.092);
   box-shadow:
-    0 0 0 1px rgba(255,215,112,.12),
-    0 0 22px rgba(255,215,112,.12),
-    0 16px 34px rgba(0,0,0,.34);
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 0 0 1px rgba(255,215,112,.18),
+    0 0 28px rgba(255,215,112,.22),
+    0 20px 42px rgba(0,0,0,.48);
 }
 
-#readiness-pass .tool-card.readiness-emboss-on span,
-#readiness-pass .tool-card.readiness-emboss-on h3,
+#readiness-pass .tool-card.readiness-emboss-on span{
+  color:#fff2b8;
+  font-size:15px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.65),
+    0 0 12px rgba(255,215,112,.7),
+    0 8px 16px rgba(0,0,0,.7);
+}
+
+#readiness-pass .tool-card.readiness-emboss-on h3{
+  color:#ffffff;
+  font-size:28px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.85),
+    0 0 14px rgba(255,255,255,.58),
+    0 0 26px rgba(255,215,112,.32),
+    0 10px 18px rgba(0,0,0,.78);
+}
+
 #readiness-pass .tool-card.readiness-emboss-on p{
   color:#ffffff;
+  font-size:18px;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.55),
+    0 0 12px rgba(255,255,255,.42),
+    0 0 22px rgba(255,215,112,.20),
+    0 9px 16px rgba(0,0,0,.72);
+}
+
+@media(max-width:640px){
+  #readiness-pass h2.readiness-emboss-on{
+    font-size:clamp(38px,9vw,54px);
+  }
+
+  #readiness-pass .tools-panel > div:first-child > p.readiness-emboss-on{
+    font-size:19px;
+  }
+
+  #readiness-pass .tool-card.readiness-emboss-on h3{
+    font-size:26px;
+  }
+
+  #readiness-pass .tool-card.readiness-emboss-on p{
+    font-size:17px;
+  }
 }
   
 </style>
