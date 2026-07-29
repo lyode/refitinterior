@@ -843,6 +843,14 @@ h2 .bracket{
   
 </head>
 <body>
+  <script>
+    try{
+      if(window.localStorage.getItem("refit-website-appearance") === "pastel"){
+        document.body.classList.add("theme-pastel");
+        document.documentElement.style.colorScheme = "light";
+      }
+    }catch(error){}
+  </script>
   <header class="site-header">
     <div class="wrap nav-row">
       <a class="brand" href="#home" aria-label="REFIT home">
@@ -863,6 +871,7 @@ h2 .bracket{
         <a href="#projectkit">ProjectKit</a>
         <a href="#digital-tools">Digital Tools</a>
         <a href="#faq">FAQ / Contact</a>
+        <button class="btn btn-dark appearance-open" id="appearanceOpen" type="button" aria-expanded="false" aria-controls="appearancePanel">Appearance</button>
         <a class="btn btn-dark" href="login.html">Client Login</a>
       </nav>
     </div>
@@ -2050,6 +2059,24 @@ ${message ? 'Details:\n'+message : guide}`;
 </script>
   <button id="refitBackTop" class="refit-back-top" type="button" aria-label="Back to top">↑</button>
 
+  <aside class="appearance-panel" id="appearancePanel" aria-hidden="true" aria-label="Website appearance">
+    <div class="appearance-panel-head">
+      <div><span>Display setting</span><strong>Choose your REFIT look</strong></div>
+      <button id="appearanceClose" type="button" aria-label="Close appearance settings">×</button>
+    </div>
+    <p>Your selection changes only this device and is remembered for your next visit.</p>
+    <div class="appearance-options">
+      <button type="button" data-refit-theme="dark" aria-pressed="true">
+        <i class="appearance-preview appearance-preview-dark"><span></span><span></span><span></span></i>
+        <b>Original Dark</b><small>Premium black, pink and gold</small>
+      </button>
+      <button type="button" data-refit-theme="pastel" aria-pressed="false">
+        <i class="appearance-preview appearance-preview-pastel"><span></span><span></span><span></span></i>
+        <b>ProjectKit Pastel</b><small>Cream, peach, blush and sage</small>
+      </button>
+    </div>
+  </aside>
+
   <style>
     .refit-back-top{
       position:fixed;
@@ -2307,6 +2334,60 @@ body.refit-project-release .site-header{
 
       window.addEventListener('scroll', toggleBackTop, { passive:true });
       toggleBackTop();
+    })();
+  </script>
+
+  <script>
+    (function(){
+      const storageKey = "refit-website-appearance";
+      const openButton = document.getElementById("appearanceOpen");
+      const closeButton = document.getElementById("appearanceClose");
+      const panel = document.getElementById("appearancePanel");
+      const choices = document.querySelectorAll("[data-refit-theme]");
+
+      if(!openButton || !closeButton || !panel || !choices.length) return;
+
+      function applyTheme(theme){
+        const selected = theme === "pastel" ? "pastel" : "dark";
+        document.body.classList.toggle("theme-pastel", selected === "pastel");
+        document.documentElement.style.colorScheme = selected === "pastel" ? "light" : "dark";
+        choices.forEach(function(choice){
+          choice.setAttribute("aria-pressed", String(choice.getAttribute("data-refit-theme") === selected));
+        });
+        try{ window.localStorage.setItem(storageKey, selected); }catch(error){}
+      }
+
+      function setPanel(open){
+        panel.classList.toggle("open", open);
+        panel.setAttribute("aria-hidden", String(!open));
+        openButton.setAttribute("aria-expanded", String(open));
+        if(open) panel.querySelector("button")?.focus();
+      }
+
+      let savedTheme = "dark";
+      try{ savedTheme = window.localStorage.getItem(storageKey) || "dark"; }catch(error){}
+      applyTheme(savedTheme);
+
+      openButton.addEventListener("click", function(){
+        const mobileNav = document.getElementById("navLinks");
+        const mobileMenu = document.getElementById("menuBtn");
+        mobileNav?.classList.remove("open");
+        mobileMenu?.setAttribute("aria-expanded","false");
+        setPanel(!panel.classList.contains("open"));
+      });
+      closeButton.addEventListener("click", function(){ setPanel(false); });
+      choices.forEach(function(choice){
+        choice.addEventListener("click", function(){
+          applyTheme(choice.getAttribute("data-refit-theme"));
+          setPanel(false);
+        });
+      });
+      document.addEventListener("keydown", function(event){ if(event.key === "Escape") setPanel(false); });
+      document.addEventListener("click", function(event){
+        if(!panel.classList.contains("open")) return;
+        if(panel.contains(event.target) || openButton.contains(event.target)) return;
+        setPanel(false);
+      });
     })();
   </script>
   
