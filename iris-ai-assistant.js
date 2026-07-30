@@ -650,7 +650,8 @@ body.iris-ai-open #refitWhatsappWidget::before{
         cursor:pointer;
       }
 
-        .iris-ai-attach{
+      .iris-ai-attach,
+      .iris-ai-mic{
         width:42px;
         border:1px solid rgba(255,255,255,.12);
         border-radius:16px;
@@ -663,7 +664,63 @@ body.iris-ai-open #refitWhatsappWidget::before{
         justify-content:center;
       }
 
-        .iris-ai-file{
+      .iris-ai-mic{
+        position:relative;
+        flex:0 0 42px;
+        color:#ffb2c1;
+        transition:background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+      }
+
+      .iris-ai-mic:hover,
+      .iris-ai-mic:focus-visible{
+        border-color:rgba(255,178,193,.58);
+        background:rgba(255,178,193,.11);
+      }
+
+      .iris-ai-mic.listening{
+        color:#fff;
+        border-color:#ff8ca5;
+        background:rgba(255,82,119,.24);
+        box-shadow:0 0 0 4px rgba(255,82,119,.12),0 0 22px rgba(255,82,119,.34);
+        animation:irisMicPulse 1.25s ease-in-out infinite;
+      }
+
+      @keyframes irisMicPulse{
+        0%,100%{transform:scale(1)}
+        50%{transform:scale(1.06)}
+      }
+
+      .iris-ai-speech-tools{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        padding:0 16px 10px;
+        color:rgba(255,255,255,.54);
+        font-size:10.5px;
+        line-height:1.35;
+      }
+
+      .iris-ai-speech-status{
+        flex:1;
+      }
+
+      .iris-ai-speech-language{
+        flex:0 0 auto;
+        border:1px solid rgba(255,215,112,.24);
+        border-radius:999px;
+        background:rgba(255,255,255,.07);
+        color:#ffe39a;
+        padding:5px 8px;
+        font-size:10.5px;
+        outline:none;
+      }
+
+      .iris-ai-speech-language option{
+        color:#111;
+      }
+
+      .iris-ai-file{
         display:none;
       }
 
@@ -890,6 +947,17 @@ body.iris-ai-open #refitWhatsappWidget::before{
           line-height:1.45;
         }
 
+        .iris-ai-speech-tools{
+          order:4;
+          padding:0 18px 9px;
+          font-size:12px;
+        }
+
+        .iris-ai-speech-language{
+          min-height:34px;
+          font-size:12px;
+        }
+
         .iris-ai-form{
           order:5;
           padding:10px 14px calc(12px + env(safe-area-inset-bottom));
@@ -912,6 +980,18 @@ body.iris-ai-open #refitWhatsappWidget::before{
           font-size:20px;
           flex:0 0 auto;
         }
+
+        .iris-ai-attach,
+        .iris-ai-mic{
+          width:48px;
+          min-height:54px;
+          flex:0 0 48px;
+          border-radius:18px;
+        }
+      }
+
+      @media(prefers-reduced-motion:reduce){
+        .iris-ai-mic.listening{animation:none}
       }
     `;
     document.head.appendChild(style);
@@ -1181,7 +1261,16 @@ const thinking = showThinking();
         </div>
 
         <div class="iris-ai-small">
-          Iris gives general guidance first. For confirmed pricing, site details or urgent work, REFIT may continue by WhatsApp.
+          Iris gives general guidance first. Voice input is converted into text by your browser's speech service; this website does not create or store an audio recording. Please review the transcript before sending.
+        </div>
+
+        <div class="iris-ai-speech-tools">
+          <span class="iris-ai-speech-status" aria-live="polite">Tap the microphone to speak.</span>
+          <select class="iris-ai-speech-language" aria-label="Voice input language">
+            <option value="en-MY">English</option>
+            <option value="ms-MY">Bahasa Malaysia</option>
+            <option value="zh-CN">Mandarin</option>
+          </select>
         </div>
         
         <div class="iris-ai-image-preview"></div>
@@ -1189,6 +1278,7 @@ const thinking = showThinking();
                 <form class="iris-ai-form">
           <button class="iris-ai-attach" type="button" aria-label="Attach images">＋</button>
           <input class="iris-ai-file" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+          <button class="iris-ai-mic" type="button" aria-label="Start voice input" aria-pressed="false">&#127908;</button>
           <textarea class="iris-ai-input" rows="1" maxlength="700" placeholder="Talk to Iris..."></textarea>
           <button class="iris-ai-send" type="submit">➤</button>
         </form>
@@ -1214,6 +1304,72 @@ const thinking = showThinking();
         const attachBtn = root.querySelector(".iris-ai-attach");
     const fileInput = root.querySelector(".iris-ai-file");
         const voiceSelect = root.querySelector(".iris-ai-voice-select");
+    const micButton = root.querySelector(".iris-ai-mic");
+    const speechStatus = root.querySelector(".iris-ai-speech-status");
+    const speechLanguage = root.querySelector(".iris-ai-speech-language");
+    const SpeechRecognitionApi = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let speechRecognition = null;
+    let speechListening = false;
+    let speechBaseText = "";
+    let speechHadResult = false;
+    let speechErrorMessage = "";
+
+    function setSpeechState(listening, message) {
+      speechListening = listening;
+      micButton?.classList.toggle("listening", listening);
+      micButton?.setAttribute("aria-pressed", String(listening));
+      micButton?.setAttribute("aria-label", listening ? "Stop voice input" : "Start voice input");
+      if (micButton) micButton.innerHTML = listening ? "&#9632;" : "&#127908;";
+      if (speechStatus && message) speechStatus.textContent = message;
+    }
+
+    if (!SpeechRecognitionApi) {
+      if (micButton) micButton.hidden = true;
+      if (speechLanguage) speechLanguage.hidden = true;
+      if (speechStatus) speechStatus.textContent = "Voice input is not supported by this browser. You can continue typing.";
+    } else {
+      speechRecognition = new SpeechRecognitionApi();
+      speechRecognition.continuous = false;
+      speechRecognition.interimResults = true;
+      speechRecognition.maxAlternatives = 1;
+
+      speechRecognition.addEventListener("start", () => {
+        speechHadResult = false;
+        speechErrorMessage = "";
+        setSpeechState(true, "Listening… tap the microphone again to stop.");
+      });
+
+      speechRecognition.addEventListener("result", (event) => {
+        let transcript = "";
+        for (let index = 0; index < event.results.length; index += 1) {
+          transcript += event.results[index][0].transcript;
+        }
+        speechHadResult = Boolean(transcript.trim());
+        input.value = [speechBaseText, transcript.trim()].filter(Boolean).join(" ").slice(0, 700);
+        input.dispatchEvent(new Event("input", { bubbles:true }));
+        setSpeechState(true, "Listening… your words are appearing below.");
+      });
+
+      speechRecognition.addEventListener("error", (event) => {
+        const messages = {
+          "not-allowed": "Microphone access was not allowed. Please enable it in your browser settings.",
+          "audio-capture": "No microphone was found. You can continue typing.",
+          "no-speech": "I could not hear any speech. Please tap the microphone and try again.",
+          "network": "Voice recognition is temporarily unavailable. You can continue typing."
+        };
+        speechErrorMessage = messages[event.error] || "Voice input stopped. Please try again or continue typing.";
+        setSpeechState(false, speechErrorMessage);
+      });
+
+      speechRecognition.addEventListener("end", () => {
+        setSpeechState(
+          false,
+          speechErrorMessage || (speechHadResult
+            ? "Transcript ready—please review it, then tap Send."
+            : "Tap the microphone to speak.")
+        );
+      });
+    }
 
     if (voiceSelect) {
       voiceSelect.value = getIrisVoiceChoice();
@@ -1241,9 +1397,10 @@ const thinking = showThinking();
       setTimeout(() => input.focus(), 120);
     }
 
-        function closeIris() {
+    function closeIris() {
       isOpen = false;
       stopIrisVoice();
+      if (speechListening) speechRecognition?.stop();
       panel.classList.remove("open");
       document.body.classList.remove("iris-ai-open");
     }
@@ -1317,6 +1474,24 @@ const thinking = showThinking();
       fileInput.click();
     });
 
+    micButton?.addEventListener("click", () => {
+      unlockIrisSound();
+      if (!speechRecognition) return;
+
+      if (speechListening) {
+        speechRecognition.stop();
+        return;
+      }
+
+      speechBaseText = input.value.trim();
+      speechRecognition.lang = speechLanguage?.value || "en-MY";
+      try {
+        speechRecognition.start();
+      } catch (error) {
+        setSpeechState(false, "Voice input is preparing. Please tap the microphone again.");
+      }
+    });
+
     fileInput.addEventListener("change", async () => {
       const prepared = await prepareIrisImages(fileInput.files);
       selectedIrisImages = prepared.slice(0, 2);
@@ -1327,6 +1502,7 @@ const thinking = showThinking();
         form.addEventListener("submit", (event) => {
       event.preventDefault();
       unlockIrisSound();
+      if (speechListening) speechRecognition?.stop();
       handleSend(input.value);
     });
     input.addEventListener("keydown", (event) => {
