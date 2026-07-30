@@ -657,6 +657,8 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const registryEventUrl =
+      "https://refit-projectkit-registry.refit-projectkit.workers.dev/v1/events";
 
     const loginView = document.getElementById("loginView");
     const portalView = document.getElementById("portalView");
@@ -850,6 +852,21 @@
         verificationBox.classList.toggle("show", !user.emailVerified);
 
         renderLicences(licences);
+        fetch(registryEventUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            eventType: "Customer sign-in",
+            name: profile.name || profile.displayName || user.displayName || "",
+            company: company.name || profile.companyId || "",
+            email: user.email || "",
+            phone: profile.phone || "",
+            businessType: company.businessType || "",
+            marketingConsent: false
+          })
+        }).catch(() => {
+          // Sign-in remains available if activity recording is temporarily unavailable.
+        });
       } catch (error) {
         console.error(error);
         renderLicences([]);
