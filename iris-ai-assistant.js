@@ -991,11 +991,87 @@ body.iris-ai-open #refitWhatsappWidget::before{
     step();
   }
   
-    function showThinking() {
+  function showThinking() {
     return createMessage("assistant", "Iris is reading your message softly...", false);
+  }
+
+  const RENOVATION_BUDGET_GUIDANCE = `A good renovation budget should be planned in three directions:
+
+1. ESSENTIAL BUDGET
+Necessary works and practical standard materials. This direction prioritises safety, function, repairs and the most important renovation needs.
+
+2. RECOMMENDED BUDGET
+A balanced level of design, material quality, durability and everyday comfort. This is normally the most practical direction for comparing value and outcome.
+
+3. ENHANCED BUDGET
+Upgraded finishes, customised details, additional features and a higher design specification.
+
+At the early planning stage, the amount should be treated as a preliminary budget range—not a final quotation. The range depends on the property condition, selected work areas, scope, measurements, material choices, workmanship level and site constraints.
+
+I also recommend keeping approximately 10%–15% of the working budget as contingency for concealed conditions, additional requirements or agreed changes discovered during the project.
+
+The budget summary should clearly show:
+• Proposed scope and work areas
+• Estimated range for each budget direction
+• Main inclusions and exclusions
+• Material or specification assumptions
+• Items requiring site inspection or specialist confirmation
+• Possible cost-saving alternatives
+
+After the site assessment, scope confirmation, measurements and material selection, REFIT can prepare a more detailed quotation. Additional work should only proceed after the customer has been informed and the cost has been agreed.
+
+To help me organise your budget direction, please share:
+1. Property or space type
+2. Approximate size
+3. Areas you want to renovate
+4. Existing condition or known problems
+5. Preferred material or finishing level
+6. Your target budget and intended start date`;
+
+  function getBuiltInIrisReply(message, images) {
+    if (images && images.length) return "";
+
+    const question = String(message || "").toLowerCase();
+    const hasBudgetTerm =
+      question.includes("budget") ||
+      question.includes("estimate") ||
+      question.includes("estimated cost") ||
+      question.includes("cost to");
+    const hasRenovationTerm =
+      question.includes("renovation") ||
+      question.includes("renovate") ||
+      question.includes("house") ||
+      question.includes("home") ||
+      question.includes("kitchen") ||
+      question.includes("bathroom") ||
+      question.includes("bedroom") ||
+      question.includes("office") ||
+      question.includes("shop") ||
+      question.includes("fit-out") ||
+      question.includes("fitout");
+    const asksAboutBudget =
+      (hasBudgetTerm && hasRenovationTerm) ||
+      question.includes("renovation budget") ||
+      question.includes("renovation estimate") ||
+      question.includes("budget estimate") ||
+      question.includes("budget direction") ||
+      question.includes("set a budget") ||
+      question.includes("set the budget") ||
+      question.includes("how much budget") ||
+      question.includes("budget for my house") ||
+      question.includes("budget for our house") ||
+      question.includes("budget for kitchen") ||
+      question.includes("budget for bathroom") ||
+      question.includes("budget for office") ||
+      question.includes("budget for shop");
+
+    return asksAboutBudget ? RENOVATION_BUDGET_GUIDANCE : "";
   }
   
     async function sendToIris(message, images) {
+    const builtInReply = getBuiltInIrisReply(message, images);
+    if (builtInReply) return builtInReply;
+
     const history = loadHistory();
 
     const response = await fetch(IRIS_ENDPOINT, {
@@ -1099,6 +1175,7 @@ const thinking = showThinking();
         
         <div class="iris-ai-suggestions">
           <button class="iris-ai-chip" type="button">I feel unsure where to start.</button>
+          <button class="iris-ai-chip" type="button">Help me set a renovation budget.</button>
           <button class="iris-ai-chip" type="button">Explain REFIT digital tools.</button>
           <button class="iris-ai-chip" type="button">Is RM99 Check suitable for me?</button>
         </div>
