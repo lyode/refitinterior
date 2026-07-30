@@ -52,7 +52,7 @@ h3,
 .welcome-panel p,
 .summary-card strong,
 .licence-card h3 {
-  text-shadow: 0 12px 32px rgba(0,0,0,.22);
+  text-shadow: 0 10px 26px rgba(0,0,0,.14);
 }
 
 /* Floating buttons */
@@ -118,7 +118,7 @@ button[type="submit"]:hover {
   border-color: var(--refit-float-border) !important;
 }
 
-/* Soft premium animation, not too strong */
+/* Keep primary content stable; motion is reserved for reveals and interaction. */
 .hero-copy,
 .hero-visual,
 .intro,
@@ -127,18 +127,7 @@ button[type="submit"]:hover {
 .contact-card,
 .framework,
 .welcome-panel {
-  animation: refitSoftFloat 7s ease-in-out infinite;
-}
-
-.hero-visual,
-.card,
-.contact-card {
-  animation-delay: .8s;
-}
-
-@keyframes refitSoftFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
+  animation: none;
 }
 
 /* Inputs also feel lifted, but stay stable */

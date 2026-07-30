@@ -4,8 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="REFIT Interior provides interior design, renovation, fit-out, maintenance and project-control support in Malaysia, together with REFIT RenoDeck software for professional project documents.">
-  <meta name="theme-color" content="#050507">
+  <meta name="theme-color" id="themeColor" content="#050507">
   <title>REFIT Interior & RenoDeck | Design, Build, Renovation & Project Control Malaysia</title>
+  <link rel="canonical" href="https://refitinterior.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="REFIT Interior">
+  <meta property="og:title" content="REFIT Interior & RenoDeck">
+  <meta property="og:description" content="Design and build interiors with clearer project delivery—from concept, coordination and site works to completion.">
+  <meta property="og:url" content="https://refitinterior.com/">
+  <meta property="og:image" content="https://refitinterior.com/assets/refit-social-card.png">
+  <meta property="og:image:width" content="1733">
+  <meta property="og:image:height" content="909">
+  <meta property="og:image:alt" content="REFIT — Design and build interiors for clearer project delivery">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="REFIT Interior & RenoDeck">
+  <meta name="twitter:description" content="Design and build interiors with clearer project delivery—from concept to completion.">
+  <meta name="twitter:image" content="https://refitinterior.com/assets/refit-social-card.png">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="refit-floating-ui.css">
@@ -843,6 +857,7 @@ h2 .bracket{
   
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <script>
     try{
       if(window.localStorage.getItem("refit-website-appearance") === "pastel"){
@@ -856,28 +871,29 @@ h2 .bracket{
       <a class="brand" href="#home" aria-label="REFIT home">
         <img src="assets/refit-wordmark.png" alt="REFIT">
       </a>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
-      <nav class="nav-links" id="navLinks">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
+      <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
         <a href="#services">Services</a>
-        <a href="#framework">Framework</a>
-        <a href="#projects">References</a>
-        <span class="nav-free-offer"> 
-          
-  <a class="nav-rm99-slashed" href="#ask-iris" data-open-iris-free>RM99 Check</a>
-  <a class="nav-free-iris" href="#ask-iris" data-cinematic-link data-open-iris-free>FREE</a>
-</span>
-        <a href="#faq">FAQ</a>
-        <a href="portfolio.html">Full Gallery</a>
-        <a href="#projectkit">RenoDeck</a>
-        <a href="#digital-tools">Digital Tools</a>
-        <a href="#faq">FAQ / Contact</a>
-        <button class="btn btn-dark appearance-open" id="appearanceOpen" type="button" aria-expanded="false" aria-controls="appearancePanel">Appearance</button>
-        <a class="btn btn-dark" href="login.html">Client Login</a>
+        <a href="#framework">How We Work</a>
+        <a href="#projects">Projects</a>
+        <a class="nav-renodeck" href="#projectkit">RenoDeck</a>
+        <a href="#contact">Contact</a>
+        <details class="nav-more">
+          <summary>More <span aria-hidden="true">+</span></summary>
+          <div class="nav-more-menu">
+            <a href="#readiness-pass">Free Project Check</a>
+            <a href="portfolio.html">Full Gallery</a>
+            <a href="#digital-tools">Digital Tools</a>
+            <a href="#faq">FAQ</a>
+          </div>
+        </details>
+        <button class="appearance-open nav-icon-btn" id="appearanceOpen" type="button" aria-expanded="false" aria-controls="appearancePanel" aria-label="Change website appearance"><span aria-hidden="true">&#9680;</span></button>
+        <a class="btn btn-dark nav-login" href="login.html">Client Login</a>
       </nav>
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="hero" id="home">
       <div class="wrap hero-grid">
         <div class="hero-copy reveal">
@@ -1033,13 +1049,56 @@ h2 .bracket{
       <div class="wrap">
         <div class="gallery-head reveal">
           <div>
-            <span class="eyebrow">Project References</span>
-            <h2>Real spaces. Practical delivery. <span class="bracket">[Clearer control]</span></h2>
+            <span class="eyebrow">Selected project stories</span>
+            <h2>Design decisions made visible. <span class="bracket">[Site reality included]</span></h2>
           </div>
           <div>
-            <p>Explore REFIT project references across commercial, food & beverage, residential, renovation and improvement works. Scroll through the photos to understand our design direction, workmanship, site coordination and project delivery capability.</p>
+            <p>Each project is more than a finished photograph. These selected stories connect the client need, design direction, site work and practical result.</p>
             <div class="button-row"><a class="btn btn-primary" href="portfolio.html" data-cinematic-link>View Full Gallery</a></div>
           </div>
+        </div>
+        <div class="case-study-grid">
+          <article class="case-study case-study-featured reveal">
+            <div class="case-study-image">
+              <img src="assets/project-commercial-1.jpg" alt="Completed commercial interior project by REFIT" loading="lazy" decoding="async">
+              <span>Commercial · Design & build</span>
+            </div>
+            <div class="case-study-copy">
+              <small>01 / Selected work</small>
+              <h3>From customer journey to buildable space.</h3>
+              <dl>
+                <div><dt>Need</dt><dd>A clear commercial identity supported by practical circulation and daily operations.</dd></div>
+                <div><dt>Direction</dt><dd>Coordinate spatial planning, finishes, lighting and site-ready decisions as one story.</dd></div>
+                <div><dt>Result</dt><dd>A more coherent customer environment with a traceable path from idea to completion.</dd></div>
+              </dl>
+            </div>
+          </article>
+          <article class="case-study reveal">
+            <div class="case-study-image">
+              <img src="assets/project-commercial-2.jpg" alt="Food and beverage fit-out completed by REFIT" loading="lazy" decoding="async">
+              <span>F&amp;B · Fit-out</span>
+            </div>
+            <div class="case-study-copy">
+              <small>02 / Selected work</small>
+              <h3>Atmosphere balanced with operational flow.</h3>
+              <p>Design language, service movement, lighting and durable finishes coordinated for a working hospitality space.</p>
+            </div>
+          </article>
+          <article class="case-study reveal">
+            <div class="case-study-image">
+              <img src="assets/project-residential-1.jpg" alt="Residential renovation and improvement work by REFIT" loading="lazy" decoding="async">
+              <span>Residential · Improvement</span>
+            </div>
+            <div class="case-study-copy">
+              <small>03 / Selected work</small>
+              <h3>Everyday comfort, clarified and improved.</h3>
+              <p>Existing conditions translated into practical improvements for layout, finishes, maintenance and long-term use.</p>
+            </div>
+          </article>
+        </div>
+        <div class="project-archive-head reveal">
+          <span>Project archive</span>
+          <p>Continue through the wider collection of completed spaces and site references.</p>
         </div>
         <div class="gallery-scroller-wrap reveal">
           <div class="gallery-scroller" id="projectScroller"></div>
@@ -1454,8 +1513,7 @@ h2 .bracket{
     <div class="wrap">
       <div class="footer-grid">
         <div><img class="footer-logo" src="assets/refit-wordmark.png" alt="REFIT"><p>Interior design, renovation, fit-out, maintenance and project-control support. Digital tools are developed from real site experience.</p></div>
-        <div><h4>REFIT Interior</h4><div class="footer-links"><a href="#services">Services</a><a href="#framework">Framework</a><a href="#projects">References</a> <a href="#faq">FAQ</a>
-<a href="#contact">Contact</a> <a href="#contact">Contact</a></div></div>
+        <div><h4>REFIT Interior</h4><div class="footer-links"><a href="#services">Services</a><a href="#framework">How We Work</a><a href="#projects">Projects</a><a href="#faq">FAQ</a><a href="#contact">Contact</a></div></div>
         <div><h4>Digital Tools</h4><div class="footer-links"><a href="#projectkit">RenoDeck</a><a href="#digital-tools">Quote Pro</a><a href="#digital-tools">Project Pro</a><a href="login.html">Client Login</a></div></div>
         <div><h4>Contact</h4><div class="footer-links"><a href="https://wa.me/60122145922">WhatsApp</a><a href="mailto:refitcs@gmail.com">Email REFIT</a><a href="portfolio.html">Project Gallery</a></div></div>
       </div>
@@ -1477,8 +1535,10 @@ h2 .bracket{
   <script>
     const menuBtn=document.getElementById('menuBtn');
     const navLinks=document.getElementById('navLinks');
-    menuBtn.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open));});
-    navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}));
+    const navMore=navLinks.querySelector('.nav-more');
+    menuBtn.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open));if(!open)navMore?.removeAttribute('open');});
+    navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');navMore?.removeAttribute('open');}));
+    document.addEventListener('click',event=>{if(navMore?.hasAttribute('open')&&!navMore.contains(event.target))navMore.removeAttribute('open');});
     const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:.08});
     document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
     initGallery({targetId:"projectScroller", scroller:true});
@@ -2005,7 +2065,6 @@ ${message ? 'Details:\n'+message : guide}`;
   })();
 </script>
   
-  <script src="whatsapp-widget-v5.js"></script>
 <script>
   document.addEventListener("click", function(event){
     const freeLink = event.target.closest("[data-open-iris-free]");
@@ -2069,11 +2128,11 @@ ${message ? 'Details:\n'+message : guide}`;
     <div class="appearance-options">
       <button type="button" data-refit-theme="dark" aria-pressed="true">
         <i class="appearance-preview appearance-preview-dark"><span></span><span></span><span></span></i>
-        <b>Original Dark</b><small>Premium black, pink and gold</small>
+        <b>Night Studio</b><small>Cinematic black, REFIT pink and muted gold</small>
       </button>
       <button type="button" data-refit-theme="pastel" aria-pressed="false">
         <i class="appearance-preview appearance-preview-pastel"><span></span><span></span><span></span></i>
-        <b>RenoDeck Pastel</b><small>Cream, peach, blush and sage</small>
+        <b>Daylight Studio</b><small>Warm cream, peach, blush and deep sage</small>
       </button>
     </div>
   </aside>
@@ -2345,17 +2404,24 @@ body.refit-project-release .site-header{
       const closeButton = document.getElementById("appearanceClose");
       const panel = document.getElementById("appearancePanel");
       const choices = document.querySelectorAll("[data-refit-theme]");
+      const themeColor = document.getElementById("themeColor");
+      const primaryNav = document.getElementById("navLinks");
+      const primaryMenuButton = document.getElementById("menuBtn");
+      const moreMenu = primaryNav?.querySelector(".nav-more");
 
       if(!openButton || !closeButton || !panel || !choices.length) return;
 
       function applyTheme(theme){
         const selected = theme === "pastel" ? "pastel" : "dark";
+        document.documentElement.classList.add("theme-changing");
         document.body.classList.toggle("theme-pastel", selected === "pastel");
         document.documentElement.style.colorScheme = selected === "pastel" ? "light" : "dark";
+        themeColor?.setAttribute("content", selected === "pastel" ? "#f7ede3" : "#050507");
         choices.forEach(function(choice){
           choice.setAttribute("aria-pressed", String(choice.getAttribute("data-refit-theme") === selected));
         });
         try{ window.localStorage.setItem(storageKey, selected); }catch(error){}
+        window.setTimeout(function(){ document.documentElement.classList.remove("theme-changing"); }, 520);
       }
 
       function setPanel(open){
@@ -2383,7 +2449,13 @@ body.refit-project-release .site-header{
           setPanel(false);
         });
       });
-      document.addEventListener("keydown", function(event){ if(event.key === "Escape") setPanel(false); });
+      document.addEventListener("keydown", function(event){
+        if(event.key !== "Escape") return;
+        setPanel(false);
+        moreMenu?.removeAttribute("open");
+        primaryNav?.classList.remove("open");
+        primaryMenuButton?.setAttribute("aria-expanded","false");
+      });
       document.addEventListener("click", function(event){
         if(!panel.classList.contains("open")) return;
         if(panel.contains(event.target) || openButton.contains(event.target)) return;
