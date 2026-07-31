@@ -1257,7 +1257,6 @@ const thinking = showThinking();
           <button class="iris-ai-chip" type="button">I feel unsure where to start.</button>
           <button class="iris-ai-chip" type="button">Help me set a renovation budget.</button>
           <button class="iris-ai-chip" type="button">Explain REFIT digital tools.</button>
-          <button class="iris-ai-chip" type="button">Is RM99 Check suitable for me?</button>
         </div>
 
         <div class="iris-ai-small">
@@ -1405,22 +1404,6 @@ const thinking = showThinking();
       document.body.classList.remove("iris-ai-open");
     }
     closeBtn.addEventListener("click", closeIris);
-    document.addEventListener("refit:free-check-clicked", function(){
-      openIris();
-
-      setTimeout(function(){
-        createMessage(
-          "assistant",
-          "Good news — REFIT’s RM99 Check is currently FREE for now.\n\nI can help you check your renovation idea, budget direction, site concern, timeline, or which REFIT service fits you best.\n\nWhat would you like me to look at first?",
-          true
-        );
-
-        if (input) {
-          input.focus();
-        }
-      }, 450);
-    });
-    
     function updateIrisTopButton() {
       if (!irisTopBtn) return;
 

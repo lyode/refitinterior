@@ -41,12 +41,6 @@ There’s no pressure to buy. I’ll give you a clear and honest picture of what
       link: "refit-complete.html",
       ready: "bundle direction",
       text: "REFIT Complete is the bundle direction combining toolkit, maintenance, quotation, project management and handover flow into one REFIT digital platform direction."
-    },
-    rm99: {
-      name: "RM99 Project Readiness Check",
-      link: "index.html#readiness-pass",
-      ready: "available as a starter check",
-      text: "RM99 Project Readiness Check is suitable if you are not ready for a full quotation yet and want REFIT to review your space photos, budget direction and possible hidden risks first."
     }
   };
 
@@ -492,18 +486,6 @@ It is not the right choice for everyone. It is more suitable if you need multipl
         };
       }
 
-      if(q.includes("rm99") || q.includes("99") || q.includes("readiness") || q.includes("check")){
-        return {
-          text:
-`RM99 Project Readiness Check is a simple first step before spending wrongly.
-
-It is suitable if you are not ready for full renovation quotation yet, but want REFIT to review your photos, rough idea, budget direction and possible hidden risks.
-
-It is meant to help you understand first, not push you to confirm work immediately.`,
-          links: productLink("rm99")
-        };
-      }
-
       if(q.includes("renovation") || q.includes("design") || q.includes("build") || q.includes("house") || q.includes("office") || q.includes("cafe") || q.includes("shop")){
         return {
           text:
@@ -511,9 +493,8 @@ It is meant to help you understand first, not push you to confirm work immediate
 
 A good first step is to share your space type, location, photos, rough budget direction and what problem you want to solve.
 
-If you are unsure, RM99 Project Readiness Check may help you understand the next step before requesting a full quotation.`,
+If you are unsure, Iris can help you organise the information before you contact REFIT for the suitable next step.`,
           links: [
-            {label:"Open RM99 Check", href:products.rm99.link},
             {label:"Contact REFIT", href:"index.html#contact"}
           ]
         };
