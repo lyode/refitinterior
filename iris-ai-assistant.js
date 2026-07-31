@@ -3,9 +3,10 @@
   window.REFIT_IRIS_AI_READY = true;
 
   const IRIS_ENDPOINT = "https://asia-southeast1-refit-digital-tools.cloudfunctions.net/irisChat";
-  const STORAGE_KEY = "refit_iris_ai_history_v2";
-const VOICE_KEY = "refit_iris_voice_choice_v1";
-const MAX_HISTORY = 12;
+  const STORAGE_KEY = "refit_iris_ai_history_v3";
+  const VOICE_KEY = "refit_iris_voice_choice_v1";
+  const BUDGET_FLOW_KEY = "refit_iris_budget_flow_v1";
+  const MAX_HISTORY = 12;
   
   let isOpen = false;
   let isBusy = false;
@@ -1121,55 +1122,120 @@ body.iris-ai-open #refitWhatsappWidget::before{
     return createMessage("assistant", "Iris is reading your message softly...", false);
   }
 
-  const RENOVATION_BUDGET_GUIDANCE = `Before setting a renovation budget, I need to understand what the budget is meant to do for you.
+  const RENOVATION_BUDGET_GUIDANCE = `Of course. We can work through the renovation budget together, one small step at a time.
 
-STEP 1 — HOW CLEAR IS YOUR PLAN?
-A. I already know exactly what work I want.
-B. I know some areas, but the scope is not complete.
-C. I only have an idea and need help developing the scope.
+Before we discuss figures, may I first understand how clear your renovation plan feels at the moment?
 
-STEP 2 — WHAT TYPE OF BUDGET DO YOU HAVE?
-A. Fixed ceiling — this is the maximum amount available.
-B. Target allowance — use this amount to control the design and priorities.
-C. Scope estimate — price the works I have already listed.
-D. Planning budget — recommend a suitable allowance based on the idea and site information.
+1. I already know most of the work I want.
+2. I know the main areas, but some details are still uncertain.
+3. I only have an initial idea and would appreciate some guidance.
 
-STEP 3 — WHAT MUST THE BUDGET INCLUDE?
-Please list the selected areas and works, such as living, bedrooms, kitchen, bathrooms, roofing, extension, electrical, plumbing, flooring, ceiling, painting and built-in joinery.
+There is no need to prepare everything now. You may reply with 1, 2 or 3, or simply explain it in your own words.`;
 
-STEP 4 — WHAT ITEMS DO YOU NEED TO BUY?
-Examples include appliances, sanitary fittings, lighting, air-conditioning, kitchen equipment, loose furniture, curtains and accessories.
+  const RENOVATION_BUDGET_LEVELS = `Thank you for sharing that with me. I now have a clearer picture of where you are starting from.
 
-For each important item, tell me:
-• Have you already selected it?
-• Do you know the supplier or where to find it?
-• Do you already have a price?
-• Will you purchase it directly, or should it be included by REFIT?
+For early planning, REFIT may organise the renovation into four gentle budget directions:
 
-STEP 5 — WHAT ARE YOUR PRIORITIES?
-Separate the requirements into:
-• Must have
-• Important if the budget allows
-• Optional later
+• Essential — approximately RM45–RM65 per sq ft for selected basic improvements.
+• Practical — approximately RM65–RM85 per sq ft for more coordinated finishes and moderate service or customised work.
+• Enhanced — approximately RM85–RM120 per sq ft for more comprehensive renovation and stronger detailing.
+• Signature — from approximately RM120 per sq ft for premium or extensively customised work.
 
-EARLY PLANNING LEVELS
-• Essential: approximately RM45–RM65 per sq ft for selected basic improvements.
-• Practical: approximately RM65–RM85 per sq ft for more coordinated finishes and moderate service or customised work.
-• Enhanced: approximately RM85–RM120 per sq ft for more comprehensive renovation and stronger detailing.
-• Signature: from approximately RM120 per sq ft for premium or extensively customised work.
+These are planning references rather than fixed prices. A kitchen, bathroom, extension, roof, structural alteration or customised built-in work may need a higher individual allowance than a bedroom or living area. REFIT would combine the different areas to understand the overall blended project direction.
 
-These are blended planning references—not fixed prices. Kitchens, bathrooms, structural work, extensions, roofing, specialist services and built-in items must be assessed separately because their cost intensity is different from bedrooms or living areas.
+It is also wise to keep approximately 10%–15% as contingency for concealed conditions, additional requirements or agreed changes. A confirmed quotation would still require measurements, material selections, scope confirmation and a proper site assessment.`;
 
-A project may therefore use a lower allowance for general areas and a higher allowance for the kitchen or bathrooms. The combined project could produce a blended rate that is different from every individual room.
+  function loadBudgetFlow() {
+    try {
+      const flow = JSON.parse(sessionStorage.getItem(BUDGET_FLOW_KEY) || "null");
+      return flow && typeof flow === "object" ? flow : null;
+    } catch (error) {
+      return null;
+    }
+  }
 
-Please also keep approximately 10%–15% contingency for concealed conditions, additional requirements or agreed changes. A final quotation requires confirmed scope, measurements, material selection and site assessment.
+  function saveBudgetFlow(flow) {
+    try {
+      if (flow) sessionStorage.setItem(BUDGET_FLOW_KEY, JSON.stringify(flow));
+      else sessionStorage.removeItem(BUDGET_FLOW_KEY);
+    } catch (error) {}
+  }
 
-You can begin by replying with:
-1. Your answer for Step 1
-2. Your answer for Step 2
-3. Property type and approximate size
-4. Areas you want to renovate
-5. Known purchase items and who will purchase them`;
+  function startBudgetFlow() {
+    saveBudgetFlow({ stage:"clarity", answers:{} });
+    return RENOVATION_BUDGET_GUIDANCE;
+  }
+
+  function continueBudgetFlow(message) {
+    const flow = loadBudgetFlow();
+    if (!flow) return "";
+
+    const answer = String(message || "").trim();
+    const lowerAnswer = answer.toLowerCase();
+
+    if (/^(stop|cancel|exit|another question)\b/.test(lowerAnswer)) {
+      saveBudgetFlow(null);
+      return "Of course. We can pause the budget discussion here. What else would you like help with?";
+    }
+
+    if (flow.stage === "clarity") {
+      flow.answers.clarity = answer;
+      flow.stage = "purpose";
+      saveBudgetFlow(flow);
+      return `Thank you—that helps me understand where you are now.
+
+When you mention a budget, may I ask what you would like that figure to do for you?
+
+1. It is a firm maximum that the project should not exceed.
+2. It is a comfortable target that can guide the design and priorities.
+3. You already know the works and would like an estimate for that scope.
+4. You would like REFIT to suggest a planning allowance from your ideas.
+
+You may choose the closest one. It is perfectly fine if you are still unsure.`;
+    }
+
+    if (flow.stage === "purpose") {
+      flow.answers.purpose = answer;
+      flow.stage = "scope";
+      saveBudgetFlow(flow);
+      return `Understood, thank you.
+
+Could you tell me a little about the property and the areas you hope to improve? For example, you may mention the property type, approximate size, and whether the work involves the living area, bedrooms, kitchen, bathrooms, roof, extension or other spaces.
+
+A simple description is enough for now—there is no need for a complete technical list.`;
+    }
+
+    if (flow.stage === "scope") {
+      flow.answers.scope = answer;
+      flow.stage = "purchases";
+      saveBudgetFlow(flow);
+      return `That gives me a much better picture.
+
+Are there any items you already know you may need to purchase, such as appliances, sanitary fittings, lighting, air-conditioning, kitchen equipment, furniture, curtains or accessories?
+
+If you have already selected anything, you may also tell me whether you know the supplier or price, and whether you prefer to purchase it directly or include it under REFIT. If you have not decided yet, that is completely alright.`;
+    }
+
+    if (flow.stage === "purchases") {
+      flow.answers.purchases = answer;
+      flow.stage = "priorities";
+      saveBudgetFlow(flow);
+      return `Thank you. One final question will help us protect the budget more carefully.
+
+Which requirements feel essential and must be completed now? Which items would be helpful if the budget allows, and which could comfortably wait until a later stage?
+
+You can answer naturally—there is no need to prepare a formal list.`;
+    }
+
+    if (flow.stage === "priorities") {
+      flow.answers.priorities = answer;
+      saveBudgetFlow(null);
+      return RENOVATION_BUDGET_LEVELS;
+    }
+
+    saveBudgetFlow(null);
+    return "";
+  }
 
   function getBuiltInIrisReply(message, images) {
     if (images && images.length) return "";
@@ -1178,6 +1244,9 @@ You can begin by replying with:
     if (containsRetiredCheckMessage(question)) {
       return removeRetiredCheckMessage(question);
     }
+
+    const budgetFlowReply = continueBudgetFlow(message);
+    if (budgetFlowReply) return budgetFlowReply;
 
     const hasBudgetTerm =
       question.includes("budget") ||
@@ -1212,7 +1281,7 @@ You can begin by replying with:
       question.includes("budget for office") ||
       question.includes("budget for shop");
 
-    return asksAboutBudget ? RENOVATION_BUDGET_GUIDANCE : "";
+    return asksAboutBudget ? startBudgetFlow() : "";
   }
   
     async function sendToIris(message, images) {
