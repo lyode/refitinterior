@@ -681,8 +681,11 @@
     const productNames = {
       quote_pro: "REFIT Quote Pro",
       project_pro: "REFIT Project Pro",
-      complete: "REFIT Complete"
+      complete: "REFIT Complete",
+      renodeck: "REFIT RenoDeck",
+      renodeck_studio: "REFIT RenoDeck Studio"
     };
+    let currentPortalUser = null;
 
     function showMessage(element, text, type = "info") {
       element.textContent = text;
@@ -751,6 +754,35 @@
         a.href = canOpen ? "project-pro-demo.html" : "#";
         a.textContent = canOpen ? "Open Project Pro demo" : "Project Pro restricted";
         if (!canOpen) a.addEventListener("click", e => e.preventDefault());
+        links.push(a);
+      }
+
+      if (["project_pro", "complete", "renodeck", "renodeck_studio"].includes(licence.productId)) {
+        const a = document.createElement("a");
+        a.className = "product-link";
+        a.href = canOpen ? "renodeck/" : "#";
+        a.textContent = canOpen ? "Open RenoDeck" : "RenoDeck restricted";
+        a.addEventListener("click", async event => {
+          if (!canOpen || !currentPortalUser) {
+            event.preventDefault();
+            return;
+          }
+          event.preventDefault();
+          try {
+            const token = await currentPortalUser.getIdToken(true);
+            const renoDeckSession = JSON.stringify({
+              token,
+              email: currentPortalUser.email || "",
+              name: currentPortalUser.displayName || currentPortalUser.email?.split("@")[0] || "REFIT member",
+              expiresAt: Date.now() + 50 * 60 * 1000
+            });
+            sessionStorage.setItem("refit-renodeck-member-session-v1", renoDeckSession);
+            localStorage.setItem("refit-renodeck-member-session-v1", renoDeckSession);
+            window.location.href = "renodeck/";
+          } catch (error) {
+            showMessage(portalMessage, "Your RenoDeck session could not be prepared. Please sign in again.", "error");
+          }
+        });
         links.push(a);
       }
       return links;
@@ -940,6 +972,7 @@
     });
 
     onAuthStateChanged(auth, async user => {
+      currentPortalUser = user;
       if (user) {
         loginView.style.display = "none";
         portalView.style.display = "block";
