@@ -154,13 +154,19 @@ const MAX_HISTORY = 12;
       value.includes("currently free") ||
       value.includes("free for now");
     const repeatsTheOldDescription =
-      (value.includes("budget direction") || value.includes("budget guide")) &&
       (
-        value.includes("good news") ||
-        value.includes("two photo") ||
-        value.includes("2 photo") ||
-        value.includes("square feet") ||
-        value.includes("sq ft") ||
+        value.includes("good news") &&
+        (value.includes("budget direction") || value.includes("budget guide")) &&
+        value.includes("photo")
+      ) ||
+      (
+        (value.includes("two photo") || value.includes("2 photo")) &&
+        (value.includes("clear budget guide") || value.includes("safer next step"))
+      ) ||
+      (
+        (value.includes("square feet") || value.includes("sq ft")) &&
+        value.includes("send") &&
+        value.includes("photo") &&
         value.includes("safer next step")
       );
 
@@ -1115,38 +1121,55 @@ body.iris-ai-open #refitWhatsappWidget::before{
     return createMessage("assistant", "Iris is reading your message softly...", false);
   }
 
-  const RENOVATION_BUDGET_GUIDANCE = `A good renovation budget should be planned in three directions:
+  const RENOVATION_BUDGET_GUIDANCE = `Before setting a renovation budget, I need to understand what the budget is meant to do for you.
 
-1. ESSENTIAL BUDGET
-Necessary works and practical standard materials. This direction prioritises safety, function, repairs and the most important renovation needs.
+STEP 1 — HOW CLEAR IS YOUR PLAN?
+A. I already know exactly what work I want.
+B. I know some areas, but the scope is not complete.
+C. I only have an idea and need help developing the scope.
 
-2. RECOMMENDED BUDGET
-A balanced level of design, material quality, durability and everyday comfort. This is normally the most practical direction for comparing value and outcome.
+STEP 2 — WHAT TYPE OF BUDGET DO YOU HAVE?
+A. Fixed ceiling — this is the maximum amount available.
+B. Target allowance — use this amount to control the design and priorities.
+C. Scope estimate — price the works I have already listed.
+D. Planning budget — recommend a suitable allowance based on the idea and site information.
 
-3. ENHANCED BUDGET
-Upgraded finishes, customised details, additional features and a higher design specification.
+STEP 3 — WHAT MUST THE BUDGET INCLUDE?
+Please list the selected areas and works, such as living, bedrooms, kitchen, bathrooms, roofing, extension, electrical, plumbing, flooring, ceiling, painting and built-in joinery.
 
-At the early planning stage, the amount should be treated as a preliminary budget range—not a final quotation. The range depends on the property condition, selected work areas, scope, measurements, material choices, workmanship level and site constraints.
+STEP 4 — WHAT ITEMS DO YOU NEED TO BUY?
+Examples include appliances, sanitary fittings, lighting, air-conditioning, kitchen equipment, loose furniture, curtains and accessories.
 
-I also recommend keeping approximately 10%–15% of the working budget as contingency for concealed conditions, additional requirements or agreed changes discovered during the project.
+For each important item, tell me:
+• Have you already selected it?
+• Do you know the supplier or where to find it?
+• Do you already have a price?
+• Will you purchase it directly, or should it be included by REFIT?
 
-The budget summary should clearly show:
-• Proposed scope and work areas
-• Estimated range for each budget direction
-• Main inclusions and exclusions
-• Material or specification assumptions
-• Items requiring site inspection or specialist confirmation
-• Possible cost-saving alternatives
+STEP 5 — WHAT ARE YOUR PRIORITIES?
+Separate the requirements into:
+• Must have
+• Important if the budget allows
+• Optional later
 
-After the site assessment, scope confirmation, measurements and material selection, REFIT can prepare a more detailed quotation. Additional work should only proceed after the customer has been informed and the cost has been agreed.
+EARLY PLANNING LEVELS
+• Essential: approximately RM45–RM65 per sq ft for selected basic improvements.
+• Practical: approximately RM65–RM85 per sq ft for more coordinated finishes and moderate service or customised work.
+• Enhanced: approximately RM85–RM120 per sq ft for more comprehensive renovation and stronger detailing.
+• Signature: from approximately RM120 per sq ft for premium or extensively customised work.
 
-To help me organise your budget direction, please share:
-1. Property or space type
-2. Approximate size
-3. Areas you want to renovate
-4. Existing condition or known problems
-5. Preferred material or finishing level
-6. Your target budget and intended start date`;
+These are blended planning references—not fixed prices. Kitchens, bathrooms, structural work, extensions, roofing, specialist services and built-in items must be assessed separately because their cost intensity is different from bedrooms or living areas.
+
+A project may therefore use a lower allowance for general areas and a higher allowance for the kitchen or bathrooms. The combined project could produce a blended rate that is different from every individual room.
+
+Please also keep approximately 10%–15% contingency for concealed conditions, additional requirements or agreed changes. A final quotation requires confirmed scope, measurements, material selection and site assessment.
+
+You can begin by replying with:
+1. Your answer for Step 1
+2. Your answer for Step 2
+3. Property type and approximate size
+4. Areas you want to renovate
+5. Known purchase items and who will purchase them`;
 
   function getBuiltInIrisReply(message, images) {
     if (images && images.length) return "";
