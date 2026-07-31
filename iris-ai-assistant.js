@@ -3,7 +3,7 @@
   window.REFIT_IRIS_AI_READY = true;
 
   const IRIS_ENDPOINT = "https://asia-southeast1-refit-digital-tools.cloudfunctions.net/irisChat";
-  const STORAGE_KEY = "refit_iris_ai_history_v1";
+  const STORAGE_KEY = "refit_iris_ai_history_v2";
 const VOICE_KEY = "refit_iris_voice_choice_v1";
 const MAX_HISTORY = 12;
   
@@ -145,10 +145,50 @@ const MAX_HISTORY = 12;
     }
   }
 
+  function containsRetiredCheckMessage(text) {
+    const value = String(text || "").toLowerCase();
+    const namesTheOldOffer =
+      /rm\s*99/.test(value) ||
+      value.includes("99 check") ||
+      value.includes("readiness check") ||
+      value.includes("currently free") ||
+      value.includes("free for now");
+    const repeatsTheOldDescription =
+      (value.includes("budget direction") || value.includes("budget guide")) &&
+      (
+        value.includes("good news") ||
+        value.includes("two photo") ||
+        value.includes("2 photo") ||
+        value.includes("square feet") ||
+        value.includes("sq ft") ||
+        value.includes("safer next step")
+      );
+
+    return namesTheOldOffer || repeatsTheOldDescription;
+  }
+
+  function removeRetiredCheckMessage(text) {
+    if (!containsRetiredCheckMessage(text)) return String(text || "");
+
+    return `I can help with general renovation planning, budgeting, design direction and the next suitable REFIT service.
+
+Tell me what you would like help with, and I will guide you from there.`;
+  }
+
   function loadHistory() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      return Array.isArray(saved) ? saved.slice(-MAX_HISTORY) : [];
+      if (!Array.isArray(saved)) return [];
+
+      const cleaned = saved
+        .filter((item) => !containsRetiredCheckMessage(item?.content))
+        .slice(-MAX_HISTORY);
+
+      if (cleaned.length !== saved.length) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+      }
+
+      return cleaned;
     } catch (error) {
       return [];
     }
@@ -1112,6 +1152,10 @@ To help me organise your budget direction, please share:
     if (images && images.length) return "";
 
     const question = String(message || "").toLowerCase();
+    if (containsRetiredCheckMessage(question)) {
+      return removeRetiredCheckMessage(question);
+    }
+
     const hasBudgetTerm =
       question.includes("budget") ||
       question.includes("estimate") ||
@@ -1172,7 +1216,9 @@ To help me organise your budget direction, please share:
       throw new Error(data.error || "Iris could not respond.");
     }
 
-    return data.reply || "I’m here. Could you share a little more with me?";
+    return removeRetiredCheckMessage(
+      data.reply || "I’m here. Could you share a little more with me?"
+    );
   }
 
   async function handleSend(text) {
