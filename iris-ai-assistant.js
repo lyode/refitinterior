@@ -3,9 +3,9 @@
   window.REFIT_IRIS_AI_READY = true;
 
   const IRIS_ENDPOINT = "https://asia-southeast1-refit-digital-tools.cloudfunctions.net/irisChat";
-  const STORAGE_KEY = "refit_iris_ai_history_v3";
+  const STORAGE_KEY = "refit_iris_ai_history_v4";
   const VOICE_KEY = "refit_iris_voice_choice_v1";
-  const BUDGET_FLOW_KEY = "refit_iris_budget_flow_v1";
+  const BUDGET_FLOW_KEY = "refit_iris_budget_flow_v2";
   const MAX_HISTORY = 12;
   
   let isOpen = false;
@@ -1136,14 +1136,56 @@ There is no need to prepare everything now. You may reply with 1, 2 or 3, or sim
 
 For early planning, REFIT may organise the renovation into four gentle budget directions:
 
-• Essential — approximately RM45–RM65 per sq ft for selected basic improvements.
-• Practical — approximately RM65–RM85 per sq ft for more coordinated finishes and moderate service or customised work.
+• Essential — approximately RM45–RM60 per sq ft for selected basic improvements.
+• Practical — approximately RM60–RM85 per sq ft for more coordinated finishes and moderate service or customised work.
 • Enhanced — approximately RM85–RM120 per sq ft for more comprehensive renovation and stronger detailing.
 • Signature — from approximately RM120 per sq ft for premium or extensively customised work.
 
 These are planning references rather than fixed prices. A kitchen, bathroom, extension, roof, structural alteration or customised built-in work may need a higher individual allowance than a bedroom or living area. REFIT would combine the different areas to understand the overall blended project direction.
 
 It is also wise to keep approximately 10%–15% as contingency for concealed conditions, additional requirements or agreed changes. A confirmed quotation would still require measurements, material selections, scope confirmation and a proper site assessment.`;
+
+  function extractSquareFeet(text, allowPlainNumber) {
+    const value = String(text || "").replace(/,/g, "").trim();
+    let match = value.match(/(\d+(?:\.\d+)?)\s*(k)?\s*(?:sq\.?\s*ft|sqft|square\s*(?:feet|foot))/i);
+
+    if (!match && allowPlainNumber) {
+      match = value.match(/^(\d+(?:\.\d+)?)\s*(k)?$/i);
+    }
+
+    if (!match) return 0;
+
+    const multiplier = match[2] ? 1000 : 1;
+    const area = Math.round(Number(match[1]) * multiplier);
+    return area >= 20 && area <= 100000 ? area : 0;
+  }
+
+  function formatRinggit(amount) {
+    return `RM${Math.round(amount).toLocaleString("en-MY")}`;
+  }
+
+  function buildEssentialEstimate(area) {
+    const lowRate = 45;
+    const highRate = 60;
+    const lowEstimate = area * lowRate;
+    const highEstimate = area * highRate;
+    const formattedArea = area.toLocaleString("en-MY");
+
+    return `Using the Essential planning rate as a simple starting point:
+
+${formattedArea} sq ft × RM${lowRate} = ${formatRinggit(lowEstimate)}
+${formattedArea} sq ft × RM${highRate} = ${formatRinggit(highEstimate)}
+
+This gives an early basic planning range of approximately ${formatRinggit(lowEstimate)}–${formatRinggit(highEstimate)}.
+
+This calculation should use the area actually being renovated—not automatically the full property size. It is only a starting guide. Kitchens, bathrooms, extensions, roofing, structural changes, specialist services and customised built-ins may require separate or higher allowances.`;
+  }
+
+  function budgetScopeQuestion(prefix) {
+    return `${prefix ? `${prefix}\n\n` : ""}Could you tell me a little about the property and the areas you hope to improve? For example, you may mention whether the work involves the living area, bedrooms, kitchen, bathrooms, roof, extension or other spaces.
+
+A simple description is enough for now—there is no need for a complete technical list.`;
+  }
 
   function loadBudgetFlow() {
     try {
@@ -1161,9 +1203,20 @@ It is also wise to keep approximately 10%–15% as contingency for concealed con
     } catch (error) {}
   }
 
-  function startBudgetFlow() {
-    saveBudgetFlow({ stage:"clarity", answers:{} });
-    return RENOVATION_BUDGET_GUIDANCE;
+  function startBudgetFlow(area) {
+    const answers = area ? { area } : {};
+    saveBudgetFlow({ stage:"clarity", answers });
+    return area
+      ? `${buildEssentialEstimate(area)}
+
+To help me refine this gently, may I also understand how clear your renovation plan feels?
+
+1. I already know most of the work I want.
+2. I know the main areas, but some details are still uncertain.
+3. I only have an initial idea and would appreciate some guidance.
+
+You may reply with 1, 2 or 3, or simply explain it in your own words.`
+      : RENOVATION_BUDGET_GUIDANCE;
   }
 
   function continueBudgetFlow(message) {
@@ -1196,13 +1249,40 @@ You may choose the closest one. It is perfectly fine if you are still unsure.`;
 
     if (flow.stage === "purpose") {
       flow.answers.purpose = answer;
-      flow.stage = "scope";
+      flow.stage = flow.answers.area ? "scope" : "area";
       saveBudgetFlow(flow);
+      if (flow.answers.area) {
+        return budgetScopeQuestion("Understood, thank you.");
+      }
+
       return `Understood, thank you.
 
-Could you tell me a little about the property and the areas you hope to improve? For example, you may mention the property type, approximate size, and whether the work involves the living area, bedrooms, kitchen, bathrooms, roof, extension or other spaces.
+May I ask for the approximate square-foot area that will actually be renovated?
 
-A simple description is enough for now—there is no need for a complete technical list.`;
+If the whole property is involved, you may share the built-up area. If only selected rooms are involved, please share the approximate affected area instead—for example, “800 sq ft”.
+
+If you do not know the area yet, you can simply say “not sure” and we can continue without the calculation.`;
+    }
+
+    if (flow.stage === "area") {
+      const area = extractSquareFeet(answer, true);
+      const areaIsUnknown = /\b(?:not sure|unsure|do not know|don't know|dont know|unknown|tbc)\b/i.test(answer);
+
+      if (!area && !areaIsUnknown) {
+        return `No problem. I could not identify a clear area from that answer.
+
+You may enter a simple figure such as “800 sq ft” or “1,200 square feet”. If the area is not available yet, just say “not sure” and we will continue gently.`;
+      }
+
+      flow.answers.area = area || 0;
+      flow.stage = "scope";
+      saveBudgetFlow(flow);
+
+      return budgetScopeQuestion(
+        area
+          ? `Thank you. Here is the simple Essential calculation:\n\n${buildEssentialEstimate(area)}`
+          : "That is completely alright. We can leave the square-foot calculation open for now."
+      );
     }
 
     if (flow.stage === "scope") {
@@ -1281,7 +1361,8 @@ You can answer naturally—there is no need to prepare a formal list.`;
       question.includes("budget for office") ||
       question.includes("budget for shop");
 
-    return asksAboutBudget ? startBudgetFlow() : "";
+    const statedArea = extractSquareFeet(message, false);
+    return asksAboutBudget ? startBudgetFlow(statedArea) : "";
   }
   
     async function sendToIris(message, images) {
